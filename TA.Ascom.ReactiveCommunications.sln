@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunicat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunications.Sample.ConsoleApp", "TA.Ascom.ReactiveCommunications.Sample.ConsoleApp\TA.Ascom.ReactiveCommunications.Sample.ConsoleApp.csproj", "{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{788F1774-FF3C-4CAB-A0A9-39CEB5DC7313}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
