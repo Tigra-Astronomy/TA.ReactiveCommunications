@@ -10,11 +10,14 @@
 // 
 // File: ITransactionProcessor.cs  Last modified: 2015-05-25@18:23 by Tim Long
 
+using System.Diagnostics.Contracts;
+
 namespace TA.Ascom.ReactiveCommunications
     {
     /// <summary>
     ///     Defines the interface of a transaction processing service.
     /// </summary>
+    [ContractClass(typeof (ITransactionProcessorContract))]
     public interface ITransactionProcessor
         {
         /// <summary>
@@ -25,4 +28,14 @@ namespace TA.Ascom.ReactiveCommunications
         /// <param name="transaction">The transaction to be processed.</param>
         void CommitTransaction(DeviceTransaction transaction);
         }
+
+    [ContractClassFor(typeof (ITransactionProcessor))]
+    abstract class ITransactionProcessorContract : ITransactionProcessor {
+        void ITransactionProcessor.CommitTransaction(DeviceTransaction transaction)
+            {
+            Contract.Requires(transaction != null);
+            Contract.Requires(!string.IsNullOrEmpty(transaction.Command));
+            throw new System.NotImplementedException();
+            }
+    }
     }
