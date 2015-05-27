@@ -8,11 +8,10 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransactionSpecs.cs  Last modified: 2015-05-27@01:45 by Tim Long
+// File: DeviceTransactionSpecs.cs  Last modified: 2015-05-27@02:48 by Tim Long
 
-using System.Diagnostics;
+using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using TA.Ascom.ReactiveCommunications.Specifications.Contexts;
@@ -23,7 +22,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
     [Subject(typeof (DeviceTransaction))]
     internal class when_a_device_transaction_completes : with_fake_transaction_processor
         {
-        Establish context = () => { Transaction = new BufferInputUntilCompletedTransaction("command"); };
+        Establish context = () => { Transaction = new BufferInputUntilCompletedTransaction("command",int.MaxValue); };
         Because of = () =>
             {
             Processor.CommitTransaction(Transaction);
@@ -47,7 +46,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
                 {
                 var index = i;
                 pendingTasks[index] =
-                    Task.Run(() => transactions[index] = new BufferInputUntilCompletedTransaction(index.ToString()));
+                    Task.Run(() => transactions[index] = new BufferInputUntilCompletedTransaction(index.ToString(),completeAfter:Int32.MaxValue));
                 }
             Task.WaitAll(pendingTasks);
             };

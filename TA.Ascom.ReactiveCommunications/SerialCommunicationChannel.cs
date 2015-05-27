@@ -47,7 +47,7 @@ namespace TA.Ascom.ReactiveCommunications
                 .Publish();
             }
 
-        ISerialPort Port { get; set; }
+        internal ISerialPort Port { get; set; }
 
         /// <summary>
         ///     Configures the serial port and opens the channel ready for transmitting.
@@ -95,7 +95,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// <param name="txData">The data to be transmitted.</param>
         public virtual void Send(string txData)
             {
-            Log.Trace("Sending [{0}]", txData);
+            Log.Debug("Sending [{0}]", txData);
             Port.Write(txData);
             }
 
