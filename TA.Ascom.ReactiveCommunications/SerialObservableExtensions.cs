@@ -8,10 +8,11 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: SerialObservableExtensions.cs  Last modified: 2015-05-25@18:23 by Tim Long
+// File: SerialObservableExtensions.cs  Last modified: 2015-05-27@09:37 by Tim Long
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO.Ports;
 using System.Linq;
 using System.Reactive;
@@ -20,9 +21,13 @@ using NLog;
 
 namespace TA.Ascom.ReactiveCommunications
     {
+    /// <summary>
+    ///     Provides extension methods for capturing and transforming observable sequences of characters received from a serial
+    ///     port.
+    /// </summary>
     public static class SerialObservableExtensions
         {
-        static readonly Logger log = LogManager.GetCurrentClassLogger();
+        static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Captures the <see cref="System.IO.Ports.SerialPort.DataReceived" /> event of a serial port and returns an
@@ -33,10 +38,12 @@ namespace TA.Ascom.ReactiveCommunications
         public static IObservable<EventPattern<SerialDataReceivedEventArgs>> ObservableDataReceivedEvents(
             this ISerialPort port)
             {
+            Contract.Requires(port != null);
+            Contract.Ensures(Contract.Result<IObservable<EventPattern<SerialDataReceivedEventArgs>>>() != null);
             var portEvents = Observable.FromEventPattern<SerialDataReceivedEventHandler, SerialDataReceivedEventArgs>(
                 handler =>
                     {
-                    log.Debug("Event: SerialDataReceived");
+                    Log.Debug("Event: SerialDataReceived");
                     return handler.Invoke;
                     },
                 handler =>
@@ -44,12 +51,12 @@ namespace TA.Ascom.ReactiveCommunications
                     // We must discard stale data when subscribing or it will pollute the first element of the sequence.
                     port.DiscardInBuffer();
                     port.DataReceived += handler;
-                    log.Debug("Listening to DataReceived event");
+                    Log.Debug("Listening to DataReceived event");
                     },
                 handler =>
                     {
                     port.DataReceived -= handler;
-                    log.Debug("Stopped listening to DataReceived event");
+                    Log.Debug("Stopped listening to DataReceived event");
                     });
             return portEvents;
             }
@@ -58,9 +65,11 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Gets an observable sequence of all the characters received by a serial port.
         /// </summary>
         /// <param name="port">The port that is to be the data source.</param>
-        /// <returns><see cref="IObservable{char}" /> - an observable sequence of characters.</returns>
+        /// <returns><see cref="IObservable{Char}" /> - an observable sequence of characters.</returns>
         public static IObservable<char> ReceivedCharacters(this ISerialPort port)
             {
+            Contract.Requires(port != null);
+            Contract.Ensures(Contract.Result<IObservable<char>>() != null);
             var observableEvents = port.ObservableDataReceivedEvents();
             var observableCharacterSequence = from args in observableEvents
                                               where args.EventArgs.EventType == SerialData.Chars
@@ -70,13 +79,15 @@ namespace TA.Ascom.ReactiveCommunications
             }
 
         /// <summary>
-        ///     Produces strings delimited by the specified terminator character.
+        ///     Produces a sequence of strings delimited by the specified <paramref name="terminator" /> character.
         /// </summary>
         /// <param name="source">The source character sequence.</param>
-        /// <param name="terminator">The terminator.</param>
-        /// <returns><see cref="IObservable{string}" /> - a sequence of strings.</returns>
+        /// <param name="terminator">The terminator that will delimit the strings.</param>
+        /// <returns><see cref="IObservable{String}" /> - a sequence of strings.</returns>
         public static IObservable<string> TerminatedStrings(this IObservable<char> source, char terminator = '#')
             {
+            Contract.Requires(source != null);
+            Contract.Ensures(Contract.Result<IObservable<string>>() != null);
             var terminatorString = terminator.ToString();
             var sequence = source.Scan("", (agg, c) => agg.EndsWith(terminatorString) ? c.ToString() : agg + c)
                 .Where(s => s.EndsWith(terminatorString));
@@ -91,9 +102,12 @@ namespace TA.Ascom.ReactiveCommunications
         ///     The period of time that the receive sequence must be quiescent before the next string will be
         ///     emitted.
         /// </param>
-        /// <returns><see cref="IObservable{string}" /> - a sequence of time-delimited strings.</returns>
+        /// <returns><see cref="IObservable{String}" /> - a sequence of time-delimited strings.</returns>
         public static IObservable<string> TimeDelimitedString(this IObservable<char> source, TimeSpan quietTime)
             {
+            Contract.Requires(source != null);
+            Contract.Requires(quietTime.TotalMilliseconds > 0);
+            Contract.Ensures(Contract.Result<IObservable<string>>() != null);
             var shared = source.Publish().RefCount();
             var buffers = shared.Buffer(() => shared.Throttle(quietTime));
             var strings = buffers.Select(buffer => new string(buffer.ToArray()));
@@ -109,7 +123,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// <param name="initiator">The initiator character that triggers the start of a new string.</param>
         /// <param name="terminator">The terminator character that marks the end of a string.</param>
         /// <returns>
-        ///     <see cref="IObservable{string}" />, an observable sequence of strings each delimited by an initiator character
+        ///     <see cref="IObservable{String}" />, an observable sequence of strings each delimited by an initiator character
         ///     and a terminator character.
         /// </returns>
         public static IObservable<string> DelimitedMessageStrings(
@@ -117,6 +131,8 @@ namespace TA.Ascom.ReactiveCommunications
             char initiator = ':',
             char terminator = '#')
             {
+            Contract.Requires(source != null);
+            Contract.Ensures(Contract.Result<IObservable<string>>() != null);
             var buffers = source.Publish(s => BufferByDelimiters(s, initiator, terminator));
             var strings = from buffer in buffers
                           select new string(buffer.ToArray());
@@ -127,12 +143,14 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Buffers a sequence of characters based on a pair of delimiters.
         /// </summary>
         /// <param name="source">The source sequence.</param>
-        /// <param name="initiator"></param>
-        /// <param name="terminator"></param>
-        /// <returns><see cref="IObservable{IList{char}}" /> - an observable sequence of buffers.</returns>
-        public static IObservable<IList<char>> BufferByDelimiters(IObservable<char> source, char initiator,
-            char terminator)
+        /// <param name="initiator">The initiator character. Optional; default is ':'."</param>
+        /// <param name="terminator">The terminator character. Optional; default is '#'."</param>
+        /// <returns><see cref="IObservable{T}" /> - an observable sequence of buffers.</returns>
+        public static IObservable<IList<char>> BufferByDelimiters(IObservable<char> source, char initiator = ':',
+            char terminator = '#')
             {
+            Contract.Requires(source != null);
+            Contract.Ensures(Contract.Result<IObservable<IList<char>>>() != null);
             return source.Buffer(source.Where(c => c == initiator), x => source.Where(c => c == terminator));
             }
 
@@ -140,11 +158,13 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Selects sequences of "0#" and "1#" and produces "0" or "1".
         /// </summary>
         /// <param name="source">The source.</param>
-        /// <param name="terminator">The terminator.</param>
-        /// <returns>IObservable&lt;System.String&gt;.</returns>
+        /// <param name="terminator">The terminator. Optional; default is '#'</param>
+        /// <returns><see cref="IObservable{String}" />.</returns>
         public static IObservable<string> TerminatedBoolean(this IObservable<char> source, char terminator = '#')
             {
-            var results = from s in source.TerminatedStrings()
+            Contract.Requires(source != null);
+            Contract.Ensures(Contract.Result<IObservable<string>>() != null);
+            var results = from s in source.TerminatedStrings(terminator)
                           where "01".Contains(s[0])
                           select s.Substring(0, 1);
             return results;

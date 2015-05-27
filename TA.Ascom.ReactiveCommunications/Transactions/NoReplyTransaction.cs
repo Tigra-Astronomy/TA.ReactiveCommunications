@@ -8,18 +8,34 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: NoReplyTransaction.cs  Last modified: 2015-05-25@18:22 by Tim Long
+// File: NoReplyTransaction.cs  Last modified: 2015-05-27@08:37 by Tim Long
 
 using System;
+using System.Diagnostics.Contracts;
 
 namespace TA.Ascom.ReactiveCommunications.Transactions
     {
+    /// <summary>
+    ///     A transaction that doesn't wait for any reply and completes immediately.
+    /// </summary>
     public class NoReplyTransaction : DeviceTransaction
         {
-        public NoReplyTransaction(string command) : base(command) {}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DeviceTransaction" /> class.
+        /// </summary>
+        /// <param name="command">The command to be sent to the communications channel.</param>
+        public NoReplyTransaction(string command) : base(command)
+            {
+            Contract.Requires(command != null);
+            }
 
+        /// <summary>
+        ///     Ignores the source sequence and does not wait for any received data. Completes the transaction immediately.
+        /// </summary>
+        /// <param name="source">The source sequence of received characters (ignored).</param>
         public override void ObserveResponse(IObservable<char> source)
             {
+            Contract.Ensures(Response != null);
             Response = new Maybe<string>(string.Empty);
             OnCompleted();
             }

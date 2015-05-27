@@ -11,20 +11,43 @@
 // File: BooleanTransaction.cs  Last modified: 2015-05-25@18:22 by Tim Long
 
 using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reactive.Linq;
 
 namespace TA.Ascom.ReactiveCommunications.Transactions
     {
+    /// <summary>
+    /// Receives a response consisting of <c>0#</c> or <c>1#</c> and interprets it as a boolean.
+    /// </summary>
     public class BooleanTransaction : DeviceTransaction
         {
-        public BooleanTransaction(string command) : base(command) {}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceTransaction" /> class.
+        /// </summary>
+        /// <param name="command">The command string to send to the device.</param>
+        public BooleanTransaction(string command) : base(command)
+            {
+            Contract.Requires(!string.IsNullOrEmpty(command));
+            }
 
+        /// <summary>
+        /// Observes the character sequence from the communications channel
+        /// until a satisfactory response has been received. 
+        /// </summary>
+        /// <param name="source">The source sequence.</param>
         public override void ObserveResponse(IObservable<char> source)
             {
             source.TerminatedBoolean('#').Take(1).Subscribe(OnNext, OnError, OnCompleted);
             }
 
+        /// <summary>
+        ///     Called when the response sequence completes. This indicates a successful transaction.
+        /// </summary>
+        /// <remarks>
+        ///     If there has been a valid response (<c>Response.Any() == true</c>) then it is converted to a boolean and placed in
+        ///     the <see cref="Value" /> property.
+        /// </remarks>
         protected override void OnCompleted()
             {
             try
@@ -39,6 +62,10 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
             base.OnCompleted();
             }
 
+        /// <summary>
+        /// Gets the final value of teh transaction's response, as a boolean.
+        /// </summary>
+        /// <value><c>true</c> if value; otherwise, <c>false</c>.</value>
         public bool Value { get; private set; }
         }
     }

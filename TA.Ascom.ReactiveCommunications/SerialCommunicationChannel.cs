@@ -8,9 +8,10 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: SerialCommunicationChannel.cs  Last modified: 2015-05-25@18:23 by Tim Long
+// File: SerialCommunicationChannel.cs  Last modified: 2015-05-27@10:28 by Tim Long
 
 using System;
+using System.Diagnostics.Contracts;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
@@ -25,7 +26,7 @@ namespace TA.Ascom.ReactiveCommunications
         {
         const string LineTerminatorValue = "\n";
         internal readonly SerialDeviceEndpoint endpoint;
-        readonly Logger Log = LogManager.GetCurrentClassLogger();
+        readonly Logger log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SerialCommunicationChannel" /> class.
@@ -41,10 +42,17 @@ namespace TA.Ascom.ReactiveCommunications
             this.endpoint = endpoint as SerialDeviceEndpoint;
             observableReceiveSequence = Port.ReceivedCharacters()
                 .Do(
-                    c => Log.Debug("Rx={0}", c),
-                    ex => Log.Error("Rx exception", ex),
-                    () => Log.Warn("Rx OnCompleted"))
+                    c => log.Debug("Rx={0}", c),
+                    ex => log.Error("Rx exception", ex),
+                    () => log.Warn("Rx OnCompleted"))
                 .Publish();
+            }
+
+        [ContractInvariantMethod]
+        void ObjectInvariant()
+            {
+            Contract.Invariant(log != null);
+            Contract.Invariant(endpoint != null);
             }
 
         internal ISerialPort Port { get; set; }
@@ -54,7 +62,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// </summary>
         public void Open()
             {
-            Log.Info("Channel opening => {0}", endpoint);
+            log.Info("Channel opening => {0}", endpoint);
             Port.PortName = endpoint.PortName;
             Port.BaudRate = endpoint.BaudRate;
             Port.Parity = endpoint.Parity;
@@ -70,7 +78,7 @@ namespace TA.Ascom.ReactiveCommunications
              * The degree symbol typically displays as 'ß' in UTF-8.
              */
             Port.Encoding = Encoding.GetEncoding(1252);
-                //ToDo: magic number. Allow this to be specified rather than hard coded.
+            //ToDo: magic number. Allow this to be specified rather than hard coded.
             Port.Open();
             if (IsOpen)
                 {
@@ -83,7 +91,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// </summary>
         public void Close()
             {
-            Log.Info("Channel closing => {0}", endpoint);
+            log.Info("Channel closing => {0}", endpoint);
             if (receiverListening != null)
                 receiverListening.Dispose(); // Disconnects the serial event handlers
             Port.Close();
@@ -95,7 +103,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// <param name="txData">The data to be transmitted.</param>
         public virtual void Send(string txData)
             {
-            Log.Debug("Sending [{0}]", txData);
+            log.Debug("Sending [{0}]", txData);
             Port.Write(txData);
             }
 
@@ -104,26 +112,35 @@ namespace TA.Ascom.ReactiveCommunications
         /// </summary>
         /// <value>The receive sequence.</value>
         public IObservable<char> ObservableReceivedCharacters
-            {
+        {
             get { return observableReceiveSequence; }
-            }
+        }
 
         /// <summary>
         ///     Gets a value indicating whether this instance is open.
         /// </summary>
         /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
         public bool IsOpen
-            {
+        {
             get { return Port.IsOpen; }
-            }
+        }
 
+        /// <summary>
+        ///     Gets the endpoint that is associated with the channel.
+        /// </summary>
+        /// <value>The endpoint.</value>
         public DeviceEndpoint Endpoint
-            {
+        {
             get { return endpoint; }
-            }
+        }
 
+        /// <summary>
+        ///     Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
             {
+            Contract.Ensures(Contract.Result<string>() != null);
             return string.Format("IsOpen: {0}, Endpoint: {1}", IsOpen, endpoint);
             }
 
@@ -142,6 +159,13 @@ namespace TA.Ascom.ReactiveCommunications
             GC.SuppressFinalize(this);
             }
 
+        /// <summary>
+        ///     Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        ///     unmanaged resources.
+        /// </param>
         protected virtual void Dispose(bool disposing)
             {
             if (!disposed)
@@ -162,7 +186,9 @@ namespace TA.Ascom.ReactiveCommunications
                 }
             }
 
-        // Use C# destructor syntax for finalization code.
+        /// <summary>
+        ///     Finalizes an instance of the <see cref="SerialCommunicationChannel" /> class.
+        /// </summary>
         ~SerialCommunicationChannel()
             {
             Dispose(false);

@@ -32,9 +32,7 @@ namespace TA.Ascom.ReactiveCommunications
             @"^(?<Host>((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])))(\:(?<Port>\d{1,5}))?";
         const string NetworkHostPattern =
             @"^(?<Host>[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*(?:\.[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)*)(\:(?<Port>\d{1,5}))?";
-        static readonly RegexOptions Options = RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture |
-                                               RegexOptions.Singleline |
-                                               RegexOptions.IgnoreCase | RegexOptions.Compiled;
+        const RegexOptions Options = RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
         static readonly Regex SerialRegex = new Regex(SerialPortPattern, Options);
         static readonly Regex NetworkIPv4Regex = new Regex(NetworkIPv4Pattern, Options);
         static readonly Regex NetworkHostRegex = new Regex(NetworkHostPattern, Options);
@@ -47,7 +45,11 @@ namespace TA.Ascom.ReactiveCommunications
         /// <value>The device address.</value>
         public string DeviceAddress
         {
-            get { return ToString(); }
+            get
+            {
+                Contract.Ensures(Contract.Result<string>() != null);
+                return ToString();
+            }
         }
 
         /// <summary>
@@ -138,6 +140,8 @@ namespace TA.Ascom.ReactiveCommunications
 
         static DeviceEndpoint CreateNetworkEndpoint(string connection, Regex regex)
             {
+            Contract.Requires(!string.IsNullOrWhiteSpace(connection));
+            Contract.Requires(regex != null);
             Contract.Ensures(Contract.Result<DeviceEndpoint>() != null);
             var matches = regex.Match(connection);
             var host = matches.Groups["Host"].Value; // IP address or host name
@@ -173,7 +177,6 @@ namespace TA.Ascom.ReactiveCommunications
             Contract.Requires(matches != null);
             Contract.Requires(groupName != null);
             Contract.Requires(defaultValue != null);
-            Contract.Ensures(Contract.Result<TResult>() != null);
             if (matches.Groups[groupName].Success == false) return defaultValue;
             var capture = matches.Groups[groupName].Value;
             try

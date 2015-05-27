@@ -8,8 +8,9 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: SerialDeviceEndpoint.cs  Last modified: 2015-05-25@18:23 by Tim Long
+// File: SerialDeviceEndpoint.cs  Last modified: 2015-05-27@09:51 by Tim Long
 
+using System.Diagnostics.Contracts;
 using System.IO.Ports;
 
 namespace TA.Ascom.ReactiveCommunications
@@ -24,16 +25,25 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Initializes a new instance of the <see cref="SerialDeviceEndpoint" /> class.
         /// </summary>
         /// <param name="portName">Name of the port, COMx where x is an integer.</param>
-        /// <param name="baudRate">The baud rate.</param>
-        /// <param name="parity">The parity bit type.</param>
-        /// <param name="dataBits">The number of data bits.</param>
-        /// <param name="stopBits">The number stop bits.</param>
+        /// <param name="baudRate">The baud rate. Optional; default is 9600.</param>
+        /// <param name="parity">The parity bit type. Optional; default is <see cref="System.IO.Ports.Parity.None" />.</param>
+        /// <param name="dataBits">The number of data bits. Optional; default is 8.</param>
+        /// <param name="stopBits">The number stop bits. Optional; default is 1.</param>
+        /// <param name="dtrEnable">
+        ///     Indicates whether the DTR signal should be asserted or negated. Optional; default is
+        ///     <see langword="true" />.
+        /// </param>
+        /// <param name="rtsEnable">
+        ///     Indicates whether the RTS signal should be asserted or negated. Optional; default is
+        ///     <see langword="true" />
+        /// </param>
         public SerialDeviceEndpoint(string portName,
             int baudRate = 9600,
             Parity parity = Parity.None,
             int dataBits = 8,
             StopBits stopBits = StopBits.One, bool dtrEnable = true, bool rtsEnable = true)
             {
+            Contract.Requires(!string.IsNullOrWhiteSpace(portName));
             PortName = portName;
             BaudRate = baudRate;
             Parity = parity;
@@ -76,12 +86,25 @@ namespace TA.Ascom.ReactiveCommunications
         /// <value>The stop bits (enumerated value).</value>
         public StopBits StopBits { get; private set; }
 
+        /// <summary>
+        ///     Gets a value indicating whether the RTS (Request To Send) signal is enabled.
+        /// </summary>
+        /// <value><c>true</c> if RTS is enabled; otherwise, <c>false</c>.</value>
         public bool RtsEnable { get; private set; }
 
+        /// <summary>
+        ///     Gets a value indicating whether DTR (Data Terminal Ready) signal is enabled.
+        /// </summary>
+        /// <value><c>true</c> if DTR is enabled; otherwise, <c>false</c>.</value>
         public bool DtrEnable { get; private set; }
 
+        /// <summary>
+        ///     Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
             {
+            Contract.Ensures(Contract.Result<string>() != null);
             return string.Format("{0}:{1},{2},{3},{4}", PortName, BaudRate, Parity, DataBits, StopBits);
             }
         }

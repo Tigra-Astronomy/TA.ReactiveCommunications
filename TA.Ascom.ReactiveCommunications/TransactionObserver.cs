@@ -11,9 +11,11 @@
 // File: TransactionObserver.cs  Last modified: 2015-05-25@18:23 by Tim Long
 
 using System;
+using System.Diagnostics.Contracts;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
+using JetBrains.Annotations;
 using NLog;
 
 namespace TA.Ascom.ReactiveCommunications
@@ -39,29 +41,55 @@ namespace TA.Ascom.ReactiveCommunications
         /// <param name="channel">The channel.</param>
         public TransactionObserver(ICommunicationChannel channel)
             {
+            Contract.Requires(channel != null);
             this.channel = channel;
             observableReceiveSequence = channel.ObservableReceivedCharacters.Publish();
             log.Info("Transaction pipeline connected to channel with endpoint {0}", channel.Endpoint);
             }
 
+        [ContractInvariantMethod]
+        void ObjectInvariant()
+            {
+            Contract.Invariant(log != null);
+            Contract.Invariant(channel!=null);
+            Contract.Invariant(observableReceiveSequence!=null);
+            }
+
+        /// <summary>
+        /// Gets a value indicating whether the receiver is ready.
+        /// </summary>
+        /// <value><c>true</c> if the receiver is ready; otherwise, <c>false</c>.</value>
         public bool ReceiverReady
             {
             get { return channel.IsOpen; }
             }
 
-        public void OnNext(DeviceTransaction value)
+        /// <summary>
+        /// Called when the next transaction is available.
+        /// </summary>
+        /// <param name="transaction">The transaction.</param>
+        [UsedImplicitly]
+        public void OnNext(DeviceTransaction transaction)
             {
-            log.Info("Committing transaction {0}", value);
-            CommitTransaction(value);
-            log.Info("Completed transaction {0}", value);
+            log.Info("Committing transaction {0}", transaction);
+            CommitTransaction(transaction);
+            log.Info("Completed transaction {0}", transaction);
             }
 
+        /// <summary>
+        /// Notifies the observer that the provider has experienced an error condition.
+        /// </summary>
+        /// <param name="error">An object that provides additional information about the error.</param>
+        [UsedImplicitly]
         public void OnError(Exception error)
             {
             //ToDo - currently we will just go 'belly up'. Is there a better way of handling errors?
             log.FatalException("Error in transaction pipeline", error);
             }
 
+        /// <summary>
+        /// Notifies the observer that the provider has finished sending push-based notifications.
+        /// </summary>
         public void OnCompleted()
             {
             /*
@@ -73,6 +101,8 @@ namespace TA.Ascom.ReactiveCommunications
 
         void CommitTransaction(DeviceTransaction transaction)
             {
+            Contract.Requires(transaction != null);
+            Contract.Requires(!string.IsNullOrEmpty(transaction.Command));
             var transactionsInFlight = Interlocked.Increment(ref activeTransactions);
             if (transactionsInFlight > 1)
                 {

@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransaction.cs  Last modified: 2015-05-27@02:36 by Tim Long
+// File: DeviceTransaction.cs  Last modified: 2015-05-27@10:26 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -30,7 +30,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// <summary>
         ///     Initializes a new instance of the <see cref="DeviceTransaction" /> class.
         /// </summary>
-        /// <param name="command">The command.</param>
+        /// <param name="command">The command to be sent to the communications channel.</param>
         /// <remarks>
         ///     This abstract class cannot be instantiated directly and is intended to be inherited by your own transaction
         ///     classes.
@@ -51,6 +51,7 @@ namespace TA.Ascom.ReactiveCommunications
         void ObjectInvariant()
             {
             Contract.Invariant(Response != null);
+            Contract.Invariant(completion != null);
             }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace TA.Ascom.ReactiveCommunications
 
         /// <summary>
         ///     Gets the response string exactly as observed from the response sequence. The response is wrapped in a
-        ///     <see cref="Maybe{string}" /> to differentiate an empty response from no response or a failed response.
+        ///     <see cref="Maybe{String}" /> to differentiate an empty response from no response or a failed response.
         ///     An empty Maybe indicates an error condition. Commands where no repsponse is expected will return a Maybe
         ///     containing <see cref="string.Empty" />, not an empty Maybe.
         /// </summary>
@@ -96,7 +97,7 @@ namespace TA.Ascom.ReactiveCommunications
 
         /// <summary>
         ///     Gets the error message for a failed transaction.
-        ///     The response is wrapped in a <see cref="Maybe{string}" /> and if there is no error, then there will be no value:
+        ///     The response is wrapped in a <see cref="Maybe{String}" /> and if there is no error, then there will be no value:
         ///     <c>ErrorMessage.Any() == false</c>
         /// </summary>
         /// <value>May contain an error message.</value>
@@ -158,6 +159,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// </remarks>
         protected virtual void OnNext(string value)
             {
+            Contract.Requires(value != null);
             Response = new Maybe<string>(value);
             }
 

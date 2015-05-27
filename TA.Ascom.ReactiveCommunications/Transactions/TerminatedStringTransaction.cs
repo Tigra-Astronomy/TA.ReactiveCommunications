@@ -8,20 +8,48 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: TerminatedStringTransaction.cs  Last modified: 2015-05-25@18:22 by Tim Long
+// File: TerminatedStringTransaction.cs  Last modified: 2015-05-27@10:07 by Tim Long
 
 using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reactive.Linq;
 
 namespace TA.Ascom.ReactiveCommunications.Transactions
     {
+    /// <summary>
+    ///     A transaction that receives a string response terminated by a '#' (octothorpe) character and strips off any
+    ///     initiator (:) and terminator (#).
+    /// </summary>
     public class TerminatedStringTransaction : DeviceTransaction
         {
-        public TerminatedStringTransaction(string command) : base(command) {}
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DeviceTransaction" /> class.
+        /// </summary>
+        /// <param name="command">The command to be sent to the communications channel.</param>
+        public TerminatedStringTransaction(string command) : base(command)
+            {
+            Contract.Requires(!string.IsNullOrEmpty(command));
+            Value = string.Empty;
+            }
 
+        [ContractInvariantMethod]
+        void ObjectInvariant()
+            {
+            Contract.Invariant(Value != null);
+            }
+
+        /// <summary>
+        ///     Gets the final response value.
+        /// </summary>
+        /// <value>The value as a string.</value>
         public string Value { get; private set; }
 
+        /// <summary>
+        ///     Observes the character sequence from the communications channel
+        ///     until a satisfactory response has been received.
+        /// </summary>
+        /// <param name="source">The source sequence.</param>
         public override void ObserveResponse(IObservable<char> source)
             {
             source.TerminatedStrings()
@@ -29,12 +57,18 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
                 .Subscribe(OnNext, OnError, OnCompleted);
             }
 
+        /// <summary>
+        ///     Called when the response sequence completes. This indicates a successful transaction. If a valid
+        ///     response was received, then delimiters are stripped off and the unterminated string is copied into the
+        ///     <see cref="Value" /> property.
+        /// </summary>
         protected override void OnCompleted()
             {
-            var debug = Response;
-            var any = Response.Any();
-            var responseString = Response.Single();
-            Value = responseString.TrimStart(':').TrimEnd('#');
+            if (Response.Any())
+                {
+                var responseString = Response.Single();
+                Value = responseString.TrimStart(':').TrimEnd('#');
+                }
             base.OnCompleted();
             }
         }
