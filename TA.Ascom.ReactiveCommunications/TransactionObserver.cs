@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: TransactionObserver.cs  Last modified: 2015-05-25@18:23 by Tim Long
+// File: TransactionObserver.cs  Last modified: 2015-05-27@20:12 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -51,21 +51,21 @@ namespace TA.Ascom.ReactiveCommunications
         void ObjectInvariant()
             {
             Contract.Invariant(log != null);
-            Contract.Invariant(channel!=null);
-            Contract.Invariant(observableReceiveSequence!=null);
+            Contract.Invariant(channel != null);
+            Contract.Invariant(observableReceiveSequence != null);
             }
 
         /// <summary>
-        /// Gets a value indicating whether the receiver is ready.
+        ///     Gets a value indicating whether the receiver is ready.
         /// </summary>
         /// <value><c>true</c> if the receiver is ready; otherwise, <c>false</c>.</value>
         public bool ReceiverReady
-            {
+        {
             get { return channel.IsOpen; }
-            }
+        }
 
         /// <summary>
-        /// Called when the next transaction is available.
+        ///     Called when the next transaction is available.
         /// </summary>
         /// <param name="transaction">The transaction.</param>
         [UsedImplicitly]
@@ -77,7 +77,7 @@ namespace TA.Ascom.ReactiveCommunications
             }
 
         /// <summary>
-        /// Notifies the observer that the provider has experienced an error condition.
+        ///     Notifies the observer that the provider has experienced an error condition.
         /// </summary>
         /// <param name="error">An object that provides additional information about the error.</param>
         [UsedImplicitly]
@@ -88,7 +88,7 @@ namespace TA.Ascom.ReactiveCommunications
             }
 
         /// <summary>
-        /// Notifies the observer that the provider has finished sending push-based notifications.
+        ///     Notifies the observer that the provider has finished sending push-based notifications.
         /// </summary>
         public void OnCompleted()
             {

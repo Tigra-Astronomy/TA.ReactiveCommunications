@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: TerminatedStringTransaction.cs  Last modified: 2015-05-27@10:07 by Tim Long
+// File: TerminatedStringTransaction.cs  Last modified: 2015-05-27@20:12 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;

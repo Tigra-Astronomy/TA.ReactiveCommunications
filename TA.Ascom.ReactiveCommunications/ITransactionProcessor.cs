@@ -8,8 +8,9 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: ITransactionProcessor.cs  Last modified: 2015-05-25@18:23 by Tim Long
+// File: ITransactionProcessor.cs  Last modified: 2015-05-27@20:12 by Tim Long
 
+using System;
 using System.Diagnostics.Contracts;
 
 namespace TA.Ascom.ReactiveCommunications
@@ -30,12 +31,13 @@ namespace TA.Ascom.ReactiveCommunications
         }
 
     [ContractClassFor(typeof (ITransactionProcessor))]
-    abstract class ITransactionProcessorContract : ITransactionProcessor {
+    internal abstract class ITransactionProcessorContract : ITransactionProcessor
+        {
         void ITransactionProcessor.CommitTransaction(DeviceTransaction transaction)
             {
             Contract.Requires(transaction != null);
             Contract.Requires(!string.IsNullOrEmpty(transaction.Command));
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
             }
-    }
+        }
     }

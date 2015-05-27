@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: SerialObservableExtensions.cs  Last modified: 2015-05-27@09:37 by Tim Long
+// File: SerialObservableExtensions.cs  Last modified: 2015-05-27@20:12 by Tim Long
 
 using System;
 using System.Collections.Generic;

@@ -1,24 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
-    <metadata>
-        <id>TA.Ascom.ReactiveCommunications</id>
-        <version>0.0.0</version>
-        <title>Reactive-style transactional device communications for ASCOM drivers with guaranteed sequencing and thread-safety.</title>
-        <authors>Tim Long</authors>
-        <owners>Tigra Astronomy</owners>
-        <licenseUrl>http://tigra.mit-license.org/</licenseUrl>
-        <projectUrl>https://bitbucket.org/tigranetworks/ta.ascom.reactivecommunications</projectUrl>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>
-          A library based on the Reactive Extensions for .NET for simplifying device communications over serial, Ethernet and other types
-          of communications channel to embedded controllers, while guaranteeing correct sequencing and thread-safety of transactions.
-          Originally developed for use with ASCOM drivers, but may be useful for any software that needs to communicate with an embedded
-          controller using a command/response protocol.
-        </description>
-        <summary>Simplifies device communications with embedded controllers, while guaranteeing correct sequencing and thread-safety of transactions.</summary>
-        <releaseNotes>This project is still in flight. Anything may change at any time. Please refer to the project home page for further information.</releaseNotes>
-        <copyright>Copyright © 2015 Tigra Astronomy, all rights reserved.</copyright>
-        <language>en-GB</language>
-        <tags>ASCOM,astronomy,control,robotics,communication,serial,ethernet,network,command-response,protocol,reactive,rx,c#</tags>
-    </metadata>
+
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="2.8">
+    <id>TA.Ascom.ReactiveCommunications</id>
+    <version>0.0.0-uncontrolled</version>
+    <title>Reactive-style transactional device communications for ASCOM drivers with guaranteed sequencing and thread-safety.</title>
+    <authors>Tim Long</authors>
+    <owners>Tigra Astronomy</owners>
+    <licenseUrl>http://tigra.mit-license.org/</licenseUrl>
+    <projectUrl>http://tigra-astronomy.com/reactive-communications-for-ascom</projectUrl>
+    <iconUrl>http://tigra-astronomy.com/Media/TigraAstronomy/ProjectIcons/ReactiveASCOM520x520.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      A library based on the Reactive Extensions for .NET for simplifying device communications over serial, Ethernet and other types
+      of communications channel to embedded controllers, while guaranteeing correct sequencing and thread-safety of transactions.
+      Originally developed for use with ASCOM drivers, but may be useful for any software that needs to communicate with an embedded
+      controller using a command/response protocol.
+    </description>
+    <summary>Simplifies device communications with embedded controllers, while guaranteeing correct sequencing and thread-safety of transactions.</summary>
+    <releaseNotes>This project is still in flight. Anything may change at any time. Please refer to the project home page for further information.</releaseNotes>
+    <copyright>Copyright © 2015 Tigra Astronomy, all rights reserved.</copyright>
+    <language>en-GB</language>
+    <tags>ASCOM,astronomy,control,robotics,communication,serial,ethernet,network,command-response,protocol,reactive,rx,c#</tags>
+  </metadata>
+  <files>
+    <file src="bin\$Configuration$\CodeContracts\TA.Ascom.ReactiveCommunications.Contracts.dll"
+          target="lib\net45\CodeContracts\TA.Ascom.ReactiveCommunications.Contracts.dll" />
+    <file src="bin\$Configuration$\CodeContracts\TA.Ascom.ReactiveCommunications.Contracts.pdb"
+          target="lib\net45\CodeContracts\TA.Ascom.ReactiveCommunications.Contracts.pdb" />
+  </files>
 </package>

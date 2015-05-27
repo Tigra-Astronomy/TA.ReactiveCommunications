@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: AssemblyInfo.cs  Last modified: 2015-05-27@02:48 by Tim Long
+// File: GlobalAssemblyInfo.cs  Last modified: 2015-05-27@20:12 by Tim Long
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -28,5 +28,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.0.0.0")]
 [assembly: AssemblyFileVersion("0.0.0.0")]
 [assembly: AssemblyInformationalVersion("0.0.0.0-uncontrolled")]
-
 [assembly: InternalsVisibleTo("TA.Ascom.ReactiveCommunications.Specifications")]

@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceEndpoint.cs  Last modified: 2015-05-26@22:05 by Tim Long
+// File: DeviceEndpoint.cs  Last modified: 2015-05-27@20:12 by Tim Long
 
 using System;
 using System.ComponentModel;
@@ -32,15 +32,17 @@ namespace TA.Ascom.ReactiveCommunications
             @"^(?<Host>((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])))(\:(?<Port>\d{1,5}))?";
         const string NetworkHostPattern =
             @"^(?<Host>[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*(?:\.[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)*)(\:(?<Port>\d{1,5}))?";
-        const RegexOptions Options = RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
+        const RegexOptions Options =
+            RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline |
+            RegexOptions.IgnoreCase | RegexOptions.Compiled;
         static readonly Regex SerialRegex = new Regex(SerialPortPattern, Options);
         static readonly Regex NetworkIPv4Regex = new Regex(NetworkIPv4Pattern, Options);
         static readonly Regex NetworkHostRegex = new Regex(NetworkHostPattern, Options);
 
         /// <summary>
         ///     Gets the device address. The address format is device specific.
-        ///     For example, for an ethernet connection, it could be a DNS host name or an IP address.
-        ///     For a serial port, it would be the name of the commm port.
+        ///     For example, for an Ethernet connection, it could be a DNS host name or an IP address.
+        ///     For a serial port, it would be the name of the port.
         /// </summary>
         /// <value>The device address.</value>
         public string DeviceAddress

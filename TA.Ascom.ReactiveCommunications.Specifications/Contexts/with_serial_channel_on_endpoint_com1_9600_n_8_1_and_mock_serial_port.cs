@@ -3,12 +3,13 @@ using System.Diagnostics;
 using System.IO.Ports;
 using FakeItEasy;
 using Machine.Specifications;
+// ReSharper disable MissingXmlDoc
 
 namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
     {
     /// <summary>
     ///   Class with_localhost_endpoint_on_port_1234.
-    ///   Creates a test context for a SerialCommunicationChannel
+    ///   Creates a test context for a <see cref="SerialCommunicationChannel"/>
     ///   with an endpoint configured as COM1, 9600, N, 8, 1
     ///   and a mocked serial port.
     /// </summary>

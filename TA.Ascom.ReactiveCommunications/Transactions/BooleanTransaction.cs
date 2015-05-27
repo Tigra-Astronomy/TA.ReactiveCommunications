@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: BooleanTransaction.cs  Last modified: 2015-05-25@18:22 by Tim Long
+// File: BooleanTransaction.cs  Last modified: 2015-05-27@20:12 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -18,12 +18,12 @@ using System.Reactive.Linq;
 namespace TA.Ascom.ReactiveCommunications.Transactions
     {
     /// <summary>
-    /// Receives a response consisting of <c>0#</c> or <c>1#</c> and interprets it as a boolean.
+    ///     Receives a response consisting of <c>0#</c> or <c>1#</c> and interprets it as a boolean.
     /// </summary>
     public class BooleanTransaction : DeviceTransaction
         {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeviceTransaction" /> class.
+        ///     Initializes a new instance of the <see cref="DeviceTransaction" /> class.
         /// </summary>
         /// <param name="command">The command string to send to the device.</param>
         public BooleanTransaction(string command) : base(command)
@@ -32,8 +32,8 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
             }
 
         /// <summary>
-        /// Observes the character sequence from the communications channel
-        /// until a satisfactory response has been received. 
+        ///     Observes the character sequence from the communications channel
+        ///     until a satisfactory response has been received.
         /// </summary>
         /// <param name="source">The source sequence.</param>
         public override void ObserveResponse(IObservable<char> source)
@@ -63,7 +63,7 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
             }
 
         /// <summary>
-        /// Gets the final value of teh transaction's response, as a boolean.
+        ///     Gets the final value of teh transaction's response, as a boolean.
         /// </summary>
         /// <value><c>true</c> if value; otherwise, <c>false</c>.</value>
         public bool Value { get; private set; }
