@@ -23,10 +23,4 @@
     <language>en-GB</language>
     <tags>ASCOM,astronomy,control,robotics,communication,serial,ethernet,network,command-response,protocol,reactive,rx,c#</tags>
   </metadata>
-  <files>
-    <file src="bin\$Configuration$\CodeContracts\TA.Ascom.ReactiveCommunications.Contracts.dll"
-          target="lib\net45\CodeContracts\TA.Ascom.ReactiveCommunications.Contracts.dll" />
-    <file src="bin\$Configuration$\CodeContracts\TA.Ascom.ReactiveCommunications.Contracts.pdb"
-          target="lib\net45\CodeContracts\TA.Ascom.ReactiveCommunications.Contracts.pdb" />
-  </files>
 </package>
