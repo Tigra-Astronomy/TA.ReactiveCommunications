@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: SerialObservableExtensions.cs  Last modified: 2015-05-29@19:58 by Tim Long
+// File: SerialObservableExtensions.cs  Last modified: 2015-05-27@20:12 by Tim Long
 
 using System;
 using System.Collections.Generic;
@@ -31,8 +31,7 @@ namespace TA.Ascom.ReactiveCommunications
 
         /// <summary>
         ///     Captures the <see cref="System.IO.Ports.SerialPort.DataReceived" /> event of a serial port and returns an
-        ///     observable sequence of the events. This implicitly opens the serial port whenever there is an active subscription
-        ///     and closes it when the subscription is disposed.
+        ///     observable sequence of the events.
         /// </summary>
         /// <param name="port">The serial port that will act as the event source.</param>
         /// <returns><see cref="IObservable{Char}" /> - an observable sequence of events.</returns>
@@ -52,12 +51,10 @@ namespace TA.Ascom.ReactiveCommunications
                     // We must discard stale data when subscribing or it will pollute the first element of the sequence.
                     port.DiscardInBuffer();
                     port.DataReceived += handler;
-                    port.Open();
                     Log.Debug("Listening to DataReceived event");
                     },
                 handler =>
                     {
-                    port.Close();
                     port.DataReceived -= handler;
                     Log.Debug("Stopped listening to DataReceived event");
                     });
