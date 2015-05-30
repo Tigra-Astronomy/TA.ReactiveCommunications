@@ -154,6 +154,7 @@
     <Compile Include="CodeAnnotations.cs" />
     <Compile Include="DeviceEndpoint.cs" />
     <Compile Include="DeviceTransaction.cs" />
+    <Compile Include="Diagnostics\ObservableDiagnosticExtensions.cs" />
     <Compile Include="ICommunicationsChannel.cs" />
     <Compile Include="ISerialPort.cs" />
     <Compile Include="ITransactionProcessor.cs" />

@@ -60,6 +60,7 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
             #region Cleanup
             // To clean up, we just need to dispose the TransactionObserver and the channel is closed automatically.
             // Not strictly necessary, but good practice.
+            processor.Dispose();
             transactionObserver.OnCompleted(); // There will be no more transactions.
             transactionObserver = null; // not necessary, but good practice.
             #endregion Cleanup
