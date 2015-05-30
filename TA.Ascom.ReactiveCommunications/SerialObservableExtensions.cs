@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: SerialObservableExtensions.cs  Last modified: 2015-05-27@20:12 by Tim Long
+// File: SerialObservableExtensions.cs  Last modified: 2015-05-30@16:13 by Tim Long
 
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
 using NLog;
 
 namespace TA.Ascom.ReactiveCommunications
@@ -58,24 +59,104 @@ namespace TA.Ascom.ReactiveCommunications
                     port.DataReceived -= handler;
                     Log.Debug("Stopped listening to DataReceived event");
                     });
+
             return portEvents;
             }
 
+
         /// <summary>
-        ///     Gets an observable sequence of all the characters received by a serial port.
+        /// Creates an observable sequence of characters from the specified serial port.
         /// </summary>
-        /// <param name="port">The port that is to be the data source.</param>
+        /// <param name="port">The port that will be the data source.</param>
         /// <returns><see cref="IObservable{Char}" /> - an observable sequence of characters.</returns>
-        public static IObservable<char> ReceivedCharacters(this ISerialPort port)
+        /// <remarks>
+        ///     This code suggested by Bart De Smet [MVP] at
+        ///     https://social.msdn.microsoft.com/Forums/en-US/5a12822d-92a6-4ff3-9a37-9bcce83dae0c/how-to-implement-serialport-parser-in-rx?forum=rx
+        ///     Bart's code correctly handles OnCompleted and OnError cases.
+        /// </remarks>
+        public static IObservable<char> ToObservableCharacterSequence(this ISerialPort port)
             {
-            Contract.Requires(port != null);
-            Contract.Ensures(Contract.Result<IObservable<char>>() != null);
-            var observableEvents = port.ObservableDataReceivedEvents();
-            var observableCharacterSequence = from args in observableEvents
-                                              where args.EventArgs.EventType == SerialData.Chars
-                                              from character in port.ReadExisting()
-                                              select character;
-            return observableCharacterSequence;
+            return Observable.Create<char>(observer =>
+                {
+                port.DataReceived += ReactiveDataReceivedEventHandler(port, observer);
+                port.ErrorReceived += ReactiveErrorReceivedEventHandler(observer);
+                return UnsubscribeAction(port, observer);
+                });
+            }
+
+        /// <summary>
+        /// Returns an Action to be called when the observer unsubscribes.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        /// <param name="observer">The observer.</param>
+        /// <returns>Action.</returns>
+        static Action UnsubscribeAction(ISerialPort port, IObserver<char> observer)
+            {
+            return () =>
+                {
+                port.DataReceived -= ReactiveDataReceivedEventHandler(port, observer);
+                port.ErrorReceived -= ReactiveErrorReceivedEventHandler(observer);
+                // depending on ownership of port, we could Dispose it here too
+                };
+            }
+
+        /// <summary>
+        /// Gets an event handler (delegate) that handles the SerialErrorReceived event from a serial port
+        /// and passes the error on to an observer by calling the OnError method on the observer.
+        /// </summary>
+        /// <param name="observer">The observer.</param>
+        /// <returns>delegate of type <see cref="SerialErrorReceivedEventHandler"/>.</returns>
+        static SerialErrorReceivedEventHandler ReactiveErrorReceivedEventHandler(IObserver<char> observer)
+            {
+            var errorEventHandler = new SerialErrorReceivedEventHandler(
+                    (sender, e) => observer.OnError(new Exception(e.EventType.ToString())));
+            return errorEventHandler;
+            }
+
+        /// <summary>
+        ///     Gets an event handler (delegate) that handles the SerialDataReceived event from a serial port. if the
+        ///     event type is <see cref="SerialData.Chars" /> then the received characters are read from the serial port
+        ///     buffer and passed on to a subscribed observer by calling the OnNext method. OnNext is called once for
+        ///     each received character. If the event type is <see cref="SerialData.Eof" /> then the observer's
+        ///     OnCompleted method is called.
+        /// </summary>
+        /// <param name="port">The data source.</param>
+        /// <param name="observer">The subscribed observer.</param>
+        /// <returns>SerialDataReceivedEventHandler.</returns>
+        /// <remarks>
+        /// The documentation for <see cref="System.IO.Ports.SerialPort"/> states that: "Note that this method can leave
+        /// trailing lead bytes in the internal buffer, which makes the BytesToRead value greater than zero". In that
+        /// situation, we would enter an infinite loop trying to read from en empty stream, which would only terminate
+        /// when more data arrives at the serial port and eventually gets flushed into the input stream. Therefore, we
+        /// use <c>Thread.Yield()</c> within the receive loop to give other threads (including the serial port) a chance
+        /// to run.
+        /// </remarks>
+        static SerialDataReceivedEventHandler ReactiveDataReceivedEventHandler(ISerialPort port, IObserver<char> observer)
+            {
+            var receiveEventHandler = new SerialDataReceivedEventHandler((sender, e) =>
+                {
+                switch (e.EventType)
+                    {
+                        case SerialData.Eof:
+                            observer.OnCompleted();
+                            break;
+                        case SerialData.Chars:
+                            while (port.BytesToRead > 0)
+                                {
+                                var inputBuffer = port.ReadExisting();
+                                foreach (var character in inputBuffer)
+                                    {
+                                    observer.OnNext(character);
+                                    }
+                                Thread.Yield(); // There's no point in spinning on an empty stream.
+                                }
+                            break;
+                        default:
+                            Log.Warn("Ignoring unexpected serial data received event: {0}", e.EventType);
+                            break;
+                    }
+                });
+            return receiveEventHandler;
             }
 
         /// <summary>

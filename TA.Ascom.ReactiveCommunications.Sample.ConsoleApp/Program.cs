@@ -58,12 +58,12 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
             #endregion Wait for the results
 
             #region Cleanup
-            // To clean up, we just need to dispose the TransactionObserver and the channel is closed automatically.
-            // Not strictly necessary, but good practice.
+            // To clean up, we just need to dispose the transactionProcessor
             processor.Dispose();
-            transactionObserver.OnCompleted(); // There will be no more transactions.
-            transactionObserver = null; // not necessary, but good practice.
             #endregion Cleanup
+
+            Console.WriteLine("Press ENTER:");
+            Console.ReadLine();
             }
         }
     }

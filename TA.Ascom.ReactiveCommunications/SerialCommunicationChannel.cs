@@ -41,7 +41,7 @@ namespace TA.Ascom.ReactiveCommunications
             if (!(endpoint is SerialDeviceEndpoint))
                 throw new ArgumentException("Expected a SerialDeviceEndpoint");
             this.endpoint = endpoint as SerialDeviceEndpoint;
-            observableReceiveSequence = Port.ReceivedCharacters()
+            observableReceiveSequence = Port.ToObservableCharacterSequence()
                 .Trace("Serial Receive")
                 .Publish();
             }
