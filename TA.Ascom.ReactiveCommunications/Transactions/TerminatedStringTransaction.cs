@@ -23,13 +23,22 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
     /// </summary>
     public class TerminatedStringTransaction : DeviceTransaction
         {
+        readonly char initiator;
+        readonly char terminator;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="DeviceTransaction" /> class.
         /// </summary>
         /// <param name="command">The command to be sent to the communications channel.</param>
-        public TerminatedStringTransaction(string command) : base(command)
+        /// <param name="initiator">The response initiator. Optional; defaults to ':'. Not used, but is stripped from
+        /// the start of the response (if present).</param>
+        /// <param name="terminator">The terminator character. Optional; defaults to '#'.</param>
+        public TerminatedStringTransaction(string command, char terminator = '#', char initiator = ':')
+            : base(command)
             {
             Contract.Requires(!string.IsNullOrEmpty(command));
+            this.initiator = initiator;
+            this.terminator = terminator;
             Value = string.Empty;
             }
 
@@ -52,7 +61,7 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
         /// <param name="source">The source sequence.</param>
         public override void ObserveResponse(IObservable<char> source)
             {
-            source.TerminatedStrings()
+            source.TerminatedStrings(terminator)
                 .Take(1)
                 .Subscribe(OnNext, OnError, OnCompleted);
             }
@@ -67,7 +76,7 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
             if (Response.Any())
                 {
                 var responseString = Response.Single();
-                Value = responseString.TrimStart(':').TrimEnd('#');
+                Value = responseString.TrimStart(initiator).TrimEnd(terminator);
                 }
             base.OnCompleted();
             }

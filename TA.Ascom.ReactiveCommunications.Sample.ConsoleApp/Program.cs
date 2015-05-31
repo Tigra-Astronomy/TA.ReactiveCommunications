@@ -41,7 +41,8 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
 
             #region Submit some transactions
             // Ready to go. We are going to use tasks to submit the transactions, just to demonstrate thread safety.
-            var raTransaction = new TerminatedStringTransaction(":GR#") {Timeout = TimeSpan.FromSeconds(2)};
+            var raTransaction = new TerminatedStringTransaction(":GR#", '#', ':') {Timeout = TimeSpan.FromSeconds(2)};
+            // The terminator and initiator are optional parameters and default to values that work for Meade style protocols.
             var decTransaction = new TerminatedStringTransaction(":GD#") {Timeout = TimeSpan.FromSeconds(2)};
             Task.Run(() => processor.CommitTransaction(raTransaction));
             Task.Run(() => processor.CommitTransaction(decTransaction));
