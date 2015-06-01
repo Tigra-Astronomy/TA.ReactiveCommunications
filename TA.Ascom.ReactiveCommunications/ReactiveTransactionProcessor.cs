@@ -58,10 +58,10 @@ namespace TA.Ascom.ReactiveCommunications
         public void SubscribeTransactionObserver(TransactionObserver observer)
             {
             Contract.Requires(observer != null);
-            subscriptionDisposer = Observable.FromEventPattern<DeviceTransaction>(
+            subscriptionDisposer = Observable.FromEventPattern<TransactionAvailableEventArgs>(
                 handler => TransactionAvailable += handler,
                 handler => TransactionAvailable -= handler)
-                .Select(e => e.EventArgs)
+                .Select(e => e.EventArgs.Transaction)
                 .ObserveOn(NewThreadScheduler.Default)
                 .Subscribe(observer);
             }
@@ -70,7 +70,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// <summary>
         ///     Occurs when a new transaction becomes available. The transaction is contained in the event arguments.
         /// </summary>
-        public event EventHandler<DeviceTransaction> TransactionAvailable;
+        internal event EventHandler<TransactionAvailableEventArgs> TransactionAvailable;
 
 
         /// <summary>
@@ -84,7 +84,8 @@ namespace TA.Ascom.ReactiveCommunications
             Contract.Requires(!string.IsNullOrEmpty(transaction.Command));
             if (TransactionAvailable != null)
                 {
-                TransactionAvailable(this, transaction);
+                var evantArgs = new TransactionAvailableEventArgs() {Transaction = transaction};
+                TransactionAvailable(this, evantArgs);
                 }
             }
         #endregion .NET Standard Event Pattern

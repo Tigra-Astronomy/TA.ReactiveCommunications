@@ -14,7 +14,6 @@ using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using NLog;
-using NLog.Fluent;
 
 namespace TA.Ascom.ReactiveCommunications.Diagnostics
     {
