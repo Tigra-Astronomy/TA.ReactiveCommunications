@@ -21,8 +21,10 @@ namespace TA.Ascom.ReactiveCommunications
     ///     A transaction processor that raises a .NET event as each transaction becomes available.
     ///     The transaction is provided as part of the event arguments.
     /// </summary>
-    public class ReactiveTransactionProcessor : ITransactionProcessor
+    public class ReactiveTransactionProcessor : ITransactionProcessor, IDisposable
         {
+        IDisposable subscriptionDisposer;
+
         /// <summary>
         ///     Commits a transaction. That is, submits it for execution with no way to cancel. From this point, the
         ///     transaction will either succeed in which case it will contain a valid response, (
@@ -56,11 +58,10 @@ namespace TA.Ascom.ReactiveCommunications
         public void SubscribeTransactionObserver(TransactionObserver observer)
             {
             Contract.Requires(observer != null);
-            var observableTransactionSource = Observable
-                .FromEventPattern<DeviceTransaction>(
-                    handler => TransactionAvailable += handler,
-                    handler => TransactionAvailable -= handler);
-            observableTransactionSource.Select(e => e.EventArgs)
+            subscriptionDisposer = Observable.FromEventPattern<TransactionAvailableEventArgs>(
+                handler => TransactionAvailable += handler,
+                handler => TransactionAvailable -= handler)
+                .Select(e => e.EventArgs.Transaction)
                 .ObserveOn(NewThreadScheduler.Default)
                 .Subscribe(observer);
             }
@@ -69,7 +70,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// <summary>
         ///     Occurs when a new transaction becomes available. The transaction is contained in the event arguments.
         /// </summary>
-        public event EventHandler<DeviceTransaction> TransactionAvailable;
+        internal event EventHandler<TransactionAvailableEventArgs> TransactionAvailable;
 
 
         /// <summary>
@@ -83,9 +84,46 @@ namespace TA.Ascom.ReactiveCommunications
             Contract.Requires(!string.IsNullOrEmpty(transaction.Command));
             if (TransactionAvailable != null)
                 {
-                TransactionAvailable(this, transaction);
+                var evantArgs = new TransactionAvailableEventArgs() {Transaction = transaction};
+                TransactionAvailable(this, evantArgs);
                 }
             }
         #endregion .NET Standard Event Pattern
+
+        #region IDisposable pattern for a base class.
+
+        bool disposed;
+
+        /// <summary>
+        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        ///   Implements <see cref = "IDisposable" />.
+        /// </summary>
+        public void Dispose()
+            {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+            }
+
+        protected virtual void Dispose(bool disposing)
+            {
+            if (!disposed)
+                {
+                if (disposing)
+                    {
+                    // Free other state (managed objects).
+                    subscriptionDisposer.Dispose();
+                    }
+                // Free own state (unmanaged objects).
+                // Set large fields to null.
+                disposed = true;
+                }
+            }
+
+        // Use C# destructor syntax for finalization code.
+        ~ReactiveTransactionProcessor()
+            {
+            Dispose(false);
+            }
+        #endregion
         }
     }

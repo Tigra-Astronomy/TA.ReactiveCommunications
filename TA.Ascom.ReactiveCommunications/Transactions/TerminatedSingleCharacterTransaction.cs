@@ -32,7 +32,8 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
         ///     Initializes a new instance of the <see cref="TerminatedSingleCharacterTransaction" /> class.
         /// </summary>
         /// <param name="command">The command to be sent to the communications channel.</param>
-        public TerminatedSingleCharacterTransaction(string command) : base(command)
+        /// <param name="terminator">The response terminator character. Optional; defaults to '#'.</param>
+        public TerminatedSingleCharacterTransaction(string command, char terminator = '#') : base(command, terminator)
             {
             Contract.Requires(!string.IsNullOrEmpty(command));
             }

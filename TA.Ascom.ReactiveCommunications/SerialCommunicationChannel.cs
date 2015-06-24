@@ -16,6 +16,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using NLog;
+using TA.Ascom.ReactiveCommunications.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -40,11 +41,8 @@ namespace TA.Ascom.ReactiveCommunications
             if (!(endpoint is SerialDeviceEndpoint))
                 throw new ArgumentException("Expected a SerialDeviceEndpoint");
             this.endpoint = endpoint as SerialDeviceEndpoint;
-            observableReceiveSequence = Port.ReceivedCharacters()
-                .Do(
-                    c => log.Debug("Rx={0}", c),
-                    ex => log.Error("Rx exception", ex),
-                    () => log.Warn("Rx OnCompleted"))
+            observableReceiveSequence = Port.ToObservableCharacterSequence()
+                .Trace("Serial Receive")
                 .Publish();
             }
 

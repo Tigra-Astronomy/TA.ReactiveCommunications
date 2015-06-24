@@ -41,7 +41,8 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
 
             #region Submit some transactions
             // Ready to go. We are going to use tasks to submit the transactions, just to demonstrate thread safety.
-            var raTransaction = new TerminatedStringTransaction(":GR#") {Timeout = TimeSpan.FromSeconds(2)};
+            var raTransaction = new TerminatedStringTransaction(":GR#", '#', ':') {Timeout = TimeSpan.FromSeconds(2)};
+            // The terminator and initiator are optional parameters and default to values that work for Meade style protocols.
             var decTransaction = new TerminatedStringTransaction(":GD#") {Timeout = TimeSpan.FromSeconds(2)};
             Task.Run(() => processor.CommitTransaction(raTransaction));
             Task.Run(() => processor.CommitTransaction(decTransaction));
@@ -58,11 +59,12 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
             #endregion Wait for the results
 
             #region Cleanup
-            // To clean up, we just need to dispose the TransactionObserver and the channel is closed automatically.
-            // Not strictly necessary, but good practice.
-            transactionObserver.OnCompleted(); // There will be no more transactions.
-            transactionObserver = null; // not necessary, but good practice.
+            // To clean up, we just need to dispose the transactionProcessor
+            processor.Dispose();
             #endregion Cleanup
+
+            Console.WriteLine("Press ENTER:");
+            Console.ReadLine();
             }
         }
     }
