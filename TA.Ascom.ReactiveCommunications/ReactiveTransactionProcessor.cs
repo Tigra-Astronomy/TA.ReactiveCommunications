@@ -55,14 +55,20 @@ namespace TA.Ascom.ReactiveCommunications
         ///     </para>
         /// </remarks>
         /// <param name="observer">The transaction observer.</param>
-        public void SubscribeTransactionObserver(TransactionObserver observer)
+        public void SubscribeTransactionObserver(TransactionObserver observer, TimeSpan? rateLimit=null)
             {
             Contract.Requires(observer != null);
-            subscriptionDisposer = Observable.FromEventPattern<TransactionAvailableEventArgs>(
+            var observable = Observable.FromEventPattern<TransactionAvailableEventArgs>(
                 handler => TransactionAvailable += handler,
                 handler => TransactionAvailable -= handler)
-                .Select(e => e.EventArgs.Transaction)
-                .ObserveOn(NewThreadScheduler.Default)
+                .Select(e => e.EventArgs.Transaction);
+
+            if (rateLimit != null)
+                {
+                observable = observable.RateLimited(rateLimit.Value);
+                }
+
+            subscriptionDisposer = observable.ObserveOn(NewThreadScheduler.Default)
                 .Subscribe(observer);
             }
 
