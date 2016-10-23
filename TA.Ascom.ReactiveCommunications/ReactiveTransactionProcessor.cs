@@ -1,6 +1,6 @@
 // This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2015 Tigra Astronomy, all rights reserved.
+// Copyright © 2016 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: ReactiveTransactionProcessor.cs  Last modified: 2015-05-27@20:12 by Tim Long
+// File: ReactiveTransactionProcessor.cs  Last modified: 2016-10-23@23:53 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -18,12 +18,12 @@ using System.Reactive.Linq;
 namespace TA.Ascom.ReactiveCommunications
     {
     /// <summary>
-    ///     A transaction processor that raises a .NET event as each transaction becomes available.
-    ///     The transaction is provided as part of the event arguments.
+    ///     A transaction processor that raises a .NET event as each transaction becomes available. The transaction is
+    ///     provided as part of the event arguments.
     /// </summary>
     public class ReactiveTransactionProcessor : ITransactionProcessor, IDisposable
         {
-        IDisposable subscriptionDisposer;
+        private IDisposable subscriptionDisposer;
 
         /// <summary>
         ///     Commits a transaction. That is, submits it for execution with no way to cancel. From this point, the
@@ -55,14 +55,21 @@ namespace TA.Ascom.ReactiveCommunications
         ///     </para>
         /// </remarks>
         /// <param name="observer">The transaction observer.</param>
-        public void SubscribeTransactionObserver(TransactionObserver observer)
+        /// <param name="rateLimit">The minimum amount of time that must elapse between transactions.</param>
+        public void SubscribeTransactionObserver(TransactionObserver observer, TimeSpan? rateLimit = null)
             {
             Contract.Requires(observer != null);
-            subscriptionDisposer = Observable.FromEventPattern<TransactionAvailableEventArgs>(
-                handler => TransactionAvailable += handler,
-                handler => TransactionAvailable -= handler)
-                .Select(e => e.EventArgs.Transaction)
-                .ObserveOn(NewThreadScheduler.Default)
+            var observable = Observable.FromEventPattern<TransactionAvailableEventArgs>(
+                    handler => TransactionAvailable += handler,
+                    handler => TransactionAvailable -= handler)
+                .Select(e => e.EventArgs.Transaction);
+
+            if (rateLimit != null)
+                {
+                observable = observable.RateLimited(rateLimit.Value);
+                }
+
+            subscriptionDisposer = observable.ObserveOn(NewThreadScheduler.Default)
                 .Subscribe(observer);
             }
 
@@ -84,19 +91,18 @@ namespace TA.Ascom.ReactiveCommunications
             Contract.Requires(!string.IsNullOrEmpty(transaction.Command));
             if (TransactionAvailable != null)
                 {
-                var evantArgs = new TransactionAvailableEventArgs() {Transaction = transaction};
+                var evantArgs = new TransactionAvailableEventArgs {Transaction = transaction};
                 TransactionAvailable(this, evantArgs);
                 }
             }
         #endregion .NET Standard Event Pattern
 
         #region IDisposable pattern for a base class.
-
-        bool disposed;
+        private bool disposed;
 
         /// <summary>
-        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        ///   Implements <see cref = "IDisposable" />.
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        ///     Implements <see cref="IDisposable" />.
         /// </summary>
         public void Dispose()
             {
@@ -104,6 +110,13 @@ namespace TA.Ascom.ReactiveCommunications
             GC.SuppressFinalize(this);
             }
 
+        /// <summary>
+        ///     Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        ///     unmanaged resources.
+        /// </param>
         protected virtual void Dispose(bool disposing)
             {
             if (!disposed)
@@ -119,7 +132,9 @@ namespace TA.Ascom.ReactiveCommunications
                 }
             }
 
-        // Use C# destructor syntax for finalization code.
+        /// <summary>
+        ///     Finalizes an instance of the <see cref="ReactiveTransactionProcessor" /> class.
+        /// </summary>
         ~ReactiveTransactionProcessor()
             {
             Dispose(false);

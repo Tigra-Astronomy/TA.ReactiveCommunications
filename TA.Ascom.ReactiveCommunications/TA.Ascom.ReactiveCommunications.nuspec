@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
   <metadata minClientVersion="2.8">
     <id>TA.Ascom.ReactiveCommunications</id>
-    <version>0.0.0-uncontrolled</version>
+    <version>$version$</version>
     <title>Reactive ASCOM</title>
     <authors>Tim Long</authors>
     <owners>Tigra Astronomy</owners>

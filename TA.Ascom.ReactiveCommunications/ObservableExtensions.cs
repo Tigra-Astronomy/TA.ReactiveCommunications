@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: SerialObservableExtensions.cs  Last modified: 2015-05-30@16:13 by Tim Long
+// File: ObservableExtensions.cs  Last modified: 2015-05-30@16:13 by Tim Long
 
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace TA.Ascom.ReactiveCommunications
     ///     Provides extension methods for capturing and transforming observable sequences of characters received from a serial
     ///     port.
     /// </summary>
-    public static class SerialObservableExtensions
+    public static class ObservableExtensions
         {
         static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -250,5 +250,26 @@ namespace TA.Ascom.ReactiveCommunications
                           select s.Substring(0, 1);
             return results;
             }
+
+        /// <summary>
+        /// Rate-limits a sequence so that it cannot produce elements faster that the specified interval.
+        /// No data is discarded. When elements arrive faster than the specified rate, they are buffered
+        /// and emitted one at a time in accordance with the configured rate. This may be useful where
+        /// devices have a limitation on the number of transactions they can process per second.
+        /// </summary>
+        /// <typeparam name="T">The type of the observable sequence.</typeparam>
+        /// <param name="source">The source sequence.</param>
+        /// <param name="interval">The minimum interval between emitted elements.</param>
+        /// <returns>A rate-limited IObservable{T}.</returns>
+        /// <remarks>Credit to <c>yamen</c> via http://stackoverflow.com/a/11285920/98516 for this solution.</remarks>
+        public static IObservable<T> RateLimited<T>(this IObservable<T> source, TimeSpan interval)
+            {
+            return source.Select(x =>
+                Observable.Empty<T>()
+                    .Delay(interval)
+                    .StartWith(x)
+                ).Concat();
+            }
+
         }
     }
