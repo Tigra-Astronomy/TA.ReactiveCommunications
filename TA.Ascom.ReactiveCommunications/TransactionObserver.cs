@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2015 Tigra Astronomy, all rights reserved.
+// Copyright © 2016 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: TransactionObserver.cs  Last modified: 2015-05-27@20:12 by Tim Long
+// File: TransactionObserver.cs  Last modified: 2016-10-23@23:53 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -21,18 +21,17 @@ using NLog;
 namespace TA.Ascom.ReactiveCommunications
     {
     /// <summary>
-    ///     Observes the incoming transaction pipeline, which ultimately derives from the client application
-    ///     and commits each transaction in sequence. Transactions are processed
-    ///     synchronously and are guaranteed to be atomic, that is,
-    ///     zero or one transactions can be 'in progress' at any given time.
-    ///     This may involve blocking the thread while the transaction completes.
+    ///     Observes the incoming transaction pipeline, which ultimately derives from the client application and commits
+    ///     each transaction in sequence. Transactions are processed synchronously and are guaranteed to be atomic, that
+    ///     is, zero or one transactions can be 'in progress' at any given time. This may involve blocking the thread
+    ///     while the transaction completes.
     /// </summary>
     public class TransactionObserver : IObserver<DeviceTransaction>
         {
-        readonly ICommunicationChannel channel;
-        readonly Logger log = LogManager.GetCurrentClassLogger();
-        readonly IConnectableObservable<char> observableReceiveSequence;
-        int activeTransactions;
+        private readonly ICommunicationChannel channel;
+        private readonly Logger log = LogManager.GetCurrentClassLogger();
+        private readonly IConnectableObservable<char> observableReceiveSequence;
+        private int activeTransactions;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="TransactionObserver" /> class and associates it with a communications
@@ -47,22 +46,14 @@ namespace TA.Ascom.ReactiveCommunications
             log.Info("Transaction pipeline connected to channel with endpoint {0}", channel.Endpoint);
             }
 
-        [ContractInvariantMethod]
-        void ObjectInvariant()
-            {
-            Contract.Invariant(log != null);
-            Contract.Invariant(channel != null);
-            Contract.Invariant(observableReceiveSequence != null);
-            }
-
         /// <summary>
         ///     Gets a value indicating whether the receiver is ready.
         /// </summary>
         /// <value><c>true</c> if the receiver is ready; otherwise, <c>false</c>.</value>
         public bool ReceiverReady
-        {
+            {
             get { return channel.IsOpen; }
-        }
+            }
 
         /// <summary>
         ///     Called when the next transaction is available.
@@ -84,7 +75,7 @@ namespace TA.Ascom.ReactiveCommunications
         public void OnError(Exception error)
             {
             //ToDo - currently we will just go 'belly up'. Is there a better way of handling errors?
-            log.FatalException("Error in transaction pipeline", error);
+            log.Fatal(error, "Error in transaction pipeline");
             }
 
         /// <summary>
@@ -99,7 +90,15 @@ namespace TA.Ascom.ReactiveCommunications
             channel.Close();
             }
 
-        void CommitTransaction(DeviceTransaction transaction)
+        [ContractInvariantMethod]
+        private void ObjectInvariant()
+            {
+            Contract.Invariant(log != null);
+            Contract.Invariant(channel != null);
+            Contract.Invariant(observableReceiveSequence != null);
+            }
+
+        private void CommitTransaction(DeviceTransaction transaction)
             {
             Contract.Requires(transaction != null);
             Contract.Requires(!string.IsNullOrEmpty(transaction.Command));
