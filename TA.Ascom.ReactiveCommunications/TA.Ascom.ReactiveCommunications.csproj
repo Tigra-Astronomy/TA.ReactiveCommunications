@@ -162,6 +162,8 @@
     </Compile>
     <Compile Include="DeviceEndpoint.cs" />
     <Compile Include="DeviceTransaction.cs" />
+    <Compile Include="Diagnostics\AsciiExtensions.cs" />
+    <Compile Include="Diagnostics\AsciiSymbols.cs" />
     <Compile Include="Diagnostics\ObservableDiagnosticExtensions.cs" />
     <Compile Include="ICommunicationsChannel.cs" />
     <Compile Include="ISerialPort.cs" />
