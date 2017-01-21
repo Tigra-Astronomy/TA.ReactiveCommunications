@@ -1,16 +1,21 @@
-﻿// This file is part of the TI.DigitalDomeWorks project
+﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2014 TiGra Astronomy, all rights reserved.
+// Copyright © 2017 Tigra Astronomy, all rights reserved.
 // 
-// File: AsciiSymbols.cs  Created: 2014-10-29@20:45
-// Last modified: 2014-11-12@05:56 by Tim
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+// 
+// File: AsciiSymbols.cs  Last modified: 2017-01-21@22:36 by Tim Long
 
 namespace TA.Ascom.ReactiveCommunications.Diagnostics
     {
     /// <summary>
-    ///   Enumeration constants for ASCII control codes.
+    ///     Enumeration constants for ASCII control codes.
     /// </summary>
-    public enum AsciiSymbols : byte
+    internal enum AsciiSymbols : byte
         {
         // ReSharper disable InconsistentNaming
         NULL = 0x00,

@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: GlobalAssemblyInfo.cs  Last modified: 2017-01-21@16:29 by Tim Long
+// File: GlobalAssemblyInfo.cs  Last modified: 2017-01-21@22:49 by Tim Long
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("Tigra Astronomy and Tigra Networks are trademarks")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("0.2.1.0")]
-[assembly: AssemblyFileVersion("0.2.1.0")]
-[assembly: AssemblyInformationalVersion("0.2.1")]
+[assembly: AssemblyVersion("0.2.2.0")]
+[assembly: AssemblyFileVersion("0.2.2.0")]
+[assembly: AssemblyInformationalVersion("0.2.2")]
 [assembly: InternalsVisibleTo("TA.Ascom.ReactiveCommunications.Specifications")]

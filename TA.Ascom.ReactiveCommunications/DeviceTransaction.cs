@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2015 Tigra Astronomy, all rights reserved.
+// Copyright © 2017 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,11 +8,12 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransaction.cs  Last modified: 2015-05-27@20:12 by Tim Long
+// File: DeviceTransaction.cs  Last modified: 2017-01-21@22:52 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
 using System.Threading;
+using TA.Ascom.ReactiveCommunications.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -24,8 +25,8 @@ namespace TA.Ascom.ReactiveCommunications
         /// <summary>
         ///     Used to generate unique transaction IDs for each created transaction.
         /// </summary>
-        static int transactionCounter;
-        readonly ManualResetEvent completion;
+        private static int transactionCounter;
+        private readonly ManualResetEvent completion;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DeviceTransaction" /> class.
@@ -47,13 +48,6 @@ namespace TA.Ascom.ReactiveCommunications
             Failed = true; // Transactions are always failed, until they have succeeded.
             }
 
-        [ContractInvariantMethod]
-        void ObjectInvariant()
-            {
-            Contract.Invariant(Response != null);
-            Contract.Invariant(completion != null);
-            }
-
         /// <summary>
         ///     Gets the transaction identifier of the transaction.
         ///     Used to match responses to commands where the protocol supports
@@ -61,7 +55,7 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Each command must have a unique transaction Id.
         /// </summary>
         /// <value>The transaction identifier.</value>
-        public long TransactionId { get; private set; }
+        public long TransactionId { get; }
 
         /// <summary>
         ///     Gets or sets the command string.
@@ -70,7 +64,7 @@ namespace TA.Ascom.ReactiveCommunications
         ///     interpreter inside the target device.
         /// </summary>
         /// <value>The command string as expected by the command interpreter in the remote device.</value>
-        public string Command { get; private set; }
+        public string Command { get; }
 
         /// <summary>
         ///     Gets or sets the time that the command can be pending before it is considered to have failed.
@@ -103,6 +97,13 @@ namespace TA.Ascom.ReactiveCommunications
         /// <value>May contain an error message.</value>
         public Maybe<string> ErrorMessage { get; protected set; }
 
+        [ContractInvariantMethod]
+        private void ObjectInvariant()
+            {
+            Contract.Invariant(Response != null);
+            Contract.Invariant(completion != null);
+            }
+
         /// <summary>
         ///     Generates the transaction identifier by incrementing a shared counter using an atomic operation.
         ///     At a constant rate of 1,000 transactions per second, the counter will not wrap for several million years.
@@ -110,13 +111,10 @@ namespace TA.Ascom.ReactiveCommunications
         ///     session.
         /// </summary>
         /// <returns>System.Int64.</returns>
-        static long GenerateTransactionId()
+        private static long GenerateTransactionId()
             {
-            unchecked
-                {
-                var tid = Interlocked.Increment(ref transactionCounter);
-                return tid;
-                }
+            var tid = Interlocked.Increment(ref transactionCounter);
+            return tid;
             }
 
         /// <summary>
@@ -134,7 +132,7 @@ namespace TA.Ascom.ReactiveCommunications
             return signalled;
             }
 
-        void SignalCompletion()
+        private void SignalCompletion()
             {
             completion.Set();
             }
@@ -208,7 +206,7 @@ namespace TA.Ascom.ReactiveCommunications
         public override string ToString()
             {
             Contract.Ensures(Contract.Result<string>() != null);
-            return string.Format("TID={0} [{1}] [{3}] {2}", TransactionId, Command, Timeout,
+            return string.Format("TID={0} [{1}] [{3}] {2}", TransactionId, Command.ExpandAscii(), Timeout,
                 Response);
             }
         }
