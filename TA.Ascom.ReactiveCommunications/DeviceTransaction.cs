@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransaction.cs  Last modified: 2017-02-18@01:09 by Tim Long
+// File: DeviceTransaction.cs  Last modified: 2017-02-18@01:18 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
