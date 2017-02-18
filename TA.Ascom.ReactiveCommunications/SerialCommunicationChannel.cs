@@ -101,7 +101,8 @@ namespace TA.Ascom.ReactiveCommunications
         /// <param name="txData">The data to be transmitted.</param>
         public virtual void Send(string txData)
             {
-            log.Debug("Sending [{0}]", txData);
+            
+            log.Debug("Sending [{0}]", txData.ExpandAscii());
             Port.Write(txData);
             }
 

@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2015 Tigra Astronomy, all rights reserved.
+// Copyright © 2017 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,11 +8,13 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransaction.cs  Last modified: 2015-05-27@20:12 by Tim Long
+// File: DeviceTransaction.cs  Last modified: 2017-02-18@01:18 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
 using System.Threading;
+using System.Threading.Tasks;
+using TA.Ascom.ReactiveCommunications.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -24,8 +26,9 @@ namespace TA.Ascom.ReactiveCommunications
         /// <summary>
         ///     Used to generate unique transaction IDs for each created transaction.
         /// </summary>
-        static int transactionCounter;
-        readonly ManualResetEvent completion;
+        private static int transactionCounter;
+        private readonly ManualResetEvent completion;
+        private readonly ManualResetEvent hot;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DeviceTransaction" /> class.
@@ -43,15 +46,10 @@ namespace TA.Ascom.ReactiveCommunications
             ErrorMessage = Maybe<string>.Empty;
             Command = command;
             Timeout = TimeSpan.FromSeconds(10); // Wait effectively forever by default
+            HotTimeout = TimeSpan.FromSeconds(10);
             completion = new ManualResetEvent(false); // Not signalled by default
+            hot = new ManualResetEvent(false);
             Failed = true; // Transactions are always failed, until they have succeeded.
-            }
-
-        [ContractInvariantMethod]
-        void ObjectInvariant()
-            {
-            Contract.Invariant(Response != null);
-            Contract.Invariant(completion != null);
             }
 
         /// <summary>
@@ -61,7 +59,7 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Each command must have a unique transaction Id.
         /// </summary>
         /// <value>The transaction identifier.</value>
-        public long TransactionId { get; private set; }
+        public long TransactionId { get; }
 
         /// <summary>
         ///     Gets or sets the command string.
@@ -70,7 +68,7 @@ namespace TA.Ascom.ReactiveCommunications
         ///     interpreter inside the target device.
         /// </summary>
         /// <value>The command string as expected by the command interpreter in the remote device.</value>
-        public string Command { get; private set; }
+        public string Command { get; }
 
         /// <summary>
         ///     Gets or sets the time that the command can be pending before it is considered to have failed.
@@ -79,6 +77,13 @@ namespace TA.Ascom.ReactiveCommunications
         /// </summary>
         /// <value>The timeout period.</value>
         public TimeSpan Timeout { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the maximum time that can elapse between the transaction being committed
+        ///     and becoming "hot" (the active transaction).
+        /// </summary>
+        /// <value>The hot timeout.</value>
+        protected TimeSpan HotTimeout { get; set; }
 
         /// <summary>
         ///     Gets the response string exactly as observed from the response sequence. The response is wrapped in a
@@ -103,6 +108,29 @@ namespace TA.Ascom.ReactiveCommunications
         /// <value>May contain an error message.</value>
         public Maybe<string> ErrorMessage { get; protected set; }
 
+        internal void MakeHot()
+            {
+            hot.Set();
+            }
+
+        internal bool WaitUntilHotOrTimeout()
+            {
+            var wasHot = hot.WaitOne(HotTimeout);
+            if (!wasHot)
+                {
+                Failed = true;
+                ErrorMessage = new Maybe<string>("Transaction was never executed");
+                }
+            return wasHot;
+            }
+
+        [ContractInvariantMethod]
+        private void ObjectInvariant()
+            {
+            Contract.Invariant(Response != null);
+            Contract.Invariant(completion != null);
+            }
+
         /// <summary>
         ///     Generates the transaction identifier by incrementing a shared counter using an atomic operation.
         ///     At a constant rate of 1,000 transactions per second, the counter will not wrap for several million years.
@@ -110,13 +138,10 @@ namespace TA.Ascom.ReactiveCommunications
         ///     session.
         /// </summary>
         /// <returns>System.Int64.</returns>
-        static long GenerateTransactionId()
+        private static long GenerateTransactionId()
             {
-            unchecked
-                {
-                var tid = Interlocked.Increment(ref transactionCounter);
-                return tid;
-                }
+            var tid = Interlocked.Increment(ref transactionCounter);
+            return tid;
             }
 
         /// <summary>
@@ -126,15 +151,39 @@ namespace TA.Ascom.ReactiveCommunications
         /// <returns><c>true</c> if the transaction completed successfully, <c>false</c> otherwise.</returns>
         public bool WaitForCompletionOrTimeout()
             {
+            var hot = WaitUntilHotOrTimeout();
+            if (!hot)
+                return false;
             var signalled = completion.WaitOne(Timeout);
             if (!signalled)
                 {
                 Response = Maybe<string>.Empty;
+                Failed = true;
+                ErrorMessage = new Maybe<string>("Timed out");
                 }
             return signalled;
             }
 
-        void SignalCompletion()
+        /// <summary>
+        ///     Returns a task that completes when the transaction completes, fails or times out.
+        /// </summary>
+        /// <param name="cancellation">
+        ///     A cancellation token that can cancel the task. Note that this does not cancel
+        ///     the transaction (these cannot be cancelled once committed).
+        /// </param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> WaitForCompletionOrTimeoutAsync(CancellationToken cancellation)
+            {
+            return Task.Run(() =>
+                {
+                if (!WaitUntilHotOrTimeout()) return false;
+                var signalled = WaitHandle.WaitAny(new[] {completion, cancellation.WaitHandle}, Timeout) == 0;
+                cancellation.ThrowIfCancellationRequested();
+                return signalled;
+                }, cancellation);
+            }
+
+        private void SignalCompletion()
             {
             completion.Set();
             }
@@ -208,8 +257,8 @@ namespace TA.Ascom.ReactiveCommunications
         public override string ToString()
             {
             Contract.Ensures(Contract.Result<string>() != null);
-            return string.Format("TID={0} [{1}] [{3}] {2}", TransactionId, Command, Timeout,
-                Response);
+            var disposition = Failed ? $"Failed ({ErrorMessage})" : "Successful";
+            return $"TID={TransactionId} [{Command.ExpandAscii()}] [{Response}] {Timeout} {disposition}";
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2016 Tigra Astronomy, all rights reserved.
+// Copyright © 2017 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: GlobalAssemblyInfo.cs  Last modified: 2016-10-23@23:45 by Tim Long
+// File: GlobalAssemblyInfo.cs  Last modified: 2017-02-18@01:29 by Tim Long
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("Tigra Astronomy and Tigra Networks are trademarks")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("0.2.0.0")]
-[assembly: AssemblyFileVersion("0.2.0.0")]
-[assembly: AssemblyInformationalVersion("0.2.0")]
+[assembly: AssemblyVersion("0.3.0.0")]
+[assembly: AssemblyFileVersion("0.3.0.0")]
+[assembly: AssemblyInformationalVersion("0.3.0")]
 [assembly: InternalsVisibleTo("TA.Ascom.ReactiveCommunications.Specifications")]
