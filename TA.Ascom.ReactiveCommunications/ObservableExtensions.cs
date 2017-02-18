@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2015 Tigra Astronomy, all rights reserved.
+// Copyright © 2017 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: ObservableExtensions.cs  Last modified: 2015-05-30@16:13 by Tim Long
+// File: ObservableExtensions.cs  Last modified: 2017-02-18@00:00 by Tim Long
 
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace TA.Ascom.ReactiveCommunications
     /// </summary>
     public static class ObservableExtensions
         {
-        static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Captures the <see cref="System.IO.Ports.SerialPort.DataReceived" /> event of a serial port and returns an
@@ -65,7 +65,7 @@ namespace TA.Ascom.ReactiveCommunications
 
 
         /// <summary>
-        /// Creates an observable sequence of characters from the specified serial port.
+        ///     Creates an observable sequence of characters from the specified serial port.
         /// </summary>
         /// <param name="port">The port that will be the data source.</param>
         /// <returns><see cref="IObservable{Char}" /> - an observable sequence of characters.</returns>
@@ -85,12 +85,12 @@ namespace TA.Ascom.ReactiveCommunications
             }
 
         /// <summary>
-        /// Returns an Action to be called when the observer unsubscribes.
+        ///     Returns an Action to be called when the observer unsubscribes.
         /// </summary>
         /// <param name="port">The port.</param>
         /// <param name="observer">The observer.</param>
         /// <returns>Action.</returns>
-        static Action UnsubscribeAction(ISerialPort port, IObserver<char> observer)
+        private static Action UnsubscribeAction(ISerialPort port, IObserver<char> observer)
             {
             return () =>
                 {
@@ -101,15 +101,15 @@ namespace TA.Ascom.ReactiveCommunications
             }
 
         /// <summary>
-        /// Gets an event handler (delegate) that handles the SerialErrorReceived event from a serial port
-        /// and passes the error on to an observer by calling the OnError method on the observer.
+        ///     Gets an event handler (delegate) that handles the SerialErrorReceived event from a serial port
+        ///     and passes the error on to an observer by calling the OnError method on the observer.
         /// </summary>
         /// <param name="observer">The observer.</param>
-        /// <returns>delegate of type <see cref="SerialErrorReceivedEventHandler"/>.</returns>
-        static SerialErrorReceivedEventHandler ReactiveErrorReceivedEventHandler(IObserver<char> observer)
+        /// <returns>delegate of type <see cref="SerialErrorReceivedEventHandler" />.</returns>
+        private static SerialErrorReceivedEventHandler ReactiveErrorReceivedEventHandler(IObserver<char> observer)
             {
             var errorEventHandler = new SerialErrorReceivedEventHandler(
-                    (sender, e) => observer.OnError(new Exception(e.EventType.ToString())));
+                (sender, e) => observer.OnError(new Exception(e.EventType.ToString())));
             return errorEventHandler;
             }
 
@@ -124,14 +124,15 @@ namespace TA.Ascom.ReactiveCommunications
         /// <param name="observer">The subscribed observer.</param>
         /// <returns>SerialDataReceivedEventHandler.</returns>
         /// <remarks>
-        /// The documentation for <see cref="System.IO.Ports.SerialPort"/> states that: "Note that this method can leave
-        /// trailing lead bytes in the internal buffer, which makes the BytesToRead value greater than zero". In that
-        /// situation, we would enter an infinite loop trying to read from en empty stream, which would only terminate
-        /// when more data arrives at the serial port and eventually gets flushed into the input stream. Therefore, we
-        /// use <c>Thread.Yield()</c> within the receive loop to give other threads (including the serial port) a chance
-        /// to run.
+        ///     The documentation for <see cref="System.IO.Ports.SerialPort" /> states that: "Note that this method can leave
+        ///     trailing lead bytes in the internal buffer, which makes the BytesToRead value greater than zero". In that
+        ///     situation, we would enter an infinite loop trying to read from en empty stream, which would only terminate
+        ///     when more data arrives at the serial port and eventually gets flushed into the input stream. Therefore, we
+        ///     use <c>Thread.Yield()</c> within the receive loop to give other threads (including the serial port) a chance
+        ///     to run.
         /// </remarks>
-        static SerialDataReceivedEventHandler ReactiveDataReceivedEventHandler(ISerialPort port, IObserver<char> observer)
+        private static SerialDataReceivedEventHandler ReactiveDataReceivedEventHandler(ISerialPort port,
+            IObserver<char> observer)
             {
             var receiveEventHandler = new SerialDataReceivedEventHandler((sender, e) =>
                 {
@@ -141,14 +142,23 @@ namespace TA.Ascom.ReactiveCommunications
                             observer.OnCompleted();
                             break;
                         case SerialData.Chars:
-                            while (port.BytesToRead > 0)
+                            try
                                 {
-                                var inputBuffer = port.ReadExisting();
-                                foreach (var character in inputBuffer)
+                                while (port.BytesToRead > 0)
                                     {
-                                    observer.OnNext(character);
+                                    var inputBuffer = port.ReadExisting();
+                                    foreach (var character in inputBuffer)
+                                        {
+                                        observer.OnNext(character);
+                                        }
+                                    Thread.Yield(); // There's no point in spinning on an empty stream.
                                     }
-                                Thread.Yield(); // There's no point in spinning on an empty stream.
+                                }
+                            catch (InvalidOperationException ex)
+                                {
+                                Log.Error(ex,
+                                    "The serial port may have closed while a transaction was waiting for data");
+                                observer.OnError(ex);
                                 }
                             break;
                         default:
@@ -252,10 +262,10 @@ namespace TA.Ascom.ReactiveCommunications
             }
 
         /// <summary>
-        /// Rate-limits a sequence so that it cannot produce elements faster that the specified interval.
-        /// No data is discarded. When elements arrive faster than the specified rate, they are buffered
-        /// and emitted one at a time in accordance with the configured rate. This may be useful where
-        /// devices have a limitation on the number of transactions they can process per second.
+        ///     Rate-limits a sequence so that it cannot produce elements faster that the specified interval.
+        ///     No data is discarded. When elements arrive faster than the specified rate, they are buffered
+        ///     and emitted one at a time in accordance with the configured rate. This may be useful where
+        ///     devices have a limitation on the number of transactions they can process per second.
         /// </summary>
         /// <typeparam name="T">The type of the observable sequence.</typeparam>
         /// <param name="source">The source sequence.</param>
@@ -265,11 +275,11 @@ namespace TA.Ascom.ReactiveCommunications
         public static IObservable<T> RateLimited<T>(this IObservable<T> source, TimeSpan interval)
             {
             return source.Select(x =>
-                Observable.Empty<T>()
-                    .Delay(interval)
-                    .StartWith(x)
-                ).Concat();
+                    Observable.Empty<T>()
+                        .Delay(interval)
+                        .StartWith(x)
+                )
+                .Concat();
             }
-
         }
     }

@@ -110,13 +110,14 @@ namespace TA.Ascom.ReactiveCommunications
                 throw new InvalidOperationException("Detected transaction overlap");
                 }
             transaction.ObserveResponse(observableReceiveSequence);
+            transaction.MakeHot();
             using (var responseSequence = observableReceiveSequence.Connect())
                 {
                 channel.Send(transaction.Command);
                 var succeeded = transaction.WaitForCompletionOrTimeout();
                 if (!succeeded)
                     {
-                    log.Warn("Transaction {0} timed out", transaction.TransactionId);
+                    log.Warn($"Transaction {transaction.TransactionId} timed out with reason: {transaction.ErrorMessage}");
                     }
                 }
             if (transaction.Failed)

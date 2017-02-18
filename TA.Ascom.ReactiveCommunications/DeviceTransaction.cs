@@ -8,11 +8,12 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransaction.cs  Last modified: 2017-01-21@22:52 by Tim Long
+// File: DeviceTransaction.cs  Last modified: 2017-02-18@01:09 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
 using System.Threading;
+using System.Threading.Tasks;
 using TA.Ascom.ReactiveCommunications.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
@@ -27,6 +28,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// </summary>
         private static int transactionCounter;
         private readonly ManualResetEvent completion;
+        private readonly ManualResetEvent hot;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DeviceTransaction" /> class.
@@ -44,7 +46,9 @@ namespace TA.Ascom.ReactiveCommunications
             ErrorMessage = Maybe<string>.Empty;
             Command = command;
             Timeout = TimeSpan.FromSeconds(10); // Wait effectively forever by default
+            HotTimeout = TimeSpan.FromSeconds(10);
             completion = new ManualResetEvent(false); // Not signalled by default
+            hot = new ManualResetEvent(false);
             Failed = true; // Transactions are always failed, until they have succeeded.
             }
 
@@ -75,6 +79,13 @@ namespace TA.Ascom.ReactiveCommunications
         public TimeSpan Timeout { get; set; }
 
         /// <summary>
+        ///     Gets or sets the maximum time that can elapse between the transaction being committed
+        ///     and becoming "hot" (the active transaction).
+        /// </summary>
+        /// <value>The hot timeout.</value>
+        protected TimeSpan HotTimeout { get; set; }
+
+        /// <summary>
         ///     Gets the response string exactly as observed from the response sequence. The response is wrapped in a
         ///     <see cref="Maybe{String}" /> to differentiate an empty response from no response or a failed response.
         ///     An empty Maybe indicates an error condition. Commands where no repsponse is expected will return a Maybe
@@ -96,6 +107,22 @@ namespace TA.Ascom.ReactiveCommunications
         /// </summary>
         /// <value>May contain an error message.</value>
         public Maybe<string> ErrorMessage { get; protected set; }
+
+        internal void MakeHot()
+            {
+            hot.Set();
+            }
+
+        internal bool WaitUntilHotOrTimeout()
+            {
+            var wasHot = hot.WaitOne(HotTimeout);
+            if (!wasHot)
+                {
+                Failed = true;
+                ErrorMessage = new Maybe<string>("Transaction was never executed");
+                }
+            return wasHot;
+            }
 
         [ContractInvariantMethod]
         private void ObjectInvariant()
@@ -124,12 +151,36 @@ namespace TA.Ascom.ReactiveCommunications
         /// <returns><c>true</c> if the transaction completed successfully, <c>false</c> otherwise.</returns>
         public bool WaitForCompletionOrTimeout()
             {
+            var hot = WaitUntilHotOrTimeout();
+            if (!hot)
+                return false;
             var signalled = completion.WaitOne(Timeout);
             if (!signalled)
                 {
                 Response = Maybe<string>.Empty;
+                Failed = true;
+                ErrorMessage = new Maybe<string>("Timed out");
                 }
             return signalled;
+            }
+
+        /// <summary>
+        ///     Returns a task that completes when the transaction completes, fails or times out.
+        /// </summary>
+        /// <param name="cancellation">
+        ///     A cancellation token that can cancel the task. Note that this does not cancel
+        ///     the transaction (these cannot be cancelled once committed).
+        /// </param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> WaitForCompletionOrTimeoutAsync(CancellationToken cancellation)
+            {
+            return Task.Run(() =>
+                {
+                if (!WaitUntilHotOrTimeout()) return false;
+                var signalled = WaitHandle.WaitAny(new[] {completion, cancellation.WaitHandle}, Timeout) == 0;
+                cancellation.ThrowIfCancellationRequested();
+                return signalled;
+                }, cancellation);
             }
 
         private void SignalCompletion()
@@ -206,8 +257,8 @@ namespace TA.Ascom.ReactiveCommunications
         public override string ToString()
             {
             Contract.Ensures(Contract.Result<string>() != null);
-            return string.Format("TID={0} [{1}] [{3}] {2}", TransactionId, Command.ExpandAscii(), Timeout,
-                Response);
+            var disposition = Failed ? $"Failed ({ErrorMessage})" : "Successful";
+            return $"TID={TransactionId} [{Command.ExpandAscii()}] [{Response}] {Timeout} {disposition}";
             }
         }
     }
