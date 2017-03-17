@@ -129,6 +129,7 @@ namespace TA.Ascom.ReactiveCommunications
             {
             Contract.Invariant(Response != null);
             Contract.Invariant(completion != null);
+            Contract.Invariant(hot != null);
             }
 
         /// <summary>
