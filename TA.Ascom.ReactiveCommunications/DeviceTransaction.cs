@@ -175,6 +175,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> WaitForCompletionOrTimeoutAsync(CancellationToken cancellation)
             {
+            Contract.Ensures(Contract.Result<Task<bool>>() != null);
             return Task.Run(() =>
                 {
                 if (!WaitUntilHotOrTimeout()) return false;
