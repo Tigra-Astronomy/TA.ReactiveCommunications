@@ -1,4 +1,8 @@
 namespace TA.Ascom.ReactiveCommunications
     {
-    class InvalidEndpoint : DeviceEndpoint {}
+    /// <summary>
+    /// A degenerate endpoint (possibly created from an invalud connection string)
+    /// that can never transfer any data.
+    /// </summary>
+    public sealed class InvalidEndpoint : DeviceEndpoint {}
     }
