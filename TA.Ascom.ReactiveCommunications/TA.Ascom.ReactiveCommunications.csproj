@@ -168,6 +168,7 @@
     <Compile Include="Diagnostics\AsciiSymbols.cs" />
     <Compile Include="Diagnostics\ObservableDiagnosticExtensions.cs" />
     <Compile Include="ICommunicationsChannel.cs" />
+    <Compile Include="InvalidEndpoint.cs" />
     <Compile Include="ISerialPort.cs" />
     <Compile Include="ITransactionProcessor.cs" />
     <Compile Include="Maybe.cs" />
@@ -192,7 +193,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="TA.Ascom.ReactiveCommunications.nuspec" />
+    <None Include="TA.Ascom.ReactiveCommunications.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

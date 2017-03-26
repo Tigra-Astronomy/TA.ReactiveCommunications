@@ -16,6 +16,7 @@ using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.IO.Ports;
 using System.Text.RegularExpressions;
+using NLog;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -38,6 +39,7 @@ namespace TA.Ascom.ReactiveCommunications
         static readonly Regex SerialRegex = new Regex(SerialPortPattern, Options);
         static readonly Regex NetworkIPv4Regex = new Regex(NetworkIPv4Pattern, Options);
         static readonly Regex NetworkHostRegex = new Regex(NetworkHostPattern, Options);
+        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Gets the device address. The address format is device specific.
@@ -136,8 +138,8 @@ namespace TA.Ascom.ReactiveCommunications
                 return CreateNetworkEndpoint(connection, NetworkHostRegex);
             if (NetworkIPv4Regex.IsMatch(connection))
                 return CreateNetworkEndpoint(connection, NetworkIPv4Regex);
-            throw new NotSupportedException(
-                string.Format("The connection string is for an unsupported connection type: {0}", connection));
+            Log.Warn("Connection string is for an unsupported endpoint, returning InvalidEndpoint");
+            return new InvalidEndpoint();
             }
 
         static DeviceEndpoint CreateNetworkEndpoint(string connection, Regex regex)
