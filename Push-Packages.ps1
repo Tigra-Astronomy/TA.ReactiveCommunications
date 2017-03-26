@@ -1,1 +1,16 @@
-nuget push Nuget-Packages\TA.Ascom.ReactiveCommunications.0.3.0.nupkg -Source https://www.myget.org/F/tigra-astronomy/api/v2/package -SymbolSource https://www.myget.org/F/tigra-astronomy/symbols/api/v2/package
+$feed = "https://www.myget.org/F/tigra-astronomy/api/v2/package"
+$symbolFeed = "https://www.myget.org/F/tigra-astronomy/symbols/api/v2/package"
+Push-Location .\Nuget-Packages
+$packages = Get-ChildItem -Filter *.nupkg
+foreach ($package in $packages)
+{
+    if ($package.Name -like "*.symbols.nupkg")
+    {
+        NuGet.exe push -Source $symbolFeed $package
+    }
+    else 
+    {
+        NuGet.exe push -Source $feed $package    
+    }
+}
+Pop-Location

@@ -19,15 +19,15 @@ using NLog;
 using TA.Ascom.ReactiveCommunications.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
-    {
+{
     /// <summary>
     ///     Class SerialCommunicationChannel. Implements sending and receiving to a serial port device.
     /// </summary>
     public class SerialCommunicationChannel : ICommunicationChannel
-        {
-        const string LineTerminatorValue = "\n";
+    {
+        private const string LineTerminatorValue = "\n";
         internal readonly SerialDeviceEndpoint endpoint;
-        readonly Logger log = LogManager.GetCurrentClassLogger();
+        private readonly Logger log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SerialCommunicationChannel" /> class.
@@ -36,22 +36,15 @@ namespace TA.Ascom.ReactiveCommunications
         /// <param name="port">The port.</param>
         /// <exception cref="System.ArgumentException">Expected a SerialDeviceEndpoint</exception>
         public SerialCommunicationChannel(DeviceEndpoint endpoint, ISerialPort port = null)
-            {
-            Port = port ?? new SerialPort();
+        {
             if (!(endpoint is SerialDeviceEndpoint))
                 throw new ArgumentException("Expected a SerialDeviceEndpoint");
             this.endpoint = endpoint as SerialDeviceEndpoint;
+            Port = port ?? CreateSerialPort(this.endpoint);
             observableReceiveSequence = Port.ToObservableCharacterSequence()
                 .Trace("Serial Receive")
                 .Publish();
-            }
-
-        [ContractInvariantMethod]
-        void ObjectInvariant()
-            {
-            Contract.Invariant(log != null);
-            Contract.Invariant(endpoint != null);
-            }
+        }
 
         internal ISerialPort Port { get; set; }
 
@@ -59,8 +52,8 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Configures the serial port and opens the channel ready for transmitting.
         /// </summary>
         public void Open()
-            {
-            log.Info("Channel opening => {0}", endpoint);
+        {
+            log.Info($"Channel opening => {endpoint}");
             Port.PortName = endpoint.PortName;
             Port.BaudRate = endpoint.BaudRate;
             Port.Parity = endpoint.Parity;
@@ -79,32 +72,29 @@ namespace TA.Ascom.ReactiveCommunications
             //ToDo: magic number. Allow this to be specified rather than hard coded.
             Port.Open();
             if (IsOpen)
-                {
                 receiverListening = observableReceiveSequence.Connect();
-                }
-            }
+        }
 
         /// <summary>
         ///     Disconnects the serial port and closes the channel.
         /// </summary>
         public void Close()
-            {
+        {
             log.Info("Channel closing => {0}", endpoint);
             if (receiverListening != null)
                 receiverListening.Dispose(); // Disconnects the serial event handlers
             Port.Close();
-            }
+        }
 
         /// <summary>
         ///     Sends the specified data and returns immediately without waiting for a reply.
         /// </summary>
         /// <param name="txData">The data to be transmitted.</param>
         public virtual void Send(string txData)
-            {
-            
+        {
             log.Debug("Sending [{0}]", txData.ExpandAscii());
             Port.Write(txData);
-            }
+        }
 
         /// <summary>
         ///     An observable sequence of the characters received from the serial port.
@@ -133,30 +123,56 @@ namespace TA.Ascom.ReactiveCommunications
             get { return endpoint; }
         }
 
+        private ISerialPort CreateSerialPort(SerialDeviceEndpoint endpoint)
+        {
+            Contract.Requires(endpoint != null);
+            var port = new SerialPort
+            {
+                PortName = endpoint.PortName,
+                BaudRate = endpoint.BaudRate,
+                Parity = endpoint.Parity,
+                DataBits = endpoint.DataBits,
+                StopBits = endpoint.StopBits,
+                RtsEnable = endpoint.RtsEnable,
+                DtrEnable = endpoint.DtrEnable,
+                Encoding = endpoint.Encoding,
+                Handshake = endpoint.Handshake
+            };
+            return port;
+        }
+
+        [ContractInvariantMethod]
+        private void ObjectInvariant()
+        {
+            Contract.Invariant(log != null);
+            Contract.Invariant(endpoint != null);
+        }
+
         /// <summary>
         ///     Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
-            {
+        {
             Contract.Ensures(Contract.Result<string>() != null);
             return string.Format("IsOpen: {0}, Endpoint: {1}", IsOpen, endpoint);
-            }
+        }
 
         #region IDisposable pattern for a base class.
-        bool disposed;
-        readonly IConnectableObservable<char> observableReceiveSequence;
-        IDisposable receiverListening;
+
+        private bool disposed;
+        private readonly IConnectableObservable<char> observableReceiveSequence;
+        private IDisposable receiverListening;
 
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         ///     Implements <see cref="IDisposable" />.
         /// </summary>
         public void Dispose()
-            {
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
-            }
+        }
 
         /// <summary>
         ///     Releases unmanaged and - optionally - managed resources.
@@ -166,32 +182,31 @@ namespace TA.Ascom.ReactiveCommunications
         ///     unmanaged resources.
         /// </param>
         protected virtual void Dispose(bool disposing)
-            {
+        {
             if (!disposed)
-                {
+            {
                 if (disposing)
-                    {
                     if (Port != null)
-                        {
+                    {
                         if (Port.IsOpen)
                             Port.Close(); // Attempt to close gracefully (this should never fail).
                         Port.Dispose();
-                        }
                     }
                 // Free own state (unmanaged objects); Set large fields to null.
 
                 // Prevent multiple disposals
                 disposed = true;
-                }
             }
+        }
 
         /// <summary>
         ///     Finalizes an instance of the <see cref="SerialCommunicationChannel" /> class.
         /// </summary>
         ~SerialCommunicationChannel()
-            {
+        {
             Dispose(false);
-            }
-        #endregion
         }
+
+        #endregion
     }
+}
