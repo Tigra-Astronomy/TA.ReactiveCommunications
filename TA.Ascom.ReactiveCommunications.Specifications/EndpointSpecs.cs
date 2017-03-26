@@ -19,7 +19,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
     public class when_creating_a_serial_device_endpoint_from_a_fully_specified_connection_string
         {
         Because of =
-            () => Endpoint = DeviceEndpoint.FromConnectionString("COM127:115200,Even,7,OnePointFive,NOdtr,norts");
+            () => Endpoint = DeviceEndpoint.FromConnectionString("COM127:115200,Even,7,OnePointFive,NOdtr,norts,RequestToSendXOnXOff");
         It should_be_a_serial_endpoint = () => Endpoint.ShouldBeOfExactType<SerialDeviceEndpoint>();
         It should_target_com127 = () => ((SerialDeviceEndpoint) Endpoint).PortName.ShouldEqual("COM127");
         It should_have_baud_rate = () => ((SerialDeviceEndpoint) Endpoint).BaudRate.ShouldEqual(115200);
@@ -28,6 +28,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
         It should_have_stop_bits = () => ((SerialDeviceEndpoint) Endpoint).StopBits.ShouldEqual(StopBits.OnePointFive);
         It should_not_assert_dtr = () => ((SerialDeviceEndpoint) Endpoint).DtrEnable.ShouldBeFalse();
         It should_not_assert_rts = () => ((SerialDeviceEndpoint) Endpoint).RtsEnable.ShouldBeFalse();
+        It should_have_handshake = () => ((SerialDeviceEndpoint) Endpoint).Handshake.ShouldEqual(Handshake.RequestToSendXOnXOff);
         static DeviceEndpoint Endpoint;
         }
 
