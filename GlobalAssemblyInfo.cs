@@ -27,5 +27,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: AssemblyVersion("0.4.*")]
 [assembly: AssemblyFileVersion("0.4.1.0")]
-[assembly: AssemblyInformationalVersion("0.4.1-beta1")]
+[assembly: AssemblyInformationalVersion("0.4.1")]
 [assembly: InternalsVisibleTo("TA.Ascom.ReactiveCommunications.Specifications")]
