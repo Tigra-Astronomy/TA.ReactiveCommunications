@@ -12,6 +12,7 @@
 
 using System.Diagnostics.Contracts;
 using System.IO.Ports;
+using System.Text;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -37,11 +38,13 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Indicates whether the RTS signal should be asserted or negated. Optional; default is
         ///     <see langword="true" />
         /// </param>
+        /// <param name="handshake">The serial handshake method (default: None)</param>
         public SerialDeviceEndpoint(string portName,
             int baudRate = 9600,
             Parity parity = Parity.None,
             int dataBits = 8,
-            StopBits stopBits = StopBits.One, bool dtrEnable = true, bool rtsEnable = true)
+            StopBits stopBits = StopBits.One, bool dtrEnable = true, bool rtsEnable = true,
+            Handshake handshake = Handshake.None)
             {
             Contract.Requires(!string.IsNullOrWhiteSpace(portName));
             PortName = portName;
@@ -51,7 +54,20 @@ namespace TA.Ascom.ReactiveCommunications
             StopBits = stopBits;
             DtrEnable = dtrEnable;
             RtsEnable = rtsEnable;
+            Handshake = handshake;
+            Encoding = Encoding.ASCII;
             }
+
+        /// <summary>
+        /// Gets or sets the serial port text encoding
+        /// (default is 7-bit ASCII).
+        /// </summary>
+        public Encoding Encoding { get; set; }
+
+        /// <summary>
+        /// Gets or sets the serial handshake method (default: None)
+        /// </summary>
+        public Handshake Handshake { get; set; }
 
         /// <summary>
         ///     Gets the name of the port being used.
