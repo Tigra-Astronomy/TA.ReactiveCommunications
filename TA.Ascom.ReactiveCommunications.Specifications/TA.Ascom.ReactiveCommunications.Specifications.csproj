@@ -88,6 +88,7 @@
     <Compile Include="Helpers\MockHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialChannelSpecs.cs" />
+    <Compile Include="TerminatedStringTransactionSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj">
