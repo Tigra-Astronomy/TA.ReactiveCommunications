@@ -18,8 +18,9 @@ using System.Reactive.Linq;
 namespace TA.Ascom.ReactiveCommunications.Transactions
     {
     /// <summary>
-    ///     A transaction that receives a string response terminated by a '#' (octothorpe) character and strips off any
-    ///     initiator (:) and terminator (#).
+    ///     A transaction that receives a string response delimited by an initiator character 
+    ///     and a terminator character. Other characters before the initiator or after the terminator
+    ///     are discarded.
     /// </summary>
     public class TerminatedStringTransaction : DeviceTransaction
         {
@@ -61,7 +62,7 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
         /// <param name="source">The source sequence.</param>
         public override void ObserveResponse(IObservable<char> source)
             {
-            source.TerminatedStrings(terminator)
+            source.DelimitedMessageStrings(initiator, terminator)
                 .Take(1)
                 .Subscribe(OnNext, OnError, OnCompleted);
             }
