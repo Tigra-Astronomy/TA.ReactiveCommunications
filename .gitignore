@@ -9,6 +9,9 @@
 # NuGet packages
 *.nupkg
 
+# nCrunch artifacts
+nCrunchTemp*
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

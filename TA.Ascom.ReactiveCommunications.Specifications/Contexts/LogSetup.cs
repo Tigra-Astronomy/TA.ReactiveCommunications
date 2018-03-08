@@ -10,6 +10,7 @@
 // 
 // File: LogSetup.cs  Last modified: 2017-02-18@00:40 by Tim Long
 
+using JetBrains.Annotations;
 using Machine.Specifications;
 using Machine.Specifications.Annotations;
 using NLog;
