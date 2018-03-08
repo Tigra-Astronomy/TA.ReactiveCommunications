@@ -78,6 +78,7 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChannelFactorySpecs.cs" />
     <Compile Include="Contexts\LogSetup.cs" />
     <Compile Include="Contexts\with_fake_transaction_processor.cs" />
     <Compile Include="Contexts\with_serial_channel_on_endpoint_com1_9600_n_8_1_and_mock_serial_port.cs" />

@@ -22,6 +22,15 @@ Reactive ASCOM uses the [MIT License][6].
 
 Tim Long - Tigra Astronomy, May 2015.
 
+# Release Notes #
+
+ ### 0.5.0
+- added the `ChannelFactory` class and the ability to register custom user-supplied channel implementations.  Removed `DeviceEndpoint.FromConnectionString()`. This is a breaking change and applications will now need to use the new `ChannelFactory` class to create a communications channel from a connection string, instead of `DeviceEndpoint.FromConnectionString()`
+
+  Builtin channel types are pre-registered in the `ChannelFactory`. Custom channel implementations can be added by calling `RegisterChannelType()`. You must supply a `Predicate<string>` that tests whether a connection string is valid for the channel type; a `Func<string,DeviceEndpoint>` for creating an endpoint from a connection string; and a `Func<DeviceEndpoint, ICommunicationsChannel>` for creating the channel itself.
+
+  If the builtin channel types are not required, they can be deleted by calling `ClearRegisteredDevices()` prior to adding any custom implementations.
+
   [1]: http://tigra-astronomy.com/reactive-communications-for-ascom "Project Page"
   [2]: https://rx.codeplex.com/ "Rx Project"
   [3]: http://ascom-standards.org "Astronomy Common Object Model"

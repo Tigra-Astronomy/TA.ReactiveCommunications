@@ -9,4 +9,10 @@ the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
 permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.&#xD;
 You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.&#xD;
 &#xD;
-File: $FILENAME$  Last modified: $CURRENT_YEAR$-$CURRENT_MONTH$-$CURRENT_DAY$@$CURRENT_TIME$ by $USER_NAME$</s:String></wpf:ResourceDictionary>
+File: $FILENAME$  Last modified: $CURRENT_YEAR$-$CURRENT_MONTH$-$CURRENT_DAY$@$CURRENT_TIME$ by $USER_NAME$</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=85330578967A4B4999F3DEAB6F1E10E5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=85330578967A4B4999F3DEAB6F1E10E5/AbsolutePath/@EntryValue">D:\VS-Projects\ta.ascom.reactivecommunications\TA.Ascom.ReactiveCommunications.Specifications\TA.Ascom.ReactiveCommunications.Specifications.csproj.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=85330578967A4B4999F3DEAB6F1E10E5/RelativePath/@EntryValue">..\TA.Ascom.ReactiveCommunications.Specifications\TA.Ascom.ReactiveCommunications.Specifications.csproj.DotSettings</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File85330578967A4B4999F3DEAB6F1E10E5/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File85330578967A4B4999F3DEAB6F1E10E5/IsOn/@EntryValue">False</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File85330578967A4B4999F3DEAB6F1E10E5/RelativePriority/@EntryValue">1</s:Double></wpf:ResourceDictionary>

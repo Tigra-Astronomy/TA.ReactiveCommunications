@@ -35,7 +35,7 @@ namespace TA.Ascom.ReactiveCommunications.Diagnostics
                 {
                 var b = (byte) c;
                 var strASCII = Enum.GetName(typeof(AsciiSymbols), b);
-                if (strASCII != null)
+                if (!string.IsNullOrEmpty(strASCII))
                     expanded.Append("<" + strASCII + ">");
                 else
                     expanded.Append(c);
