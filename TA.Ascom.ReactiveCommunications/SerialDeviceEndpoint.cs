@@ -10,9 +10,11 @@
 // 
 // File: SerialDeviceEndpoint.cs  Last modified: 2015-05-27@20:12 by Tim Long
 
+using System;
 using System.Diagnostics.Contracts;
 using System.IO.Ports;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -22,6 +24,10 @@ namespace TA.Ascom.ReactiveCommunications
     /// </summary>
     public class SerialDeviceEndpoint : DeviceEndpoint
         {
+        private const string SerialPortPattern =
+            @"^(?<PortName>(COM|com)\d{1,3})(:((?<Baud>\d{3,7})(,(?<Parity>None|Even|Odd|Mark|Space))?(,(?<DataBits>7|8))?(,(?<StopBits>Zero|OnePointFive|One|Two))?(,(?<DTR>nodtr|dtr))?(,(?<RTS>norts|rts))?(,(?<Handshake>None|XOnXOff|RequestToSend|RequestToSendXOnXOff))?)?)?$";
+        private static readonly Regex SerialRegex = new Regex(SerialPortPattern, Options);
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="SerialDeviceEndpoint" /> class.
         /// </summary>
@@ -122,6 +128,35 @@ namespace TA.Ascom.ReactiveCommunications
             {
             Contract.Ensures(Contract.Result<string>() != null);
             return string.Format("{0}:{1},{2},{3},{4}", PortName, BaudRate, Parity, DataBits, StopBits);
+            }
+
+        internal static bool IsValidConnectionString(string connectionString)
+            {
+            return SerialRegex.IsMatch(connectionString);
+            }
+
+        public static DeviceEndpoint FromConnectionString(string connectionString)
+            {
+            Contract.Requires(!string.IsNullOrWhiteSpace(connectionString));
+            Contract.Ensures(Contract.Result<DeviceEndpoint>() != null);
+            var matches = SerialRegex.Match(connectionString);
+            if (!matches.Success)
+                throw new ArgumentException(
+                    "Not a valid serial connection string; Example: COM127:9600,None,8,One,dtr,norts",
+                    nameof(connectionString));
+            var portName = matches.Groups["PortName"].Value;
+            var baud = CaptureGroupOrDefault(matches, "Baud", 9600);
+            var parity = CaptureGroupOrDefault(matches, "Parity", Parity.None);
+            var databits = CaptureGroupOrDefault(matches, "DataBits", 8);
+            var stopbits = CaptureGroupOrDefault(matches, "StopBits", StopBits.One);
+            var assertDtr = CaptureGroupOrDefault(matches, "DTR", "dtr")
+                .Equals("dtr", StringComparison.InvariantCultureIgnoreCase);
+            var assertRts = CaptureGroupOrDefault(matches, "RTS", "rts")
+                .Equals("rts", StringComparison.InvariantCultureIgnoreCase);
+            var handshake = CaptureGroupOrDefault(matches, "Handshake", Handshake.None);
+            var endpoint = new SerialDeviceEndpoint(portName, baud, parity, databits, stopbits, assertDtr, assertRts,
+                handshake);
+            return endpoint;
             }
         }
     }
