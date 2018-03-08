@@ -27,6 +27,9 @@ namespace TA.Ascom.ReactiveCommunications
     [Serializable]
     public abstract class DeviceEndpoint
         {
+        /// <summary>
+        /// Regex options for builtin endpoints.
+        /// </summary>
         protected const RegexOptions Options =
             RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline |
             RegexOptions.IgnoreCase | RegexOptions.Compiled;
@@ -47,6 +50,17 @@ namespace TA.Ascom.ReactiveCommunications
                 }
             }
 
+        /// <summary>
+        /// A helper method that returns the value of a named capture group,
+        /// if it exists, or the specified default value if there was no matching
+        /// named capture.
+        /// </summary>
+        /// <param name="matches">The match results from a regex match.</param>
+        /// <param name="groupName">The named capture group whose value we seek.</param>
+        /// <param name="defaultValue">The default value to be used in the event that the named group did not capture a value.</param>
+        /// <typeparam name="TResult">The type of the returned result.</typeparam>
+        /// <returns>The value of the named capture group, or the default value.</returns>
+        /// <exception cref="ArgumentException"></exception>
         protected static TResult CaptureGroupOrDefault<TResult>(Match matches, string groupName, TResult defaultValue)
             {
             Contract.Requires(matches != null);
@@ -62,10 +76,7 @@ namespace TA.Ascom.ReactiveCommunications
             catch (NotSupportedException ex)
                 {
                 var message =
-                    string.Format(
-                        "The parameter '{0}' with value '{1}' could not be parsed. See InnerException for details.",
-                        groupName,
-                        capture);
+                    $"The parameter '{groupName}' with value '{capture}' could not be parsed. See InnerException for details.";
                 throw new ArgumentException(message, ex);
                 }
             }

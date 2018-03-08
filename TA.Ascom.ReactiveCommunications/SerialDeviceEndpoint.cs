@@ -135,6 +135,12 @@ namespace TA.Ascom.ReactiveCommunications
             return SerialRegex.IsMatch(connectionString);
             }
 
+        /// <summary>
+        /// Creates a SerialDeviceEndpoint from a valid connection string.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <returns>A populated <see cref="SerialDeviceEndpoint"/>.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public static DeviceEndpoint FromConnectionString(string connectionString)
             {
             Contract.Requires(!string.IsNullOrWhiteSpace(connectionString));

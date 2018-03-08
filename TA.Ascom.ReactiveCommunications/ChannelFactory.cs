@@ -17,6 +17,11 @@ using System.Linq;
 
 namespace TA.Ascom.ReactiveCommunications
     {
+    /// <summary>
+    /// A factory for creating an <see cref="ICommunicationChannel"/>
+    /// from a connection string. By default, the factory knows how to create
+    /// serial channels, but custom channel implementations can be registered.
+    /// </summary>
     public class ChannelFactory
         {
         private readonly List<RegisteredChannelBuilder> deviceTypes = new List<RegisteredChannelBuilder>();
