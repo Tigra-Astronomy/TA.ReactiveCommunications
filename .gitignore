@@ -9,6 +9,9 @@
 # NuGet packages
 *.nupkg
 
+# nCrunch artifacts
+nCrunchTemp*
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -190,3 +193,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/.vs/TA.Ascom.ReactiveCommunications/v15/Server/sqlite3

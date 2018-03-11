@@ -31,8 +31,8 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
             {
             #region Setup for Reactive ASCOM
             var connectionString = Settings.Default.ConnectionString; // Edit in App.config, default is "COM1:"
-            var endpoint = DeviceEndpoint.FromConnectionString(connectionString);
-            ICommunicationChannel channel = new SerialCommunicationChannel(endpoint);
+            var channelFactory = new ChannelFactory();
+            var channel = channelFactory.FromConnectionString(connectionString);
             var transactionObserver = new TransactionObserver(channel);
             var processor = new ReactiveTransactionProcessor();
             processor.SubscribeTransactionObserver(transactionObserver);
