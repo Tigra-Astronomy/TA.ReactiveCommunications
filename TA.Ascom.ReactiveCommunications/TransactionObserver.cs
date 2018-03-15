@@ -109,8 +109,8 @@ namespace TA.Ascom.ReactiveCommunications
                 log.Error("Detected transaction overlap before committing {0}", transaction);
                 throw new InvalidOperationException("Detected transaction overlap");
                 }
-            transaction.ObserveResponse(observableReceiveSequence);
             transaction.MakeHot();
+            transaction.ObserveResponse(observableReceiveSequence);
             using (var responseSequence = observableReceiveSequence.Connect())
                 {
                 channel.Send(transaction.Command);

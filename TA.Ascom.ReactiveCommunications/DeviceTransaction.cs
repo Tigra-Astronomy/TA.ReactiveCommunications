@@ -49,7 +49,7 @@ namespace TA.Ascom.ReactiveCommunications
             HotTimeout = TimeSpan.FromSeconds(10);
             completion = new ManualResetEvent(false); // Not signalled by default
             hot = new ManualResetEvent(false);
-            Failed = true; // Transactions are always failed, until they have succeeded.
+            State = TransactionLifecycle.Created;
             }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Gets an indication that the transaction has failed.
         /// </summary>
         /// <value><c>true</c> if failed; otherwise, <c>false</c>.</value>
-        public bool Failed { get; protected set; }
+        public bool Failed => State == TransactionLifecycle.Failed;
 
         /// <summary>
         ///     Gets the error message for a failed transaction.
@@ -108,8 +108,30 @@ namespace TA.Ascom.ReactiveCommunications
         /// <value>May contain an error message.</value>
         public Maybe<string> ErrorMessage { get; protected set; }
 
+        /// <summary>
+        /// Indicates which stage of the transaction lifecycle the transaction is in.
+        /// </summary>
+        public TransactionLifecycle State { get; protected set; }
+
+        /// <summary>
+        /// Indicates whether a transaction has completed successfully.
+        /// Note: this is subtly different from <c>!Failed</c>
+        /// </summary>
+        /// <seealso cref="State"/>
+        public bool Successful => State == TransactionLifecycle.Completed;
+
+        /// <summary>
+        /// Indicates whether the transaction is completed. A completed transaction
+        /// could either have succeeded or failed, so it is necessary to also check
+        /// <see cref="Successful"/> or <see cref="Failed"/>, or to examine the
+        /// <see cref="State"/> property to determine the final disposition of
+        /// the transaction.
+        /// </summary>
+        public bool Completed => State == TransactionLifecycle.Completed || State == TransactionLifecycle.Failed;
+
         internal void MakeHot()
             {
+            State = TransactionLifecycle.InProgress;
             hot.Set();
             }
 
@@ -118,7 +140,7 @@ namespace TA.Ascom.ReactiveCommunications
             var wasHot = hot.WaitOne(HotTimeout);
             if (!wasHot)
                 {
-                Failed = true;
+                State = TransactionLifecycle.Failed;
                 ErrorMessage = new Maybe<string>("Transaction was never executed");
                 }
             return wasHot;
@@ -159,7 +181,7 @@ namespace TA.Ascom.ReactiveCommunications
             if (!signalled)
                 {
                 Response = Maybe<string>.Empty;
-                Failed = true;
+                State = TransactionLifecycle.Failed;
                 ErrorMessage = new Maybe<string>("Timed out");
                 }
             return signalled;
@@ -231,7 +253,7 @@ namespace TA.Ascom.ReactiveCommunications
             Contract.Ensures(ErrorMessage != null);
             Response = Maybe<string>.Empty;
             ErrorMessage = new Maybe<string>(except.Message);
-            Failed = true;
+            State = TransactionLifecycle.Failed;
             SignalCompletion();
             }
 
@@ -247,7 +269,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// </remarks>
         protected virtual void OnCompleted()
             {
-            Failed = false;
+            State = TransactionLifecycle.Completed;
             SignalCompletion();
             }
 
@@ -259,7 +281,7 @@ namespace TA.Ascom.ReactiveCommunications
         public override string ToString()
             {
             Contract.Ensures(Contract.Result<string>() != null);
-            var disposition = Failed ? $"Failed ({ErrorMessage})" : "Successful";
+            var disposition = Failed ? $"Failed ({ErrorMessage})" : State.ToString();
             return $"TID={TransactionId} [{Command.ExpandAscii()}] [{Response}] {Timeout} {disposition}";
             }
         }

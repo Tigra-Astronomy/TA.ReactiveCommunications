@@ -79,12 +79,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\failed_transaction.cs" />
+    <Compile Include="Behaviours\successful_transaction.cs" />
     <Compile Include="ChannelFactorySpecs.cs" />
+    <Compile Include="Behaviours\rxascom_behaviour.cs" />
+    <Compile Include="Contexts\RxAscomContext.cs" />
+    <Compile Include="Contexts\RxAscomContextBuilder.cs" />
     <Compile Include="Contexts\LogSetup.cs" />
+    <Compile Include="Contexts\with_rxascom_context.cs" />
     <Compile Include="Contexts\with_fake_transaction_processor.cs" />
     <Compile Include="Contexts\with_serial_channel_on_endpoint_com1_9600_n_8_1_and_mock_serial_port.cs" />
     <Compile Include="DeviceTransactionSpecs.cs" />
     <Compile Include="EndpointSpecs.cs" />
+    <Compile Include="Fakes\FakeCommunicationChannel.cs" />
+    <Compile Include="Fakes\FakeEndpoint.cs" />
     <Compile Include="Fakes\FakeTransactionProcessor.cs" />
     <Compile Include="Fakes\BufferInputUntilCompletedTransaction.cs" />
     <Compile Include="Helpers\MockHelpers.cs" />

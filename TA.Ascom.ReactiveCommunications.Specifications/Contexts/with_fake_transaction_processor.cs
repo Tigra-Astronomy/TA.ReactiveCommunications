@@ -10,6 +10,7 @@
 // 
 // File: with_fake_transaction_processor.cs  Last modified: 2015-05-27@02:48 by Tim Long
 
+using System;
 using System.Reactive.Linq;
 using Machine.Specifications;
 using TA.Ascom.ReactiveCommunications.Specifications.Fakes;
