@@ -1,0 +1,7 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <HiddenComponentWarnings>
+      <Value>CodeContractsReferenceBuildsAreEnabled</Value>
+    </HiddenComponentWarnings>
+  </Settings>
+</ProjectConfiguration>
