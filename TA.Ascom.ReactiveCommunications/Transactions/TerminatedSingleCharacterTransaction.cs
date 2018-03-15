@@ -55,7 +55,7 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
             catch (FormatException)
                 {
                 Value = default(char);
-                Failed = true;
+                State = TransactionLifecycle.Failed;
                 ErrorMessage = new Maybe<string>("Unable to convert the response to a single character value");
                 }
             base.OnCompleted();
