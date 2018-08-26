@@ -18,7 +18,12 @@
       controller using a command/response protocol.
     </description>
     <summary>Simplifies device communications over serial and network connections while guaranteeing correct sequencing and thread-safety of transactions.</summary>
-    <releaseNotes>This project is still in flight. Anything may change at any time. Please refer to the project home page for further information.</releaseNotes>
+    <releaseNotes>
+      Major version update due to potentially breaking changes in transaction lifecycle.
+      Improved lifecycle management of transactions so that they don't appear as "Failed" before they are committed.
+      Added disposition properties Successful and Completed to compliment Failed.
+      Please refer to the project home page for further information.
+    </releaseNotes>
     <copyright>Copyright © 2015-18 Tigra Astronomy, all rights reserved.</copyright>
     <language>en-GB</language>
     <tags>ASCOM,astronomy,control,robotics,communication,serial,ethernet,network,command-response,protocol,reactive,rx,c#</tags>

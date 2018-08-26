@@ -36,11 +36,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
             Processor.CommitTransaction(Transaction);
             Transaction.WaitForCompletionOrTimeout();
             };
-        It should_be_complete = () => Transaction.Completed.ShouldBeTrue();
-        It should_have_lifecycle_state_completed = () => Transaction.State.ShouldEqual(TransactionLifecycle.Completed);
-        It should_have_a_response = () => Transaction.Response.Any().ShouldBeTrue();
-        It should_not_have_an_error_message = () => Transaction.ErrorMessage.Any().ShouldBeFalse();
-        static DeviceTransaction Transaction;
+        Behaves_like<successful_transaction> a_successful_transaction;
         }
 
     [Subject(typeof(DeviceTransaction), "unique identity")]
