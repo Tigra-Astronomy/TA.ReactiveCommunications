@@ -8,13 +8,12 @@
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceEndpoint.cs  Last modified: 2018-03-02@02:30 by Tim Long
+// File: DeviceEndpoint.cs  Last modified: 2018-08-26@06:02 by Tim Long
 
 using System;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Globalization;
-using System.IO.Ports;
 using System.Text.RegularExpressions;
 using NLog;
 
@@ -28,7 +27,7 @@ namespace TA.Ascom.ReactiveCommunications
     public abstract class DeviceEndpoint
         {
         /// <summary>
-        /// Regex options for builtin endpoints.
+        ///     Regex options for builtin endpoints.
         /// </summary>
         protected const RegexOptions Options =
             RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline |
@@ -51,9 +50,9 @@ namespace TA.Ascom.ReactiveCommunications
             }
 
         /// <summary>
-        /// A helper method that returns the value of a named capture group,
-        /// if it exists, or the specified default value if there was no matching
-        /// named capture.
+        ///     A helper method that returns the value of a named capture group,
+        ///     if it exists, or the specified default value if there was no matching
+        ///     named capture.
         /// </summary>
         /// <param name="matches">The match results from a regex match.</param>
         /// <param name="groupName">The named capture group whose value we seek.</param>
