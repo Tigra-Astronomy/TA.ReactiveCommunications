@@ -19,10 +19,8 @@
     </description>
     <summary>Simplifies device communications over serial and network connections while guaranteeing correct sequencing and thread-safety of transactions.</summary>
     <releaseNotes>
-      Major version update due to potentially breaking changes in transaction lifecycle.
-      Improved lifecycle management of transactions so that they don't appear as "Failed" before they are committed.
-      Added disposition properties Successful and Completed to compliment Failed.
-      Please refer to the project home page for further information.
+      Minor version update due to refactoring of the Reactive Extensions
+      base packages creating some dependency issues. No new functionality.
     </releaseNotes>
     <copyright>Copyright © 2015-18 Tigra Astronomy, all rights reserved.</copyright>
     <language>en-GB</language>
