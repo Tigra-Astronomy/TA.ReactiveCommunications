@@ -34,8 +34,8 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
             var channelFactory = new ChannelFactory();
             var channel = channelFactory.FromConnectionString(connectionString);
             var transactionObserver = new TransactionObserver(channel);
-            var processor = new ReactiveTransactionProcessor();
-            processor.SubscribeTransactionObserver(transactionObserver);
+            var transactionProcessor = new ReactiveTransactionProcessor();
+            transactionProcessor.SubscribeTransactionObserver(transactionObserver);
             channel.Open();
             #endregion Setup for Reactive ASCOM
 
@@ -44,8 +44,8 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
             var raTransaction = new TerminatedStringTransaction(":GR#", '#', ':') {Timeout = TimeSpan.FromSeconds(2)};
             // The terminator and initiator are optional parameters and default to values that work for Meade style protocols.
             var decTransaction = new TerminatedStringTransaction(":GD#") {Timeout = TimeSpan.FromSeconds(2)};
-            Task.Run(() => processor.CommitTransaction(raTransaction));
-            Task.Run(() => processor.CommitTransaction(decTransaction));
+            Task.Run(() => transactionProcessor.CommitTransaction(raTransaction));
+            Task.Run(() => transactionProcessor.CommitTransaction(decTransaction));
             #endregion Submit some transactions
 
             #region Wait for the results
@@ -60,7 +60,7 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
 
             #region Cleanup
             // To clean up, we just need to dispose the transactionProcessor
-            processor.Dispose();
+            transactionProcessor.Dispose();
             #endregion Cleanup
 
             Console.WriteLine("Press ENTER:");
