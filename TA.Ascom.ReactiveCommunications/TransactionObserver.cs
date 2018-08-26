@@ -31,7 +31,7 @@ namespace TA.Ascom.ReactiveCommunications
         private readonly ICommunicationChannel channel;
         private readonly Logger log = LogManager.GetCurrentClassLogger();
         private readonly IConnectableObservable<char> observableReceiveSequence;
-        private int activeTransactions;
+        private volatile int activeTransactions;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="TransactionObserver" /> class and associates it with a communications
@@ -43,7 +43,7 @@ namespace TA.Ascom.ReactiveCommunications
             Contract.Requires(channel != null);
             this.channel = channel;
             observableReceiveSequence = channel.ObservableReceivedCharacters.Publish();
-            log.Info("Transaction pipeline connected to channel with endpoint {0}", channel.Endpoint);
+            log.Info($"Transaction pipeline connected to channel with endpoint {channel.Endpoint}");
             }
 
         /// <summary>
@@ -62,9 +62,9 @@ namespace TA.Ascom.ReactiveCommunications
         [UsedImplicitly]
         public void OnNext(DeviceTransaction transaction)
             {
-            log.Info("Committing transaction {0}", transaction);
+            log.Info($"Committing transaction {transaction}");
             CommitTransaction(transaction);
-            log.Info("Completed transaction {0}", transaction);
+            log.Info($"Completed transaction {transaction}");
             }
 
         /// <summary>
@@ -109,8 +109,8 @@ namespace TA.Ascom.ReactiveCommunications
                 log.Error("Detected transaction overlap before committing {0}", transaction);
                 throw new InvalidOperationException("Detected transaction overlap");
                 }
-            transaction.ObserveResponse(observableReceiveSequence);
             transaction.MakeHot();
+            transaction.ObserveResponse(observableReceiveSequence);
             using (var responseSequence = observableReceiveSequence.Connect())
                 {
                 channel.Send(transaction.Command);

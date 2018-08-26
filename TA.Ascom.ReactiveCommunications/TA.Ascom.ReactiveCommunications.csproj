@@ -187,6 +187,7 @@
     </Compile>
     <Compile Include="NetworkDeviceEndpoint.cs" />
     <Compile Include="TransactionAvailableEventArgs.cs" />
+    <Compile Include="TransactionLifecycle.cs" />
     <Compile Include="TransactionObserver.cs" />
     <Compile Include="Transactions\BooleanTransaction.cs" />
     <Compile Include="Transactions\NoReplyTransaction.cs" />

@@ -21,6 +21,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications.Fakes
     ///     Buffers the input sequence effectively forever (actually 1 day).
     ///     When the input sequence completes, the buffer is converted to a string and placed in the Response property.
     /// </summary>
+    [Obsolete("This class tends to yield brittle tests. Consider building a test using with_rxascom_context instead.")]
     internal class BufferInputUntilCompletedTransaction : DeviceTransaction
         {
         readonly int completeAfter;
@@ -34,10 +35,10 @@ namespace TA.Ascom.ReactiveCommunications.Specifications.Fakes
 
         public override void ObserveResponse(IObservable<char> source)
             {
-            source.Take(completeAfter)
-                .Buffer(TimeSpan.FromDays(1))
+            source.Buffer(completeAfter)
                 .Select(p => new string(p.ToArray()))
-                .ObserveOn(NewThreadScheduler.Default)
+                //.ObserveOn(NewThreadScheduler.Default)
+                .Take(1)
                 .Subscribe(OnNext, OnError, OnCompleted);
             }
 
