@@ -1,14 +1,14 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2015 Tigra Astronomy, all rights reserved.
+// Copyright © 2018 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: Program.cs  Last modified: 2015-05-25@18:23 by Tim Long
+// File: Program.cs  Last modified: 2018-08-26@15:22 by Tim Long
 
 using System;
 using System.Threading.Tasks;
@@ -20,14 +20,15 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
     /// <summary>
     ///     This simple console application demonstrates the bare minimum requirements to set up and use the reactive
     ///     communications library for ASCOM. It creates a connection to a device, which is assumed to implement a
-    ///     Meade-style protocol, and queries the Right Ascension and Declination coordinates as string values.
+    ///     Meade-style protocol, and queries the Right Ascension and Declination coordinates as string values, using
+    ///     one of the basic transaction classes built into the library.
     /// </summary>
     /// <remarks>
     ///     Please refer to the accompanying ReadMe.md markdown file for notes on this implementation.
     /// </remarks>
     internal class Program
         {
-        static void Main(string[] args)
+        private static void Main(string[] args)
             {
             #region Setup for Reactive ASCOM
             var connectionString = Settings.Default.ConnectionString; // Edit in App.config, default is "COM1:"
@@ -59,7 +60,12 @@ namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp
             #endregion Wait for the results
 
             #region Cleanup
-            // To clean up, we just need to dispose the transactionProcessor
+            /*
+             * To clean up, we just need to dispose the transaction processor. This terminates the
+             * sequence of transactions, which causes the TransactionObserver's OnCompleted method
+             * to be called, which unsubscribes the receive sequence, which closes the
+             * communications channel
+             */
             transactionProcessor.Dispose();
             #endregion Cleanup
 

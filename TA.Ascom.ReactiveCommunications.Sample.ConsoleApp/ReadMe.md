@@ -1,11 +1,12 @@
 
 This rather simplistic console application demonstrates a number of important features of Reactive ASCOM.
-- It is really simple to get going. You need instances of `ReactiveTransactionProcessor`, `TransactionObserver`, `SerialCommunicationsChannel` and `SerialDeviceEndpoint` - and they are really easy to create.
-- Communicate with the device by creating an appropriate `DeviceTransaction` derived object, and call `ITransactionProcessor.Commit()`
-- Wait for your result by calling `DeviceTransaction.WaitForCompletionOrTimeout()`.
+- It is really simple to get going. Under typical circumstances you need instances of `TransactionObserver`, `ICommunicationsChannel` and `ITransactionProcessor` - and they are really easy to create and use.
+- Communicate with the device by creating an appropriate `DeviceTransaction` derived object, and call `ITransactionProcessor.CommitTransaction()`
+- Wait for your result by calling `DeviceTransaction.WaitForCompletionOrTimeout()` or `DeviceTransaction.WaitForCompletionOrTimeoutAsync()`.
 - Transactions are sequenced based on the order of submission, no matter what else you do to them.
 - ***Reactive ASCOM*** guarantees correct sequencing and thread safety.
 - You get logging and diagnostics of your protocol 'for free'.
+- The key is to create transaction classes for your protocol, derived from `DeviceTransaction`, that only recognise correct responses.
 
 In the code sample, we have done things in a deliberately awkward way to demonstrate some of these features. For example:
 - We use `Task.Run()` to submit each transaction asynchronously. We don't know when these tasks will actually run so we have no idea when or in what order the transactions will actually execute.
