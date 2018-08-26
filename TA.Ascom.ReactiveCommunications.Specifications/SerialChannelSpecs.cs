@@ -61,7 +61,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
         private It should_configure_the_port_with_the_expected_stop_bits =
             () => Channel.Port.StopBits.ShouldEqual(SerialEndpoint.StopBits);
         private It should_open_the_serial_port =
-            () => A.CallTo(() => MockPort.Open()).MustHaveHappened(Repeated.Exactly.Once);
+            () => A.CallTo(() => MockPort.Open()).MustHaveHappenedOnceExactly();
         }
 
     [Subject(typeof(SerialCommunicationChannel), "Disconnecting")]
@@ -70,7 +70,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
         {
         private Because of = () => Channel.Close();
         private It should_close_the_serial_port =
-            () => A.CallTo(() => MockPort.Close()).MustHaveHappened(Repeated.Exactly.Once);
+            () => A.CallTo(() => MockPort.Close()).MustHaveHappenedOnceExactly();
         }
 
     [Subject(typeof(SerialCommunicationChannel), "Disposing")]
@@ -85,9 +85,9 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
             Thrown = Catch.Exception(() => Channel.Dispose());
             };
         private It should_close_the_serial_port =
-            () => A.CallTo(() => MockPort.Close()).MustHaveHappened(Repeated.Exactly.Once);
+            () => A.CallTo(() => MockPort.Close()).MustHaveHappenedOnceExactly();
         private It should_dispose_the_serial_port =
-            () => A.CallTo(() => MockPort.Dispose()).MustHaveHappened(Repeated.Exactly.Once);
+            () => A.CallTo(() => MockPort.Dispose()).MustHaveHappenedOnceExactly();
         private It should_not_throw_when_disposed_twice = () => Thrown.ShouldBeNull();
         }
 
@@ -104,7 +104,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
         private Because of = () => Channel.Send(TestString);
         private It should_send_the_string_to_the_serial_port = () =>
             A.CallTo(() => MockPort.Write(A<string>.That.Matches(s => s == TestString)))
-                .MustHaveHappened(Repeated.Exactly.Once);
+                .MustHaveHappenedOnceExactly();
         }
 
     [Ignore("Upgrading FakeItEasy broke the event handling")]
