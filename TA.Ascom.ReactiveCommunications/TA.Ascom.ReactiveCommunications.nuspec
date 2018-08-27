@@ -25,5 +25,9 @@
     <copyright>Copyright © 2015-18 Tigra Astronomy, all rights reserved.</copyright>
     <language>en-GB</language>
     <tags>ASCOM,astronomy,control,robotics,communication,serial,ethernet,network,command-response,protocol,reactive,rx,c#</tags>
-  </metadata>
+    <dependencies>
+      <dependency id="System.Reactive" version="[4.1.0,5)" />
+      <dependency id="NLog" version="[4.5.9,5)" />
+    </dependencies>
+  </metadata> 
 </package>
