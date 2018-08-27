@@ -160,6 +160,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="TA.Ascom.ReactiveCommunications.nuspec">
       <SubType>Designer</SubType>
     </None>

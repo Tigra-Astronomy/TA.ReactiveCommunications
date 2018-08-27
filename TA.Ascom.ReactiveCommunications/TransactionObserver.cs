@@ -1,14 +1,14 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2016 Tigra Astronomy, all rights reserved.
+// Copyright © 2018 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: TransactionObserver.cs  Last modified: 2016-10-23@23:53 by Tim Long
+// File: TransactionObserver.cs  Last modified: 2018-08-27@22:35 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -50,10 +50,7 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Gets a value indicating whether the receiver is ready.
         /// </summary>
         /// <value><c>true</c> if the receiver is ready; otherwise, <c>false</c>.</value>
-        public bool ReceiverReady
-            {
-            get { return channel.IsOpen; }
-            }
+        public bool ReceiverReady => channel.IsOpen;
 
         /// <summary>
         ///     Called when the next transaction is available.
@@ -116,14 +113,10 @@ namespace TA.Ascom.ReactiveCommunications
                 channel.Send(transaction.Command);
                 var succeeded = transaction.WaitForCompletionOrTimeout();
                 if (!succeeded)
-                    {
-                    log.Warn($"Transaction {transaction.TransactionId} timed out with reason: {transaction.ErrorMessage}");
-                    }
+                    log.Warn(
+                        $"Transaction {transaction.TransactionId} timed out with reason: {transaction.ErrorMessage}");
                 }
-            if (transaction.Failed)
-                {
-                log.Warn("Transaction {0} was marked as FAILED", transaction.TransactionId);
-                }
+            if (transaction.Failed) log.Warn("Transaction {0} was marked as FAILED", transaction.TransactionId);
             log.Info("Transaction {0} completed", transaction.TransactionId);
             transactionsInFlight = Interlocked.Decrement(ref activeTransactions);
             if (transactionsInFlight != 0)

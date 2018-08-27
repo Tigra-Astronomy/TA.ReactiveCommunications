@@ -24,7 +24,6 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{332539bc-1f6e-47c2-bcd4-45fdd77ed7db}*SharedItemsImports = 4
 		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{90a3332b-527d-42ca-8b23-b8e2e3edb09a}*SharedItemsImports = 4
-		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{bde363ce-c0a4-47d2-83d2-5e9bbc6f4e1e}*SharedItemsImports = 4
 		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{ca9c1585-6227-4808-b46a-7f4f8ecc9f68}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
