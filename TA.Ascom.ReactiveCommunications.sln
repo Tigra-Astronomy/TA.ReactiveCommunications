@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27924.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunications", "TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj", "{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunications.Sample.ConsoleApp", "TA.Ascom.ReactiveCommunications.Sample.ConsoleApp\TA.Ascom.ReactiveCommunications.Sample.ConsoleApp.csproj", "{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunications.Specifications", "TA.Ascom.ReactiveCommunications.Specifications\TA.Ascom.ReactiveCommunications.Specifications.csproj", "{BDE363CE-C0A4-47D2-83D2-5E9BBC6F4E1E}"
@@ -13,22 +11,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		Build-Packages.ps1 = Build-Packages.ps1
-		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 		License.md = License.md
 		Push-Packages.ps1 = Push-Packages.ps1
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunications", "TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj", "{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TA.Ascom.ReactiveCommunications.Shared", "TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.shproj", "{CA9C1585-6227-4808-B46A-7F4F8ECC9F68}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{332539bc-1f6e-47c2-bcd4-45fdd77ed7db}*SharedItemsImports = 4
+		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{90a3332b-527d-42ca-8b23-b8e2e3edb09a}*SharedItemsImports = 4
+		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{bde363ce-c0a4-47d2-83d2-5e9bbc6f4e1e}*SharedItemsImports = 4
+		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{ca9c1585-6227-4808-b46a-7f4f8ecc9f68}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,8 +40,15 @@ Global
 		{BDE363CE-C0A4-47D2-83D2-5E9BBC6F4E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDE363CE-C0A4-47D2-83D2-5E9BBC6F4E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDE363CE-C0A4-47D2-83D2-5E9BBC6F4E1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DEEC5AE1-2FB1-48C0-84AE-1ED406320765}
 	EndGlobalSection
 EndGlobal
