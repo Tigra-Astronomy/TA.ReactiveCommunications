@@ -5,16 +5,13 @@
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransactionSpecs.cs  Last modified: 2018-03-15@18:57 by Tim Long
+// File: DeviceTransactionSpecs.cs  Last modified: 2018-08-26@17:05 by Tim Long
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using TA.Ascom.ReactiveCommunications.Specifications.Behaviours;
@@ -73,7 +70,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
     [Subject(typeof(DeviceTransaction), "lifecycle")]
     internal class when_a_transaction_times_out : with_rxascom_context
         {
-        Establish context = () => Context=RxAscomContextBuilder
+        Establish context = () => Context = RxAscomContextBuilder
             .WithOpenConnection("Fake")
             .Build();
         Because of = () =>
@@ -82,24 +79,25 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
             Processor.CommitTransaction(Transaction);
             Transaction.WaitForCompletionOrTimeout();
             };
-        Behaves_like<failed_transaction> _;
         It should_include_failed_in_tostring = () => Transaction.ToString().ShouldContain("Failed");
         It should_give_timeout_as_the_reason_for_failure = () =>
             Transaction.ErrorMessage.Single().ShouldContain("Timed out");
+        Behaves_like<failed_transaction> a_failed_transaction;
         }
 
     [Subject(typeof(DeviceTransaction), "lifecycle")]
     internal class when_a_transaction_is_in_progress : with_rxascom_context
         {
-        Establish context = () => Context=RxAscomContextBuilder
+        Establish context = () => Context = RxAscomContextBuilder
             .WithOpenConnection("Fake")
             .Build();
         Because of = () =>
             {
-            Transaction = new BooleanTransaction("Dummy");
+            Transaction = new BooleanTransaction("Dummy") {Timeout = TimeSpan.FromDays(1)};
             Processor.CommitTransaction(Transaction);
             };
-        It should_have_lifecycle_state_in_progress = () => Transaction.State.ShouldEqual(TransactionLifecycle.InProgress);
+        It should_have_lifecycle_state_in_progress =
+            () => Transaction.State.ShouldEqual(TransactionLifecycle.InProgress);
         It should_not_be_completed = () => Transaction.Completed.ShouldBeFalse();
         It should_not_be_successful = () => Transaction.Successful.ShouldBeFalse();
         It should_not_be_failed = () => Transaction.Failed.ShouldBeFalse();

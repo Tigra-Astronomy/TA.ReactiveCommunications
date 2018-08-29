@@ -5,12 +5,11 @@
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: NetworkDeviceEndpoint.cs  Last modified: 2018-03-07@23:31 by Tim Long
+// File: NetworkDeviceEndpoint.cs  Last modified: 2018-08-27@17:28 by Tim Long
 
-using System;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 using NLog;
@@ -30,6 +29,7 @@ namespace TA.Ascom.ReactiveCommunications
         private static readonly Regex NetworkIPv4Regex = new Regex(NetworkIPv4Pattern, Options);
         private static readonly Regex NetworkHostRegex = new Regex(NetworkHostPattern, Options);
         private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="NetworkDeviceEndpoint" /> class.
         /// </summary>
@@ -67,7 +67,7 @@ namespace TA.Ascom.ReactiveCommunications
 
         public static DeviceEndpoint FromConnectionString(string connection)
             {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(connection),
+            Contract.Requires(!string.IsNullOrEmpty(connection),
                 "connection string was null or empty");
             Contract.Ensures(Contract.Result<DeviceEndpoint>() != null);
             if (NetworkHostRegex.IsMatch(connection))

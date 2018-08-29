@@ -1,6 +1,5 @@
 ﻿<ProjectConfiguration>
   <Settings>
-    <AllowStaticCodeContractChecking>True</AllowStaticCodeContractChecking>
     <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
   </Settings>
 </ProjectConfiguration>
