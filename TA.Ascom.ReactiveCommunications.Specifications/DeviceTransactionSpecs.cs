@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransactionSpecs.cs  Last modified: 2018-08-26@14:52 by Tim Long
+// File: DeviceTransactionSpecs.cs  Last modified: 2018-08-26@17:05 by Tim Long
 
 using System;
 using System.Linq;
@@ -93,7 +93,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
             .Build();
         Because of = () =>
             {
-            Transaction = new BooleanTransaction("Dummy");
+            Transaction = new BooleanTransaction("Dummy") {Timeout = TimeSpan.FromDays(1)};
             Processor.CommitTransaction(Transaction);
             };
         It should_have_lifecycle_state_in_progress =
