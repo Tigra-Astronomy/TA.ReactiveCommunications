@@ -1,14 +1,14 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2017 Tigra Astronomy, all rights reserved.
+// Copyright © 2018 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransaction.cs  Last modified: 2017-02-18@01:18 by Tim Long
+// File: DeviceTransaction.cs  Last modified: 2018-09-19@22:04 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -98,6 +98,7 @@ namespace TA.Ascom.ReactiveCommunications
         ///     Gets an indication that the transaction has failed.
         /// </summary>
         /// <value><c>true</c> if failed; otherwise, <c>false</c>.</value>
+        /// <seealso cref="OnError" />
         public bool Failed => State == TransactionLifecycle.Failed;
 
         /// <summary>
@@ -109,23 +110,23 @@ namespace TA.Ascom.ReactiveCommunications
         public Maybe<string> ErrorMessage { get; protected set; }
 
         /// <summary>
-        /// Indicates which stage of the transaction lifecycle the transaction is in.
+        ///     Indicates which stage of the transaction lifecycle the transaction is in.
         /// </summary>
         public TransactionLifecycle State { get; protected set; }
 
         /// <summary>
-        /// Indicates whether a transaction has completed successfully.
-        /// Note: this is subtly different from <c>!Failed</c>
+        ///     Indicates whether a transaction has completed successfully.
+        ///     Note: this is subtly different from <c>!Failed</c>
         /// </summary>
-        /// <seealso cref="State"/>
+        /// <seealso cref="State" />
         public bool Successful => State == TransactionLifecycle.Completed;
 
         /// <summary>
-        /// Indicates whether the transaction is completed. A completed transaction
-        /// could either have succeeded or failed, so it is necessary to also check
-        /// <see cref="Successful"/> or <see cref="Failed"/>, or to examine the
-        /// <see cref="State"/> property to determine the final disposition of
-        /// the transaction.
+        ///     Indicates whether the transaction is completed. A completed transaction
+        ///     could either have succeeded or failed, so it is necessary to also check
+        ///     <see cref="Successful" /> or <see cref="Failed" />, or to examine the
+        ///     <see cref="State" /> property to determine the final disposition of
+        ///     the transaction.
         /// </summary>
         public bool Completed => State == TransactionLifecycle.Completed || State == TransactionLifecycle.Failed;
 
@@ -237,14 +238,16 @@ namespace TA.Ascom.ReactiveCommunications
             }
 
         /// <summary>
-        ///     Called when the response sequence produces an error.
+        ///     Called when the response sequence produces an error, or by a custom
+        ///     transaction to indicate an error condition.
         ///     This indicates a failed transaction.
         /// </summary>
         /// <param name="except">The exception.</param>
         /// <remarks>
         ///     Overriding <c>OnError</c> is discouraged but it you do, you should call <c>base.OnError</c> before
         ///     returning from your override method, to ensure correct thread synchronization and that the internal state remains
-        ///     consistent.
+        ///     consistent. <see cref="OnError" /> and <see cref="OnCompleted" /> are mutually exclusive,
+        ///     therefore do not call <c>base.OnCompleted</c> after calling this method.
         /// </remarks>
         protected virtual void OnError(Exception except)
             {
