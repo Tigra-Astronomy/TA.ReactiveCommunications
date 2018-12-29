@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: DeviceTransactionSpecs.cs  Last modified: 2018-08-26@17:05 by Tim Long
+// File: DeviceTransactionSpecs.cs  Last modified: 2018-12-29@15:08 by Tim Long
 
 using System;
 using System.Linq;
@@ -96,8 +96,11 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
             Transaction = new BooleanTransaction("Dummy") {Timeout = TimeSpan.FromDays(1)};
             Processor.CommitTransaction(Transaction);
             };
-        It should_have_lifecycle_state_in_progress =
-            () => Transaction.State.ShouldEqual(TransactionLifecycle.InProgress);
+        /*
+         * Note: transactions do not necessarily move to "In Progress" immediately.
+         * They may remain "Pending" for some time, therefore we cannot perform a test for
+         * "In Progress" here and can only perform negative tests.
+         */
         It should_not_be_completed = () => Transaction.Completed.ShouldBeFalse();
         It should_not_be_successful = () => Transaction.Successful.ShouldBeFalse();
         It should_not_be_failed = () => Transaction.Failed.ShouldBeFalse();
