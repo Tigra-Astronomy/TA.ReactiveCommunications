@@ -14,7 +14,6 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.IO.Ports;
-using System.Runtime.Remoting;
 using System.Text;
 
 #pragma warning disable 1591    // Prevent warnings for missing XML comments
@@ -126,7 +125,5 @@ namespace TA.Ascom.ReactiveCommunications
         object GetLifetimeService();
 
         object InitializeLifetimeService();
-
-        ObjRef CreateObjRef(Type requestedType);
         }
     }
