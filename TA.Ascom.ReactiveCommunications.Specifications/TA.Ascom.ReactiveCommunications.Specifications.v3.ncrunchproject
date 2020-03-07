@@ -1,5 +1,7 @@
 ﻿<ProjectConfiguration>
   <Settings>
+    <BuildProcessArchitecture>x64</BuildProcessArchitecture>
+    <PreventSigningOfAssembly>True</PreventSigningOfAssembly>
     <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
   </Settings>
 </ProjectConfiguration>
