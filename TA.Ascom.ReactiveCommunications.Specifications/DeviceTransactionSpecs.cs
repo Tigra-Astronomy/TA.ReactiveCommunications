@@ -95,6 +95,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
             {
             Transaction = new BooleanTransaction("Dummy") {Timeout = TimeSpan.FromDays(1)};
             Processor.CommitTransaction(Transaction);
+            Transaction.WaitUntilHotOrTimeout();
             };
         It should_have_lifecycle_state_in_progress =
             () => Transaction.State.ShouldEqual(TransactionLifecycle.InProgress);
