@@ -34,13 +34,8 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
                 Processor.CommitTransaction(Transaction);
                 Transaction.WaitForCompletionOrTimeout();
             };
-<<<<<<< HEAD
         Behaves_like<successful_transaction> a_successful_transaction;
     }
-=======
-        [UsedImplicitly] Behaves_like<successful_transaction> a_successful_transaction;
-        }
->>>>>>> feature/netstandard
 
     [Subject(typeof(DeviceTransaction), "unique identity")]
     internal class when_generating_lots_of_transactions_asynchronously
@@ -99,15 +94,9 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
             .Build();
         Because of = () =>
             {
-<<<<<<< HEAD
-                Transaction = new BooleanTransaction("Dummy") { Timeout = TimeSpan.FromDays(1) };
-                Processor.CommitTransaction(Transaction);
-                Transaction.WaitUntilHotOrTimeout();
-=======
             Transaction = new BooleanTransaction("Dummy") {Timeout = TimeSpan.FromDays(1)};
             Processor.CommitTransaction(Transaction);
             Transaction.WaitUntilHotOrTimeout();
->>>>>>> feature/netstandard
             };
         It should_have_lifecycle_state_in_progress =
             () => Transaction.State.ShouldEqual(TransactionLifecycle.InProgress);
