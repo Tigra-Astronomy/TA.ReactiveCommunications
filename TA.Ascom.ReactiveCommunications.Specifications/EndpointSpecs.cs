@@ -1,13 +1,13 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-// 
+//
 // Copyright © 2015 Tigra Astronomy, all rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-// 
+//
 // File: EndpointSpecs.cs  Last modified: 2015-05-27@02:48 by Tim Long
 
 using System.IO.Ports;
@@ -60,5 +60,17 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
         It should_be_localhost = () => ((NetworkDeviceEndpoint) Endpoint).Host.ShouldEqual("1.12.123.123");
         It should_have_the_expected_port = () => ((NetworkDeviceEndpoint) Endpoint).Port.ShouldEqual(1234);
         static DeviceEndpoint Endpoint;
+        }
+
+    [Subject(typeof(SerialDeviceEndpoint), "connection string generation")]
+    internal class when_generating_a_connection_string_from_a_serial_endpoint
+        {
+        Establish context = () =>
+            endpoint = new SerialDeviceEndpoint("COM127", 115200, Parity.Even, 7, StopBits.Two, false, false);
+        Because of = () => connection = endpoint.DeviceAddress;
+        It should_produce_a_syntactically_correct_fully_qualified_connection_string = () => connection.ShouldEqual(expectedConnectionString);
+        static DeviceEndpoint endpoint;
+        static string connection;
+        const string expectedConnectionString = "COM127:115200,Even,7,Two,nodtr,norts";
         }
     }
