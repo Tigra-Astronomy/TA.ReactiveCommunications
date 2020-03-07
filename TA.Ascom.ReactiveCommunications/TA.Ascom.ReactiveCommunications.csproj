@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
     <Authors>Tim Long</Authors>
     <Company>Tigra Astronomy</Company>
@@ -7,31 +7,39 @@
     <Copyright>Copyright © 2015-19 Tigra Astronomy, all rights reserved</Copyright>
     <AssemblyTitle>TA.Ascom.ReactiveCommunications</AssemblyTitle>
     <Description>
-A library based on the Reactive Extensions for simplifying device communications over serial, Ethernet and other types of communications channel to embedded controllers, while guaranteeing correct sequencing and thread-safety of transactions.
-      
-Originally developed for use with ASCOM device drivers, but may be useful for any software that needs to communicate with an embedded controller over an essentially serial communications channel.
-      
-The library offers classes that help with developing transactions, which model command/response protocols. The communications channel is abstracted into an interface, so that clients can easily switch between (say) serial or ethernet streams, or any other custom type of channel the developer may supply.
-      
+A library based on the Reactive Extensions for simplifying device communications to embedded controllers,
+while guaranteeing correct sequencing and thread-safety of transactions.
+
+Originally developed for use with ASCOM device drivers, but may be useful for any software that needs to
+communicate with an embedded controller over a communications channel.
+
+The library offers classes that help with developing transactions, which model command/response protocols.
+The communications channel is abstracted into an interface, so that clients can easily switch between (say)
+serial or ethernet streams. Support for serial channels is built-in and custom channel implementations can
+easily be added and used. The client driver or application remains ignorant of the type of channel in use
+and just needs to save a "connection string" in settings to recreate the correct channel.
+
 For more information and a quick-start tutorial, please see http://tigra-astronomy.com/reactive-communications-for-ascom
     </Description>
   </PropertyGroup>
-
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net471;net472</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageLicenseExpression></PackageLicenseExpression>
     <PackageProjectUrl>tigra-astronomy.com/reactive-communications-for-ascom</PackageProjectUrl>
     <PackageIconUrl>http://tigra-astronomy.com/Media/TigraAstronomy/ProjectIcons/ReactiveASCOM520x520.png</PackageIconUrl>
-    <RepositoryUrl>https://bitbucket.org/tigra-astronomy/ta.ascom.reactivecommunications/</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>ASCOM,Rx,Serial,Ethernet,Comms,Transaction,Thread-safe</PackageTags>
+    <PackageIcon>NugetPackageIcon.png</PackageIcon>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <FileVersion>0.0.0.0</FileVersion>
+    <PackageLicenseFile>License.md</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="System.IO.Ports" Version="4.5.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="GitVersionTask" Version="4.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -42,4 +50,14 @@ For more information and a quick-start tutorial, please see http://tigra-astrono
     <PackageReference Include="System.Reactive" Version="4.1.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\Artwork\NugetPackageIcon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\License.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 </Project>

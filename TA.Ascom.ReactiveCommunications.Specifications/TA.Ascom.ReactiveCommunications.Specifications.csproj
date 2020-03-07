@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
+    <NoWarn>CS0169</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Behaviours\failed_transaction.cs" />

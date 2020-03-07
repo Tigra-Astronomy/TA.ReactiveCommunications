@@ -1,18 +1,19 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-// 
+//
 // Copyright © 2018 Tigra Astronomy, all rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-// 
+//
 // File: DeviceTransactionSpecs.cs  Last modified: 2018-08-26@17:05 by Tim Long
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Machine.Specifications;
 using TA.Ascom.ReactiveCommunications.Specifications.Behaviours;
 using TA.Ascom.ReactiveCommunications.Specifications.Contexts;
@@ -33,7 +34,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
             Processor.CommitTransaction(Transaction);
             Transaction.WaitForCompletionOrTimeout();
             };
-        Behaves_like<successful_transaction> a_successful_transaction;
+        [UsedImplicitly] Behaves_like<successful_transaction> a_successful_transaction;
         }
 
     [Subject(typeof(DeviceTransaction), "unique identity")]

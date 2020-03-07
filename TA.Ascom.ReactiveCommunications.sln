@@ -21,7 +21,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TA.Ascom.ReactiveCommunicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Ascom.ReactiveCommunications", "TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj", "{B8B5A523-93A8-482D-A6F8-DBB4BF81D916}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunications.Sample.NetCoreConsoleApp", "ConsoleApp2\TA.Ascom.ReactiveCommunications.Sample.NetCoreConsoleApp.csproj", "{4316BF0C-D705-44EF-9E61-6D36D10AC6C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Ascom.ReactiveCommunications.Sample.NetCoreConsoleApp", "ConsoleApp2\TA.Ascom.ReactiveCommunications.Sample.NetCoreConsoleApp.csproj", "{4316BF0C-D705-44EF-9E61-6D36D10AC6C8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{2F2972C0-CD87-467A-8D5B-65D5F02E7C37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{6FCDDEA6-60DA-4C51-BF60-0B44306749BA}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -52,6 +56,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6FCDDEA6-60DA-4C51-BF60-0B44306749BA} = {2F2972C0-CD87-467A-8D5B-65D5F02E7C37}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DEEC5AE1-2FB1-48C0-84AE-1ED406320765}
