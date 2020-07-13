@@ -1,13 +1,13 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-// 
+//
 // Copyright © 2018 Tigra Astronomy, all rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-// 
+//
 // File: DeviceTransaction.cs  Last modified: 2018-09-19@22:04 by Tim Long
 
 using System;
@@ -15,6 +15,7 @@ using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
 using TA.Ascom.ReactiveCommunications.Diagnostics;
+using TA.Utils.Core;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -142,7 +143,7 @@ namespace TA.Ascom.ReactiveCommunications
             if (!wasHot)
                 {
                 State = TransactionLifecycle.Failed;
-                ErrorMessage = new Maybe<string>("Transaction was never executed");
+                ErrorMessage = Maybe<string>.From("Transaction was never executed");
                 }
             return wasHot;
             }
@@ -183,7 +184,7 @@ namespace TA.Ascom.ReactiveCommunications
                 {
                 Response = Maybe<string>.Empty;
                 State = TransactionLifecycle.Failed;
-                ErrorMessage = new Maybe<string>("Timed out");
+                ErrorMessage = Maybe<string>.From("Timed out");
                 }
             return signalled;
             }
@@ -234,7 +235,7 @@ namespace TA.Ascom.ReactiveCommunications
         protected virtual void OnNext(string value)
             {
             Contract.Requires(value != null);
-            Response = new Maybe<string>(value);
+            Response = value.AsMaybe();
             }
 
         /// <summary>
@@ -255,7 +256,7 @@ namespace TA.Ascom.ReactiveCommunications
             Contract.Ensures(Response != null);
             Contract.Ensures(ErrorMessage != null);
             Response = Maybe<string>.Empty;
-            ErrorMessage = new Maybe<string>(except.Message);
+            ErrorMessage = except.Message.AsMaybe();
             State = TransactionLifecycle.Failed;
             SignalCompletion();
             }
@@ -285,7 +286,7 @@ namespace TA.Ascom.ReactiveCommunications
             {
             Contract.Ensures(Contract.Result<string>() != null);
             var disposition = Failed ? $"Failed ({ErrorMessage})" : State.ToString();
-            return $"TID={TransactionId} [{Command.ExpandAscii()}] [{Response}] {Timeout} {disposition}";
+            return $"TID={TransactionId} [{Command.ExpandAscii()}] [{Response.ToString().ExpandAscii()}] {Timeout} {disposition}";
             }
         }
     }

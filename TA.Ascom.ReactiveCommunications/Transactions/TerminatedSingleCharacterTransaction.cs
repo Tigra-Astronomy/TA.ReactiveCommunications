@@ -13,6 +13,7 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using TA.Utils.Core;
 
 namespace TA.Ascom.ReactiveCommunications.Transactions
     {
@@ -56,7 +57,7 @@ namespace TA.Ascom.ReactiveCommunications.Transactions
                 {
                 Value = default(char);
                 State = TransactionLifecycle.Failed;
-                ErrorMessage = new Maybe<string>("Unable to convert the response to a single character value");
+                ErrorMessage = Maybe<string>.From("Unable to convert the response to a single character value");
                 }
             base.OnCompleted();
             }
