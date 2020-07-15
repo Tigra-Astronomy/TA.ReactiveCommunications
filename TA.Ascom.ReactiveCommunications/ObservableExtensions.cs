@@ -1,13 +1,13 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-// 
+//
 // Copyright © 2017 Tigra Astronomy, all rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-// 
+//
 // File: ObservableExtensions.cs  Last modified: 2017-02-18@00:00 by Tim Long
 
 using System;
@@ -18,7 +18,8 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
-using NLog;
+using TA.Ascom.ReactiveCommunications.Diagnostics;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -28,7 +29,7 @@ namespace TA.Ascom.ReactiveCommunications
     /// </summary>
     public static class ObservableExtensions
         {
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = ServiceLocator.LogService;
 
         /// <summary>
         ///     Captures the <see cref="System.IO.Ports.SerialPort.DataReceived" /> event of a serial port and returns an
@@ -41,10 +42,11 @@ namespace TA.Ascom.ReactiveCommunications
             {
             Contract.Requires(port != null);
             Contract.Ensures(Contract.Result<IObservable<EventPattern<SerialDataReceivedEventArgs>>>() != null);
+            var log = ServiceLocator.LogService;
             var portEvents = Observable.FromEventPattern<SerialDataReceivedEventHandler, SerialDataReceivedEventArgs>(
                 handler =>
                     {
-                    Log.Debug("Event: SerialDataReceived");
+                    log.Debug().Message("Event: SerialDataReceived").Write();
                     return handler.Invoke;
                     },
                 handler =>
@@ -52,12 +54,12 @@ namespace TA.Ascom.ReactiveCommunications
                     // We must discard stale data when subscribing or it will pollute the first element of the sequence.
                     port.DiscardInBuffer();
                     port.DataReceived += handler;
-                    Log.Debug("Listening to DataReceived event");
+                    log.Debug().Message("Listening to DataReceived event").Write();
                     },
                 handler =>
                     {
                     port.DataReceived -= handler;
-                    Log.Debug("Stopped listening to DataReceived event");
+                    log.Debug().Message("Stopped listening to DataReceived event").Write();
                     });
 
             return portEvents;
@@ -134,6 +136,7 @@ namespace TA.Ascom.ReactiveCommunications
         private static SerialDataReceivedEventHandler ReactiveDataReceivedEventHandler(ISerialPort port,
             IObserver<char> observer)
             {
+            var log = ServiceLocator.LogService;
             var receiveEventHandler = new SerialDataReceivedEventHandler((sender, e) =>
                 {
                 switch (e.EventType)
@@ -156,13 +159,17 @@ namespace TA.Ascom.ReactiveCommunications
                                 }
                             catch (InvalidOperationException ex)
                                 {
-                                Log.Error(ex,
-                                    "The serial port may have closed while a transaction was waiting for data");
+                                log.Error()
+                                    .Message("The serial port may have closed while a transaction was waiting for data")
+                                    .Exception(ex)
+                                    .Write();
                                 observer.OnError(ex);
                                 }
                             break;
                         default:
-                            Log.Warn("Ignoring unexpected serial data received event: {0}", e.EventType);
+                            log.Warning()
+                                .Message("Ignoring unexpected serial data received event: {type}", e.EventType)
+                                .Write();
                             break;
                     }
                 });

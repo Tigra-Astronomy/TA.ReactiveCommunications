@@ -29,6 +29,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
             var unitTestRunnerTarget = new TraceTarget();
             configuration.AddTarget("Unit test runner", unitTestRunnerTarget);
             unitTestRunnerTarget.Layout = "${time}|${pad:padding=-5:inner=${uppercase:${level}}}|${message}";
+            unitTestRunnerTarget.RawWrite = true;
             var logEverything = new LoggingRule("*", LogLevel.Debug, unitTestRunnerTarget);
             configuration.LoggingRules.Add(logEverything);
             LogManager.Configuration = configuration;

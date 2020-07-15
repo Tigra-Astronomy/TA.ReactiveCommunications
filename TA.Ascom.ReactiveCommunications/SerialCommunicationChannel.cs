@@ -15,9 +15,9 @@ using System.Diagnostics.Contracts;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
-using NLog;
 using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.Utils.Core;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -28,7 +28,7 @@ namespace TA.Ascom.ReactiveCommunications
         {
         private const string LineTerminatorValue = "\n";
         internal readonly SerialDeviceEndpoint endpoint;
-        private readonly Logger log = LogManager.GetCurrentClassLogger();
+        private readonly ILog log = ServiceLocator.LogService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SerialCommunicationChannel" /> class.
@@ -54,7 +54,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// </summary>
         public void Open()
             {
-            log.Info($"Channel opening => {endpoint}");
+            log.Info().Message("Channel opening => {endpoint}", endpoint).Write();
             Port.PortName = endpoint.PortName;
             Port.BaudRate = endpoint.BaudRate;
             Port.Parity = endpoint.Parity;
@@ -63,11 +63,14 @@ namespace TA.Ascom.ReactiveCommunications
             Port.RtsEnable = endpoint.RtsEnable;
             Port.DtrEnable = endpoint.DtrEnable;
             /*
-             * We use a code page of 1252 because most devices speak "extended ASCII". Encoding.ASCII is strictly 7-bit ASCII
-             * so some devices and in particular Meade devices don't work if that encoding is used. The 'degree symbol'
-             * (ASCII 223 decimal) is particularly problematic and is used by Meade devices in the formatting of the Declination
-             * coordinate. Codepage 1252 is a superset of ISO-8859-1 8-bit ASCII so the degree symbol works correctly in that code page.
-             * The degree symbol typically displays as 'ß' in UTF-8.
+             * We use a code page of 1252 because most devices speak "extended ASCII".
+             * Encoding.ASCII is strictly 7-bit ASCII so some devices and in particular
+             * Meade devices don't work if that encoding is used. The 'degree symbol'
+             * (ASCII 223 decimal) is particularly problematic and is used by Meade
+             * devices in the formatting of the Declination coordinate. Codepage 1252
+             * is a superset of ISO-8859-1 8-bit ASCII so the degree symbol works
+             * correctly in that code page. The degree symbol typically displays
+             * as 'ß' in UTF-8.
              */
             Port.Encoding = Encoding.GetEncoding(1252);
             //ToDo: magic number. Allow this to be specified rather than hard coded.
@@ -81,9 +84,8 @@ namespace TA.Ascom.ReactiveCommunications
         /// </summary>
         public void Close()
             {
-            log.Info("Channel closing => {0}", endpoint);
-            if (receiverListening != null)
-                receiverListening.Dispose(); // Disconnects the serial event handlers
+            log.Info().Message("Channel closing => {endpoint}", endpoint);
+            receiverListening?.Dispose(); // Disconnects the serial event handlers
             Port.Close();
             }
 
@@ -93,7 +95,7 @@ namespace TA.Ascom.ReactiveCommunications
         /// <param name="txData">The data to be transmitted.</param>
         public virtual void Send(string txData)
             {
-            log.Debug("Sending [{0}]", txData.ExpandAscii());
+            log.Debug().Message("Sending [{txdata}]", txData.ExpandAscii());
             Port.Write(txData);
             }
 
@@ -147,7 +149,7 @@ namespace TA.Ascom.ReactiveCommunications
         public override string ToString()
             {
             Contract.Ensures(Contract.Result<string>() != null);
-            return string.Format("IsOpen: {0}, Endpoint: {1}", IsOpen, endpoint);
+            return $"IsOpen: {IsOpen}, Endpoint: {endpoint}";
             }
 
         #region IDisposable pattern for a base class.

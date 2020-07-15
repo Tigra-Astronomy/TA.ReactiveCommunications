@@ -12,7 +12,6 @@
 
 using System;
 using System.Reactive.Linq;
-using NLog;
 using TA.Utils.Core;
 
 namespace TA.Ascom.ReactiveCommunications.Diagnostics
@@ -30,12 +29,21 @@ namespace TA.Ascom.ReactiveCommunications.Diagnostics
         /// <param name="name">The name emitted in trace output for this source.</param>
         public static IObservable<TSource> Trace<TSource>(this IObservable<TSource> source, string name)
             {
-            var log = LogManager.GetLogger(name);
+            var log = ServiceLocator.LogService;
             var id = 0;
             return Observable.Create<TSource>(observer =>
                 {
-                var idClosure = ++id;
-                Action<string, object> trace = (m, v) => log.Debug("{0}[{1}]: {2}({3})", name, idClosure, m, v);
+                var subscriptionId = ++id;  // closure
+                var logName = name;       // closure
+                Action<string, object> trace = (action, content) => log
+                    .Debug()
+                    .LoggerName(logName)
+                    .Message("{source}[{id}]: {action}({content})")
+                    .Property("source", logName)
+                    .Property("id", subscriptionId)
+                    .Property("action", action)
+                    .Property("content", content)
+                    .Write();
                 trace("Subscribe", "");
                 var disposable = source.Subscribe(
                     v =>

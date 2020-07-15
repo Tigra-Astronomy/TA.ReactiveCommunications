@@ -1,18 +1,19 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-// 
+//
 // Copyright © 2018 Tigra Astronomy, all rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-// 
+//
 // File: NetworkDeviceEndpoint.cs  Last modified: 2018-08-27@17:28 by Tim Long
 
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
-using NLog;
+using TA.Ascom.ReactiveCommunications.Diagnostics;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -28,7 +29,7 @@ namespace TA.Ascom.ReactiveCommunications
             @"^(?<Host>[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*(?:\.[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)*)(\:(?<Port>\d{1,5}))?";
         private static readonly Regex NetworkIPv4Regex = new Regex(NetworkIPv4Pattern, Options);
         private static readonly Regex NetworkHostRegex = new Regex(NetworkHostPattern, Options);
-        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = ServiceLocator.LogService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="NetworkDeviceEndpoint" /> class.
@@ -74,7 +75,7 @@ namespace TA.Ascom.ReactiveCommunications
                 return CreateNetworkEndpoint(connection, NetworkHostRegex);
             if (NetworkIPv4Regex.IsMatch(connection))
                 return CreateNetworkEndpoint(connection, NetworkIPv4Regex);
-            Log.Warn("Connection string is for an unsupported endpoint, returning InvalidEndpoint");
+            Log.Warning("Connection string is for an unsupported endpoint, returning InvalidEndpoint");
             return new InvalidEndpoint();
             }
 

@@ -15,7 +15,8 @@ using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using NLog;
+using TA.Ascom.ReactiveCommunications.Diagnostics;
+using ILog = TA.Utils.Core.Diagnostics.ILog;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -32,7 +33,7 @@ namespace TA.Ascom.ReactiveCommunications
         protected const RegexOptions Options =
             RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Singleline |
             RegexOptions.IgnoreCase | RegexOptions.Compiled;
-        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = ServiceLocator.LogService;
 
         /// <summary>
         ///     Gets the device address. The address format is device specific.

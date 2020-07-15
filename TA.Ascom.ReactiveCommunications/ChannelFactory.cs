@@ -14,6 +14,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using JetBrains.Annotations;
+using TA.Ascom.ReactiveCommunications.Diagnostics;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
     {
@@ -24,17 +27,20 @@ namespace TA.Ascom.ReactiveCommunications
     /// </summary>
     public class ChannelFactory
         {
+        private readonly ILog log;
         private readonly List<RegisteredChannelBuilder> deviceTypes = new List<RegisteredChannelBuilder>();
 
         /// <summary>
         /// Creates a new instance with the builtin channel types pre-registered.
         /// </summary>
-        public ChannelFactory()
+        public ChannelFactory([CanBeNull] ILog logger=null)
             {
-            RegisterDefaultChannelFBuilders();
+            log = logger ?? ServiceLocator.LogService;
+            ServiceLocator.LogService = log;
+            RegisterDefaultChannelBuilders();
             }
 
-        private void RegisterDefaultChannelFBuilders()
+        private void RegisterDefaultChannelBuilders()
             {
             var serialChannelFactory = new RegisteredChannelBuilder
                 {
@@ -54,9 +60,12 @@ namespace TA.Ascom.ReactiveCommunications
         public ICommunicationChannel FromConnectionString(string connection)
             {
             Contract.Requires(!string.IsNullOrEmpty(connection));
+            log.Info().Message("Creating channel from connection string {connection}", connection);
             var deviceBuilder = ChannelBuilderForConnectionString(connection);
             var endpoint = deviceBuilder.EndpointFromConnectionString(connection);
+            log.Debug().Message("Using endpoint type {endpoint}", endpoint.GetType());
             var channel = deviceBuilder.ChannelFromEndpoint(endpoint);
+            log.Debug().Message("Using channel type {channel}", channel.GetType());
             return channel;
             }
 

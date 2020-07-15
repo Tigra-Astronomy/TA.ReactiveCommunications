@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using TA.Ascom.ReactiveCommunications.Specifications.Fakes;
+using TA.Utils.Logging.NLog;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
     {
@@ -16,7 +17,8 @@ namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
         {
         public RxAscomContextBuilder()
             {
-            channelFactory = new ChannelFactory();
+            var logService = new NlogLoggingService();
+            channelFactory = new ChannelFactory(logService);
             channelFactory.RegisterChannelType(
                 p => p.StartsWith("Fake", StringComparison.InvariantCultureIgnoreCase),
                 connection => new FakeEndpoint(),
