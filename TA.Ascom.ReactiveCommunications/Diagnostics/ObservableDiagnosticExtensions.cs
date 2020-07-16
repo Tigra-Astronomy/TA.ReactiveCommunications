@@ -36,13 +36,9 @@ namespace TA.Ascom.ReactiveCommunications.Diagnostics
                 var subscriptionId = ++id;  // closure
                 var logName = name;       // closure
                 Action<string, object> trace = (action, content) => log
-                    .Debug()
+                    .Trace()
                     .LoggerName(logName)
-                    .Message("{source}[{id}]: {action}({content})")
-                    .Property("source", logName)
-                    .Property("id", subscriptionId)
-                    .Property("action", action)
-                    .Property("content", content)
+                    .Message("{source}[{id}]: {action}({content})", logName, subscriptionId, action, content)
                     .Write();
                 trace("Subscribe", "");
                 var disposable = source.Subscribe(

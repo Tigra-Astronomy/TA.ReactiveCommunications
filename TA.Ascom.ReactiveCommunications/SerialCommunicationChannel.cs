@@ -72,6 +72,7 @@ namespace TA.Ascom.ReactiveCommunications
              * correctly in that code page. The degree symbol typically displays
              * as 'ß' in UTF-8.
              */
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Port.Encoding = Encoding.GetEncoding(1252);
             //ToDo: magic number. Allow this to be specified rather than hard coded.
             Port.Open();

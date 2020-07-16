@@ -23,7 +23,7 @@ For more information and a quick-start tutorial, please see http://tigra-astrono
     </Description>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>tigra-astronomy.com/reactive-communications-for-ascom</PackageProjectUrl>
     <PackageIconUrl>http://tigra-astronomy.com/Media/TigraAstronomy/ProjectIcons/ReactiveASCOM520x520.png</PackageIconUrl>
@@ -47,6 +47,7 @@ For more information and a quick-start tutorial, please see http://tigra-astrono
     </PackageReference>
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
     <PackageReference Include="System.Reactive" Version="4.1.5" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
     <PackageReference Include="TA.Utils.Core" Version="1.1.0-alpha.19" />
   </ItemGroup>
 

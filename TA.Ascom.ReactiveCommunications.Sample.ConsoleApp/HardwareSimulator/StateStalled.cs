@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2018 Tigra Astronomy, all rights reserved.
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,9 +8,15 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: AssemblyInfo.cs  Last modified: 2018-08-26@14:20 by Tim Long
+// File: StateStalled.cs  Last modified: 2020-07-16@02:26 by Tim Long
 
-using System.Reflection;
+namespace TA.Ascom.ReactiveCommunications.Sample.ConsoleApp.HardwareSimulator
+    {
+    /// <summary>This state is used when an unrecoverable error has occurred.</summary>
+    internal class StateStalled : SimulatorState
+        {
+        internal StateStalled(SimulatorStateMachine machine) : base(machine) { }
 
-[assembly: AssemblyTitle("TA.Ascom.ReactiveCommunications.Sample.ConsoleApp")]
-[assembly: AssemblyDescription("Demonstrates simple setup and use of Reactive ASCOM")]
+        protected override string Name => "Stalled";
+        }
+    }
