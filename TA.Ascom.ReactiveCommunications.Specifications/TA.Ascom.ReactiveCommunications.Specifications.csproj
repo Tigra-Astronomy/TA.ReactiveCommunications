@@ -17,6 +17,10 @@
     <PackageTags>ascom,reactive,rx,communication,serial,oss</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;0169</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Artwork\**" />
     <EmbeddedResource Remove="Artwork\**" />
