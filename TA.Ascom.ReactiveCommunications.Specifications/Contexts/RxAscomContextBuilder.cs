@@ -1,7 +1,7 @@
 ﻿// This file is part of the TA.DigitalDomeworks project
-// 
+//
 // Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: RxAscomContextBuilder.cs  Last modified: 2018-03-08@19:17 by Tim Long
 
 using System;
@@ -17,7 +17,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
         {
         public RxAscomContextBuilder()
             {
-            var logService = new NlogLoggingService();
+            var logService = new LoggingService();
             channelFactory = new ChannelFactory(logService);
             channelFactory.RegisterChannelType(
                 p => p.StartsWith("Fake", StringComparison.InvariantCultureIgnoreCase),

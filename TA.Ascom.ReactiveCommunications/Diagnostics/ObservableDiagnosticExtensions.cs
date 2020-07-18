@@ -34,11 +34,10 @@ namespace TA.Ascom.ReactiveCommunications.Diagnostics
             return Observable.Create<TSource>(observer =>
                 {
                 var subscriptionId = ++id;  // closure
-                var logName = name;       // closure
+                var sequenceName = name;       // closure
                 Action<string, object> trace = (action, content) => log
-                    .Trace()
-                    .LoggerName(logName)
-                    .Message("{source}[{id}]: {action}({content})", logName, subscriptionId, action, content)
+                    .Trace("Observable")
+                    .Message("{@source}[{id}]: {@action}({@content})", sequenceName, subscriptionId, action, content)
                     .Write();
                 trace("Subscribe", "");
                 var disposable = source.Subscribe(

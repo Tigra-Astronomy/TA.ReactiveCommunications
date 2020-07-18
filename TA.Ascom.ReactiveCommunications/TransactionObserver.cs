@@ -118,13 +118,13 @@ namespace TA.Ascom.ReactiveCommunications
                 channel.Send(transaction.Command);
                 var succeeded = transaction.WaitForCompletionOrTimeout();
                 if (!succeeded)
-                    log.Warning()
+                    log.Warn()
                         .Message("Transaction {id} timed out with reason: {message}",
                             transaction.TransactionId, transaction.ErrorMessage.SingleOrDefault())
                         .Write();
                 }
             if (transaction.Failed)
-                log.Warning()
+                log.Warn()
                     .Message("Transaction {id} was marked as FAILED", transaction.TransactionId)
                     .Property("transaction", transaction)
                     .Write();

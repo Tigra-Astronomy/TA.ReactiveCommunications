@@ -4,7 +4,7 @@
     <Authors>Tim Long</Authors>
     <Company>Tigra Astronomy</Company>
     <Description>A thread-safe, transactional, reactive style commications library for ASCOM telescopes and other devices.</Description>
-    <Copyright>Copyright © 2015-19 Tigra Astronomy, all rights reserved</Copyright>
+    <Copyright>Copyright © 2015-20 Tigra Astronomy, all rights reserved</Copyright>
     <AssemblyTitle>TA.Ascom.ReactiveCommunications</AssemblyTitle>
     <Description>
 A library based on the Reactive Extensions for simplifying device communications to embedded controllers,
@@ -25,40 +25,42 @@ For more information and a quick-start tutorial, please see http://tigra-astrono
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl>tigra-astronomy.com/reactive-communications-for-ascom</PackageProjectUrl>
-    <PackageIconUrl>http://tigra-astronomy.com/Media/TigraAstronomy/ProjectIcons/ReactiveASCOM520x520.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications/wiki</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications/wiki/Artwork/NugetPackageIcon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>ASCOM,Rx,Serial,Ethernet,Comms,Transaction,Thread-safe</PackageTags>
     <PackageIcon>NugetPackageIcon.png</PackageIcon>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
-    <PackageLicenseFile>License.md</PackageLicenseFile>
+    <PackageLicenseFile></PackageLicenseFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-    <PackageReference Include="System.IO.Ports" Version="4.5.0" />
+    <PackageReference Include="System.IO.Ports" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0">
+    <PackageReference Include="GitVersionTask" Version="5.3.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
-    <PackageReference Include="System.Reactive" Version="4.1.5" />
+    <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
+    <PackageReference Include="System.Reactive" Version="4.4.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
-    <PackageReference Include="TA.Utils.Core" Version="1.1.0-alpha.19" />
+    <PackageReference Include="TA.Utils.Core" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Artwork\NugetPackageIcon.png">
+    <None Include="Assets\NugetPackageIcon.png">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>/</PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\License.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
   </ItemGroup>
 </Project>

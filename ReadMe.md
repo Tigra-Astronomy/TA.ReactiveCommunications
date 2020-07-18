@@ -20,19 +20,42 @@ Reactive ASCOM uses the [MIT License][6].
 
 Tim Long - Tigra Astronomy, May 2015.
 
-## Release Notes ##
+## Getting Started ##
 
-### 0.5.1 ###
+We have posted a number of "HowTo" videos on our YouTube channel.
 
-- Updated dependent NuGet packages to latest release versions before rebuilding and pushing to NuGet.
+- [Introduction to Reactive Communications for ASCOM][yt-intro]
+- [Building Custom Transactions for Reactive ASCOM][yt-trans-intro]
+- [Deep Dive Into Creating Transactions][yt-trans-deep]
 
-### 0.5.0 ###
+The source code also contains a pair of sample console applications, which demonstrate the two main
+usage patterns that we have identified.
+How you use RX Comms will most likely depend on the communications protocol that your device uses.
+There seems to be two main types.
 
-- added the `ChannelFactory` class and the ability to register custom user-supplied channel implementations.  Removed `DeviceEndpoint.FromConnectionString()`. This is a breaking change and applications will now need to use the new `ChannelFactory` class to create a communications channel from a connection string, instead of `DeviceEndpoint.FromConnectionString()`
+- Devices where commands and responses happen in closely coupled pairs, with the response comming immediately or after a very short delay.
+  We call this the *Transactional Model* and each command and response can be theought of as a single *transaction*.
+  For this type of protocol, you'll probably want to focus on understanding the `DeviceTransaction` class
+  and implementing your own transaction subclasses.
+  You'll use the `ReactiveTransactionProcessor` to execute your transactions.
 
-  Builtin channel types are pre-registered in the `ChannelFactory`. Custom channel implementations can be added by calling `RegisterChannelType()`. You must supply a `Predicate<string>` that tests whether a connection string is valid for the channel type; a `Func<string,DeviceEndpoint>` for creating an endpoint from a connection string; and a `Func<DeviceEndpoint, ICommunicationsChannel>` for creating the channel itself.
+- Devices where commands may not have a direct response but the device emits notifications
+  in real time, not necessarily in response to a direct command.
+  We call this the *Asynchronous Model*.
+  This type of protocol can actually be great to work with if done well and
+  a reactive programming style is an excellent fit.
+  You'll probably want to focus on chopping up your input stream into observable sequences
+  and hooking them up to actions, state machines and user interface components.
 
-  If the builtin channel types are not required, they can be deleted by calling `ClearRegisteredDevices()` prior to adding any custom implementations.
+- In most cases, there is a continuum between the *Transactional* and *Asynchronous* models
+  and most devices will require some elements of both.
+  Rx Comms has you covered, either way.
+
+- Whatever approach you adopt, you will also need to understand:
+  - Communications channels (`ICommunicationsChannel` and `SerialCommunicationsChannel`)
+  - `DeviceEndpoint` used for storing channel configuration data.
+  - `ChannelFactory` for creating channels from connection strings.
+
 
   [1]: http://tigra-astronomy.com/reactive-communications-for-ascom "Project Page"
   [2]: https://rx.codeplex.com/ "Rx Project"
@@ -40,3 +63,6 @@ Tim Long - Tigra Astronomy, May 2015.
   [4]: http://www.nuget.org "NuGet Package Manager"
   [5]: http://tigra-astronomy.com/blog/the-well-travelled-photon/reactive-ascom "Introducing Reactive ASCOM"
   [6]: http://tigra.mit-license.org/ "Tigra Astronomy MIT License"
+  [yt-intro]: https://www.youtube.com/watch?v=2rE6ZsNUWCE&t=8s "Quick start introductory video"
+  [yt-trans-intro]: https://www.youtube.com/watch?v=QqMK0nu01MI "Basic guide to creating transactions"
+  [yt-trans-deep]: https://www.youtube.com/watch?v=hV9BzGyiZwc "Deep dive into creating transactions"

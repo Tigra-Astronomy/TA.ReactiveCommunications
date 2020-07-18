@@ -167,7 +167,7 @@ namespace TA.Ascom.ReactiveCommunications
                                 }
                             break;
                         default:
-                            log.Warning()
+                            log.Warn()
                                 .Message("Ignoring unexpected serial data received event: {type}", e.EventType)
                                 .Write();
                             break;
