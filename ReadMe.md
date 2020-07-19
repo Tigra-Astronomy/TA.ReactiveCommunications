@@ -34,7 +34,7 @@ In summary:
 
 Tim Long - Tigra Astronomy, July 2020.
 
-[rx: https://github.com/dotnet/reactive "Reactive Extensions for .NET"
+[rx]: https://github.com/dotnet/reactive "Reactive Extensions for .NET"
 [ascom]: http://ascom-standards.org "Astronomy Common Object Model"
 [nuget]: http://www.nuget.org "NuGet Package Manager"
 [yt-intro]: https://www.youtube.com/watch?v=2rE6ZsNUWCE&t=8s "Quick start introductory video"
