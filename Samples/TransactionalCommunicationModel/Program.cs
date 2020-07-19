@@ -15,7 +15,7 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using SimulatorChannel;
 using TA.Ascom.ReactiveCommunications;
-using TA.DigitalDomeworks.DeviceInterface;
+using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.Utils.Core;
 using TA.Utils.Logging.NLog;
 
@@ -107,7 +107,7 @@ namespace TransactionalCommunicationModel
                 statusTransaction.WaitForCompletionOrTimeout(); // There is also an async version
 
                 // If the transaction failed, log and throw TransactionException.
-                statusTransaction.ThrowIfFailed(log);
+                TransactionExtensions.ThrowIfFailed(statusTransaction, log);
 
                 // Now we can retrieve the results and use them.
                 // If the transaction succeeded, we should be assured of a valid result.
@@ -124,7 +124,7 @@ namespace TransactionalCommunicationModel
                 transactionProcessor.CommitTransaction(gpioTransaction);
                 gpioTransaction.WaitForCompletionOrTimeout();
 
-                gpioTransaction.ThrowIfFailed(log);
+                TransactionExtensions.ThrowIfFailed(gpioTransaction, log);
                 var newPinState = gpioTransaction.UserPins;
                 if (newPinState != gpioPinsToWrite)
                     throw new ApplicationException("Failed to write GPIO pins");

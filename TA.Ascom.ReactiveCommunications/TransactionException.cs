@@ -12,9 +12,8 @@
 
 using System;
 using System.Runtime.Serialization;
-using TA.Ascom.ReactiveCommunications;
 
-namespace TA.DigitalDomeworks.DeviceInterface
+namespace TA.Ascom.ReactiveCommunications
     {
     /// <inheritdoc />
     /// <summary>

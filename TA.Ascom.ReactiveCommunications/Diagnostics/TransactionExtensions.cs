@@ -10,25 +10,22 @@
 //
 // File: TransactionExtensions.cs  Last modified: 2020-07-18@11:03 by Tim Long
 
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using NLog;
-using TA.Ascom.ReactiveCommunications;
-using TA.DigitalDomeworks.DeviceInterface;
+using JetBrains.Annotations;
 using TA.Utils.Core.Diagnostics;
 
-namespace TransactionalCommunicationModel
+namespace TA.Ascom.ReactiveCommunications.Diagnostics
     {
-    internal static class TransactionExtensions
+    public static class TransactionExtensions
         {
         /// <summary>Raises a TransactionException for the given transaction.</summary>
         /// <param name="transaction">The transaction causing the exception.</param>
         /// <param name="log">
-        ///     An <see cref="ILogger" /> instance to which the exception message will be logged at Error
-        ///     severity.
+        ///     An <see cref="ILog" /> instance to which the exception message will be logged at Error
+        ///     severity. The exception and transaction details will also be added to the log as properties.
         /// </param>
         /// <exception cref="TransactionException">Always thrown.</exception>
-        public static void RaiseException([NotNull] this DeviceTransaction transaction, [AllowNull]ILog log = null)
+        public static void RaiseException([NotNull] this DeviceTransaction transaction, [CanBeNull] ILog log = null)
             {
             Contract.Requires(transaction != null);
             var message = $"Transaction {transaction} failed: {transaction.ErrorMessage}";
@@ -36,11 +33,18 @@ namespace TransactionalCommunicationModel
             log?.Error()
                 .Message(message)
                 .Exception(transactionException)
+                .Transaction(transaction)
                 .Property("transaction", transaction)
                 .Write();
             throw transactionException;
             }
 
+        /// <summary>
+        /// Throws a <see cref="TransactionException"/> if the transaction failed.
+        /// If a logging service is supplied in the <paramref name="log"/> parameter, then the failure is logged as an error.
+        /// </summary>
+        /// <param name="transaction">The transaction that may have failed.</param>
+        /// <param name="log">Optional. A logging service that can be used to log the error.</param>
         public static void ThrowIfFailed(this DeviceTransaction transaction, ILog log=null)
             {
             if (transaction.Failed)
