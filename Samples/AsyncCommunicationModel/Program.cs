@@ -1,14 +1,14 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-//
+// 
 // Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-//
-// File: Program.cs  Last modified: 2020-07-16@02:32 by Tim Long
+// 
+// File: Program.cs  Last modified: 2020-07-20@00:49 by Tim Long
 
 using System;
 using System.IO;
@@ -58,13 +58,13 @@ namespace AsyncCommunicationModel
             log.Info()
                 .Message("Program start. Version {gitversion}", GitVersion.GitInformationalVersion)
                 .Property("CommitSha", GitVersion.GitCommitSha)
-                .Property("CommitDate",GitVersion.GitCommitDate)
+                .Property("CommitDate", GitVersion.GitCommitDate)
                 .Write();
             var channelFactory = new ChannelFactory(log);
             channelFactory.RegisterChannelType(
                 SimulatorEndpoint.IsConnectionStringValid,
                 SimulatorEndpoint.FromConnectionString,
-                enpoint => new SimulatorCommunicationsChannel((SimulatorEndpoint)enpoint, log));
+                enpoint => new SimulatorCommunicationsChannel((SimulatorEndpoint) enpoint, log));
 
             /*
              * Now get out connection string from the AppSettings.json file.
@@ -106,7 +106,6 @@ namespace AsyncCommunicationModel
             Console.ReadLine();
 
             #region Cleanup
-
             log.Info().Message("Cleaning up for exit").Write();
 
             // We can first clean up our subscription that is monitoring position updates.
@@ -189,7 +188,7 @@ namespace AsyncCommunicationModel
                     .LoggerName("Position update")
                     .Message("Got position {position}", item)
                     .Write()
-                );
+            );
             return disposable;
             }
         }

@@ -1,14 +1,14 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-//
-// Copyright © 2018 Tigra Astronomy, all rights reserved.
-//
+// 
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-//
-// File: SerialCommunicationChannel.cs  Last modified: 2018-08-27@22:37 by Tim Long
+// 
+// File: SerialCommunicationChannel.cs  Last modified: 2020-07-20@00:51 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -22,7 +22,8 @@ using TA.Utils.Core.Diagnostics;
 namespace TA.Ascom.ReactiveCommunications
     {
     /// <summary>
-    ///     Class SerialCommunicationChannel. Implements sending and receiving to a serial port device.
+    ///     Class SerialCommunicationChannel. Implements sending and receiving to a serial port
+    ///     device.
     /// </summary>
     public class SerialCommunicationChannel : ICommunicationChannel
         {
@@ -30,9 +31,7 @@ namespace TA.Ascom.ReactiveCommunications
         internal readonly SerialDeviceEndpoint endpoint;
         private readonly ILog log = ServiceLocator.LogService;
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="SerialCommunicationChannel" /> class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the <see cref="SerialCommunicationChannel" /> class.</summary>
         /// <param name="endpoint">The device endpoint.</param>
         /// <param name="port">The port.</param>
         /// <exception cref="System.ArgumentException">Expected a SerialDeviceEndpoint</exception>
@@ -49,9 +48,7 @@ namespace TA.Ascom.ReactiveCommunications
 
         internal ISerialPort Port { get; set; }
 
-        /// <summary>
-        ///     Configures the serial port and opens the channel ready for transmitting.
-        /// </summary>
+        /// <summary>Configures the serial port and opens the channel ready for transmitting.</summary>
         public void Open()
             {
             log.Info().Message("Channel opening => {endpoint}", endpoint).Write();
@@ -80,9 +77,7 @@ namespace TA.Ascom.ReactiveCommunications
                 receiverListening = observableReceiveSequence.Connect();
             }
 
-        /// <summary>
-        ///     Disconnects the serial port and closes the channel.
-        /// </summary>
+        /// <summary>Disconnects the serial port and closes the channel.</summary>
         public void Close()
             {
             log.Info().Message("Channel closing => {endpoint}", endpoint);
@@ -90,9 +85,7 @@ namespace TA.Ascom.ReactiveCommunications
             Port.Close();
             }
 
-        /// <summary>
-        ///     Sends the specified data and returns immediately without waiting for a reply.
-        /// </summary>
+        /// <summary>Sends the specified data and returns immediately without waiting for a reply.</summary>
         /// <param name="txData">The data to be transmitted.</param>
         public virtual void Send(string txData)
             {
@@ -100,21 +93,15 @@ namespace TA.Ascom.ReactiveCommunications
             Port.Write(txData);
             }
 
-        /// <summary>
-        ///     An observable sequence of the characters received from the serial port.
-        /// </summary>
+        /// <summary>An observable sequence of the characters received from the serial port.</summary>
         /// <value>The receive sequence.</value>
         public IObservable<char> ObservableReceivedCharacters => observableReceiveSequence;
 
-        /// <summary>
-        ///     Gets a value indicating whether this instance is open.
-        /// </summary>
+        /// <summary>Gets a value indicating whether this instance is open.</summary>
         /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
         public bool IsOpen => Port.IsOpen;
 
-        /// <summary>
-        ///     Gets the endpoint that is associated with the channel.
-        /// </summary>
+        /// <summary>Gets the endpoint that is associated with the channel.</summary>
         /// <value>The endpoint.</value>
         public DeviceEndpoint Endpoint => endpoint;
 
@@ -143,9 +130,7 @@ namespace TA.Ascom.ReactiveCommunications
             Contract.Invariant(endpoint != null);
             }
 
-        /// <summary>
-        ///     Returns a <see cref="System.String" /> that represents this instance.
-        /// </summary>
+        /// <summary>Returns a <see cref="System.String" /> that represents this instance.</summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
             {
@@ -159,8 +144,8 @@ namespace TA.Ascom.ReactiveCommunications
         private IDisposable receiverListening;
 
         /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        ///     Implements <see cref="IDisposable" />.
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged
+        ///     resources. Implements <see cref="IDisposable" />.
         /// </summary>
         public void Dispose()
             {
@@ -168,9 +153,7 @@ namespace TA.Ascom.ReactiveCommunications
             GC.SuppressFinalize(this);
             }
 
-        /// <summary>
-        ///     Releases unmanaged and - optionally - managed resources.
-        /// </summary>
+        /// <summary>Releases unmanaged and - optionally - managed resources.</summary>
         /// <param name="disposing">
         ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
         ///     unmanaged resources.
@@ -193,9 +176,7 @@ namespace TA.Ascom.ReactiveCommunications
                 }
             }
 
-        /// <summary>
-        ///     Finalizes an instance of the <see cref="SerialCommunicationChannel" /> class.
-        /// </summary>
+        /// <summary>Finalizes an instance of the <see cref="SerialCommunicationChannel" /> class.</summary>
         ~SerialCommunicationChannel()
             {
             Dispose(false);

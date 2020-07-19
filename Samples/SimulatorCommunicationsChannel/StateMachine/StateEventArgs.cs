@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: StateEventArgs.cs  Last modified: 2020-07-16@02:26 by Tim Long
+// File: StateEventArgs.cs  Last modified: 2020-07-20@00:49 by Tim Long
 
 using System;
 

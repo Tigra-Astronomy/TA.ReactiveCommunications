@@ -1,14 +1,14 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-//
-// Copyright © 2020 Tigra Astronomy, all rights reserved.
-//
+// 
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-//
-// File: SerialDeviceEndpoint.cs  Last modified: 2020-03-07@17:04 by Tim Long
+// 
+// File: SerialDeviceEndpoint.cs  Last modified: 2020-07-20@00:51 by Tim Long
 
 using System;
 using System.Diagnostics.Contracts;
@@ -110,7 +110,6 @@ namespace TA.Ascom.ReactiveCommunications
             var dtr = DtrEnable ? "dtr" : "nodtr";
             var rts = RtsEnable ? "rts" : "norts";
             return $"{PortName}:{BaudRate},{Parity},{DataBits},{StopBits},{dtr},{rts}";
-
             }
 
         /// <summary>Creates a SerialDeviceEndpoint from a valid connection string.</summary>
@@ -125,28 +124,30 @@ namespace TA.Ascom.ReactiveCommunications
         ///         </code>
         ///     </para>
         ///     <para>
-        ///         Since that is a rather unfriendly expression to human eyes, one way to determine correct connection
-        ///         string syntax is to create a specimen endpoint, passing in the required configuration as constructor
-        ///         parameters. Then, write the object to an output stream. The ToString method will write out a
-        ///         syntactically correct connection string. There are many ways to accomplish this. For example, you
-        ///         can use the C# Interactive window in Visual Studio, write a unit test, use Windows PowerShell or an
-        ///         utility such as LINQPad. In LINQPad, the following fragment will suffice:
+        ///         Since that is a rather unfriendly expression to human eyes, one way to determine correct
+        ///         connection string syntax is to create a specimen endpoint, passing in the required
+        ///         configuration as constructor parameters. Then, write the object to an output stream. The
+        ///         ToString method will write out a syntactically correct connection string. There are many
+        ///         ways to accomplish this. For example, you can use the C# Interactive window in Visual
+        ///         Studio, write a unit test, use Windows PowerShell or an utility such as LINQPad. In
+        ///         LINQPad, the following fragment will suffice:
         ///         <code lang="csharp">
         ///             var endpoint = new SerialDeviceEndpoint("COM1"); // Pass in whatever parameters you need
         ///             endpoint.Dump();
         ///         </code>
         ///     </para>
         ///     <para>
-        ///         It is probably best to avoid creating connection strings directly as this will tend to be error
-        ///         prone, especially if it is from user-supplied input. Instead, create a user interface that gathers
-        ///         all of the serial parameters from the user. For an ASCOM driver, this will likely be part of the
-        ///         Setup Dialog. Save all the user-supplied data in your settings. Then generate a connection string by
-        ///         creating a <see cref="SerialDeviceEndpoint" />, passing the user settings in as constructor
-        ///         parameters. Finally, use <see cref="ToString" /> or the <see cref="DeviceEndpoint.DeviceAddress"/>
-        ///         property to retrieve the corresponding connection string. The connection string can either be saved
-        ///         along with user settings and used 'as-is' in the next session, or it can be dynamically regenerated
-        ///         on demand using the above technique - the choice is yours. It is also up to you whether or not you
-        ///         decide to make the connection string visible to the user.
+        ///         It is probably best to avoid creating connection strings directly as this will tend to be
+        ///         error prone, especially if it is from user-supplied input. Instead, create a user interface
+        ///         that gathers all of the serial parameters from the user. For an ASCOM driver, this will
+        ///         likely be part of the Setup Dialog. Save all the user-supplied data in your settings. Then
+        ///         generate a connection string by creating a <see cref="SerialDeviceEndpoint" />, passing the
+        ///         user settings in as constructor parameters. Finally, use <see cref="ToString" /> or the
+        ///         <see cref="DeviceEndpoint.DeviceAddress" /> property to retrieve the corresponding
+        ///         connection string. The connection string can either be saved along with user settings and
+        ///         used 'as-is' in the next session, or it can be dynamically regenerated on demand using the
+        ///         above technique - the choice is yours. It is also up to you whether or not you decide to
+        ///         make the connection string visible to the user.
         ///     </para>
         /// </remarks>
         public static SerialDeviceEndpoint FromConnectionString(string connectionString)

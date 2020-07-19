@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: NotifyPropertyChangeReactiveExtensions.cs  Last modified: 2020-07-16@02:26 by Tim Long
+// File: NotifyPropertyChangeReactiveExtensions.cs  Last modified: 2020-07-20@00:49 by Tim Long
 
 using System;
 using System.ComponentModel;
@@ -78,7 +78,7 @@ namespace SimulatorChannel
             where TSource : INotifyPropertyChanged
             {
             Contract.Requires(property != null);
-            return GetObservableValueFor<TSource, TValue>(source, property)
+            return GetObservableValueFor(source, property)
                 .Subscribe(observer);
             }
 
@@ -90,7 +90,7 @@ namespace SimulatorChannel
                 Action onCompleted)
             where TSource : INotifyPropertyChanged
             {
-            return GetObservableValueFor<TSource, TValue>(source, property)
+            return GetObservableValueFor(source, property)
                 .Subscribe(observer, onCompleted);
             }
 
@@ -102,7 +102,7 @@ namespace SimulatorChannel
                 Action<Exception> onException)
             where TSource : INotifyPropertyChanged
             {
-            return GetObservableValueFor<TSource, TValue>(source, property)
+            return GetObservableValueFor(source, property)
                 .Subscribe(observer, onException);
             }
 
@@ -115,7 +115,7 @@ namespace SimulatorChannel
                 Action onCompleted)
             where TSource : INotifyPropertyChanged
             {
-            return GetObservableValueFor<TSource, TValue>(source, property)
+            return GetObservableValueFor(source, property)
                 .Subscribe(observer, onException, onCompleted);
             }
         }

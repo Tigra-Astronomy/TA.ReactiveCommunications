@@ -1,14 +1,14 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
-//
+// 
 // Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
-//
-// File: StatusTransaction.cs  Last modified: 2020-07-18@09:29 by Tim Long
+// 
+// File: StatusTransaction.cs  Last modified: 2020-07-20@00:49 by Tim Long
 
 using System;
 using System.Linq;
@@ -51,29 +51,29 @@ namespace TransactionalCommunicationModel
              * Always begin with "V4," and end with a newline.
              */
             var statusResponse = source
-                    /*
-                     * First we slice & dice our input stream based on strings the start with 'V' and end with newline.
-                     * We use an RxComms extension method for this.
-                     * In practice, it would be wise to perform a more rigorous check here  with
-                     * a regular expression match, but for this particular protocol
-                     * the letter 'V' can only occur in this exact situation, so we are safe.
-                     */
+                /*
+                 * First we slice & dice our input stream based on strings the start with 'V' and end with newline.
+                 * We use an RxComms extension method for this.
+                 * In practice, it would be wise to perform a more rigorous check here  with
+                 * a regular expression match, but for this particular protocol
+                 * the letter 'V' can only occur in this exact situation, so we are safe.
+                 */
                 .DelimitedMessageStrings('V', '\n')
-                    /*
-                     * We'll emit all matching responses into the diagnostic logs.
-                     */
+                /*
+                 * We'll emit all matching responses into the diagnostic logs.
+                 */
                 .Trace("StatusTransaction")
-                    /*
-                     * And then (this is critical) we end the sequence after one element is produced.
-                     * It is important that the sequence ends so that the OnCompleted action fires.
-                     * This is what marks the transaction as "complete".
-                     * If the sequence doesn't complete, the transaction will eventually time out and fail.
-                     */
+                /*
+                 * And then (this is critical) we end the sequence after one element is produced.
+                 * It is important that the sequence ends so that the OnCompleted action fires.
+                 * This is what marks the transaction as "complete".
+                 * If the sequence doesn't complete, the transaction will eventually time out and fail.
+                 */
                 .Take(1)
-                    /*
-                     * And then we subscribe to our transformed sequence, using the handlers provided
-                     * in the DeviceTransaction base class and our overridden OnCompleted action.
-                     */
+                /*
+                 * And then we subscribe to our transformed sequence, using the handlers provided
+                 * in the DeviceTransaction base class and our overridden OnCompleted action.
+                 */
                 .Subscribe(OnNext, OnError, OnCompleted);
             }
 

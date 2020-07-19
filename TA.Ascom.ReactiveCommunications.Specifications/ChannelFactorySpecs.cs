@@ -1,14 +1,14 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2018 Tigra Astronomy, all rights reserved.
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so,. The Software comes with no warranty of any kind.
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: ChannelFactorySpecs.cs  Last modified: 2018-03-08@16:30 by Tim Long
+// File: ChannelFactorySpecs.cs  Last modified: 2020-07-20@00:51 by Tim Long
 
 using System;
 using System.Reactive.Linq;
@@ -16,18 +16,18 @@ using Machine.Specifications;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications
     {
-    #region  Context base classes
+    #region Context base classes
     internal class with_default_channel_factory
         {
-        Establish context = () => Factory = new ChannelFactory();
+        protected static ICommunicationChannel Channel;
+        protected static ChannelFactory Factory;
         Cleanup after = () =>
             {
             Channel?.Dispose();
             Channel = null;
             Factory = null;
             };
-        protected static ICommunicationChannel Channel;
-        protected static ChannelFactory Factory;
+        Establish context = () => Factory = new ChannelFactory();
         }
     #endregion
 
@@ -62,6 +62,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
     [Subject(typeof(ChannelFactory), "clear builtin channels")]
     internal class when_the_builtin_channel_types_are_cleared : with_default_channel_factory
         {
+        static Exception exception;
         Establish context = () =>
             {
             Factory.ClearRegisteredDevices();
@@ -72,7 +73,6 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
             };
         Because of = () => exception = Catch.Exception(() => Channel = Factory.FromConnectionString("COM22:"));
         It should_throw = () => exception.ShouldBeOfExactType<InvalidOperationException>();
-        static Exception exception;
         }
 
     internal class UnitTestDeviceEndpoint : DeviceEndpoint { }
