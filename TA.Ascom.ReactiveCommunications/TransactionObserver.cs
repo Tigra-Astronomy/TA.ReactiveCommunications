@@ -61,9 +61,15 @@ namespace TA.Ascom.ReactiveCommunications
         [UsedImplicitly]
         public void OnNext(DeviceTransaction transaction)
             {
-            log.Info().Message("Committing transaction {transaction}",transaction).Write();
+            log.Info()
+                .Transaction(transaction)
+                .Message("Committing transaction {transaction}")
+                .Write();
             CommitTransaction(transaction);
-            log.Info().Message("Completed transaction {transaction}", transaction).Write();
+            log.Info()
+                .Transaction(transaction)
+                .Message("Completed transaction {transaction}")
+                .Write();
             }
 
         /// <summary>
@@ -119,16 +125,19 @@ namespace TA.Ascom.ReactiveCommunications
                 var succeeded = transaction.WaitForCompletionOrTimeout();
                 if (!succeeded)
                     log.Warn()
+                        .Transaction(transaction)
                         .Message("Transaction {id} timed out with reason: {message}",
                             transaction.TransactionId, transaction.ErrorMessage.SingleOrDefault())
                         .Write();
                 }
             if (transaction.Failed)
                 log.Warn()
+                    .Transaction(transaction)
                     .Message("Transaction {id} was marked as FAILED", transaction.TransactionId)
-                    .Property("transaction", transaction)
                     .Write();
-            log.Info().Message("Transaction {id} completed", transaction.TransactionId);
+            log.Info()
+                .Transaction(transaction)
+                .Message("Transaction {id} completed", transaction.TransactionId);
             transactionsInFlight = Interlocked.Decrement(ref activeTransactions);
             if (transactionsInFlight != 0)
                 {
