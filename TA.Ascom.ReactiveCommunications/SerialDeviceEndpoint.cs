@@ -62,10 +62,10 @@ namespace TA.Ascom.ReactiveCommunications
             DtrEnable = dtrEnable;
             RtsEnable = rtsEnable;
             Handshake = handshake;
-            Encoding = Encoding.ASCII;
+            Encoding = Encoding.UTF8;
             }
 
-        /// <summary>Gets or sets the serial port text encoding (default is 7-bit ASCII).</summary>
+        /// <summary>Gets or sets the serial port text encoding (default is UTF-8).</summary>
         public Encoding Encoding { get; set; }
 
         /// <summary>Gets or sets the serial handshake method (default: None)</summary>
