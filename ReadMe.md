@@ -1,28 +1,12 @@
-# Reactive ASCOM #
+# Reactive Communications for ASCOM
 
-![Reactive ASCOM Logo](http://tigra-astronomy.com/Media/TigraAstronomy/ProjectIcons/ReactiveASCOM520x520.png)  
+![Reactive ASCOM logo](images/RxCommsIcon.png)
 
-## Reactive-style transactional device communications for [ASCOM][3] drivers with guaranteed sequencing and thread-safety ##
+**Reactive Communications for ASCOM** is a class library and an object-oriented design pattern for handling device communications. We will explain what it is, explain the key concepts and then provide a code example.
 
-[Reactive ASCOM][1] (namespace TA.Ascom.ReactiveCommunications) is a library based on the [Reactive Extensions for .NET][2] for simplifying device communications over serial, Ethernet and other types of communications channel to embedded controllers, while guaranteeing correct sequencing and thread-safety of transactions.
+## TL;DR - Quick start
 
-Originally developed for use with [ASCOM][3] drivers, but may be useful for any software that needs to communicate with an embedded controller using a predominantly command-response protocol.
-
-This [blog article][5] describes the approach and gives a bried overview of how to use the library. The source code contains a sample console application demonstrating how to create and use the various classes.
-
-Available as a [NuGet][4] package - simply `Install-Package TA.Ascom.ReactiveCommunications`
-
-The [main project page][1] for [Reactive ASCOM][1] is at: http://tigra-astronomy.com/reactive-communications-for-ascom
-
-## License ##
-
-Reactive ASCOM uses the [MIT License][6].
-
-Tim Long - Tigra Astronomy, May 2015.
-
-## Getting Started ##
-
-We have posted a number of "HowTo" videos on our YouTube channel.
+In addition to this documentation, we have posted a number of "HowTo" videos on our YouTube channel.
 
 - [Introduction to Reactive Communications for ASCOM][yt-intro]
 - [Building Custom Transactions for Reactive ASCOM][yt-trans-intro]
@@ -30,39 +14,111 @@ We have posted a number of "HowTo" videos on our YouTube channel.
 
 The source code also contains a pair of sample console applications, which demonstrate the two main
 usage patterns that we have identified.
+
+## What Is It?
+
+**Reactive** refers to a programming style that is well-suited to real-time systems that must react to events, such as received data or user interactivity. The style works especially well with asynchronous I/O.
+
+**Reactive Extensions for .NET** (referred to as _Rx_) is a class library making it easy to use a reactive programming style in .NET languages such as C#. It provides some gaurantees about the order in which things will be processed. The key type in Rx is `IObservable<T>` which defines a sequence of data that is yet to arrive. Rx provides a powerful way to describe what we _intend to do_ with the data _when it arrives_. Therefore it allows us to use a declarative style to describe our intent without having to focus too much on the implementation details.
+
+**Reactive Communications for ASCOM** (referred to as _RxComms_) builds upon Rx and provides both a design pattern and a class library for dealing with device communications.
+
+It provides a few key types and a strong object-oriented design pattern for handling inter-device communications.
+The key types are `ICommunicationsChannel` (which descibes a connection to a device) and `DeviceTransaction` which is an abstract base class for building transactional communication models.
+
+## Why?
+
+RxComms arose out of the need to solve difficult problems of sequencing and thread-safety that we encountered when developing commercial ASCOM drivers.
+Like many ASCOM driver writers, we didn't give much thought to these issues early on when coding our drivers.
+Then multi-threaded client applications began to appear and things started to go wrong.
+Developers typically try to solve this by using multi-threading and thread synchronization and this can provide a partial solution.
+Unfortunately, die to the workings of Single Threaded Apartments (STA threads) this also tends to go wrong for rather obscure and hard-to-debug reasons.
+Any in-process ASCOM driver or a driver that has a user interface will almost certainly suffer from this so your multi-threaded code may not work as you expect.
+
+We needed a way to solve these issues in multiple drivers but we were not happy with any of the "brute force" solutions available.
+At the same time, we needed a way to make drivers that could work with different types of connection and we needed a general putpose way of doing that.
+
+We decided to take a step back and think about the problem in terms of the SOLID principles of object-oriented design, and come up with a general-purpose object-oriented solution that could be packaged as a reusable library.
+
+RxComms provides a robust object-oriented pattern that doesn't require explicit use of threading, but solves all of the sequencing and thread safety issues.
+
+## Basic approach
+
+To use RxComms, a client must at minimum create an instance of an `ICommunicationsChannel` using the `ChannelFactory` class.
+Depending on the communications model adopted, implementations may need to define one or more classes derived from `DeviceTransaction` and will use an `ITransactionProcessor` to process transactions.
+
+## Concepts
+
 How you use RX Comms will most likely depend on the communications protocol that your device uses.
 There seems to be two main types.
 
-- Devices where commands and responses happen in closely coupled pairs, with the response comming immediately or after a very short delay.
-  We call this the *Transactional Model* and each command and response can be theought of as a single *transaction*.
+- _Devices where commands and responses happen in closely coupled pairs_, with the response comming immediately or after a very short delay.
+  We call this the **Transactional Model** and each command and response can be theought of as a single *transaction*.
   For this type of protocol, you'll probably want to focus on understanding the `DeviceTransaction` class
   and implementing your own transaction subclasses.
   You'll use the `ReactiveTransactionProcessor` to execute your transactions.
 
-- Devices where commands may not have a direct response but the device emits notifications
-  in real time, not necessarily in response to a direct command.
-  We call this the *Asynchronous Model*.
+- _Devices where commands may not have a direct response but the device emits notifications
+  in real time, not necessarily in response to a direct command_.
+  We call this the **Asynchronous Model**.
   This type of protocol can actually be great to work with if done well and
   a reactive programming style is an excellent fit.
   You'll probably want to focus on chopping up your input stream into observable sequences
   and hooking them up to actions, state machines and user interface components.
 
-- In most cases, there is a continuum between the *Transactional* and *Asynchronous* models
+- _In most cases, there is a continuum between the **Transactional** and **Asynchronous** models_
   and most devices will require some elements of both.
   Rx Comms has you covered, either way.
 
-- Whatever approach you adopt, you will also need to understand:
-  - Communications channels (`ICommunicationsChannel` and `SerialCommunicationsChannel`)
-  - `DeviceEndpoint` used for storing channel configuration data.
-  - `ChannelFactory` for creating channels from connection strings.
+### Communications Channel
+
+A _communications channel_ is the pipeline through which data is sent to and received from a device. Channels implement the `ICommunicationsChannel` interface. A channel has a method to send a string of data (command) to the device and exposes an `IObservable<char>` representing a sequence of received characters.
+
+RxComms includes a single implementation of `ICommunicationsChannel`: `SerialCommunicationsChannel`. Other methods of communication can be "plugged in" at runtime.
+
+At the base level, received data is represented as an observable sequence. which means that all handling of received data can be done in a reactive style.
+
+Devices using the *Asynchronous Model* are discussed in a separate document, "[Managing Communications for Devices With Asynchronous Protocols][async]"
+
+### Device Transaction
+
+This is perhaps the key point of understanding when using RxComms.
+
+A _transaction_ can be thought of as a single data exchange between an application (ASCOM driver) and a device, over a communications channel.
+
+Each transaction has a well-defined lifecycle. It is _created_, then _committed_. Transactions execute asynchronously and the result can be awaited either synchronously or asynchronously.
+
+Each transaction is responsible for observing the received data sequence and "plucking out" just the exact data that it considers to be a valid response, ignoring all other data. This is achieved by means of LINQ queries and operators.
+RxComms provides a number of helpers and extension methods to assist in creating these LINQ queries.
+
+Once valid data has been received, the transaction is complete and is marked as _Successful_. The application can read the response. If a transaction does not complete withing a user specified time, it times out and is marked as _Failed_.
+
+Note that transactions are constructed so that they can only receive valid responses. Invalid data is simply ignored, and absence of a response results in a _Failed_ transaction.
+
+Transactions are most useful if they are constructed to receive a certain type of data. For example, if the application needs to request the date and time from a device, then we might create a `DateTimeTransaction`. The class could then have a property named `Value` of type `DateTime`. When the transaction is completes successfully, the `Value` property would contain the date and time received from the device. Another common example (for ASCOM drivers) is the need to receive coordinates (right ascension, declination, altitude, azimuth, latitude, longitude) as _sexagesimal_ (base 60) strings. We provide an example `SexagesimalTransaction` in the sample project.
+
+### Transaction Observer
+
+The `TransactionObserver` class implements `IObserver<DeviceTransaction>` and therefore takes an observable sequence of transactions as its input.
+The `TransactionObserver` also has a reference to an `ICommunicationsChannel` which is passed in the constructor. Once subscribed to a sequence of transactions, the class executes each transaction in the sequence, sending a command to the device and receiving a valid response (or timing out).
+
+The application developer must provide the observable sequence of transactions and create the subscription to the transaction observer. RxComms provides a class (`ReactiveTransactionProcessor`) that provides a ready-made way to do this.
+
+### Reactive Transaction Processor
+
+This is a helper class that provides a way to create an observable sequence of transactions and feed them to a `TransactionObserver`. The class also offers the option to rate-limit ("throttle") the stream of transactions.
+
+Once an instance is created (specifying any rate limit in the constructor), the developer can call `SubscribeTransactionObserver()`, passing in an instance of `TransactionObserver`. This creates the transaction sequence and the link between the `IObserver` and the `IObservable`.
+
+Thereafter, transactions are executed by calling `ReactiveTransactionProcessor.CommitTransaction()`.
 
 
-  [1]: http://tigra-astronomy.com/reactive-communications-for-ascom "Project Page"
-  [2]: https://rx.codeplex.com/ "Rx Project"
-  [3]: http://ascom-standards.org "Astronomy Common Object Model"
-  [4]: http://www.nuget.org "NuGet Package Manager"
-  [5]: http://tigra-astronomy.com/blog/the-well-travelled-photon/reactive-ascom "Introducing Reactive ASCOM"
-  [6]: http://tigra.mit-license.org/ "Tigra Astronomy MIT License"
+  [project]: http://tigra-astronomy.com/reactive-communications-for-ascom "Project Page"
+  [rx]: https://rx.codeplex.com/ "Rx Project"
+  [ascom]: http://ascom-standards.org "Astronomy Common Object Model"
+  [nuget]: http://www.nuget.org "NuGet Package Manager"
+  [license]: http://tigra.mit-license.org/ "Tigra Astronomy MIT License"
+  [async]: Managing-Communications-for-Devices-With-Asynchronous-Protocols.md "Markdown document"
   [yt-intro]: https://www.youtube.com/watch?v=2rE6ZsNUWCE&t=8s "Quick start introductory video"
   [yt-trans-intro]: https://www.youtube.com/watch?v=QqMK0nu01MI "Basic guide to creating transactions"
   [yt-trans-deep]: https://www.youtube.com/watch?v=hV9BzGyiZwc "Deep dive into creating transactions"
