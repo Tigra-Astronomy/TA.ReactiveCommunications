@@ -59,12 +59,12 @@ namespace TA.Ascom.ReactiveCommunications
             {
             log.Info()
                 .Transaction(transaction)
-                .Message("Committing transaction {transaction}")
+                .Message("Committing transaction {transaction}", transaction)
                 .Write();
             CommitTransaction(transaction);
             log.Info()
                 .Transaction(transaction)
-                .Message("Completed transaction {transaction}")
+                .Message("Completed transaction {transaction}", transaction)
                 .Write();
             }
 

@@ -34,7 +34,6 @@ namespace TA.Ascom.ReactiveCommunications.Diagnostics
                 .Message(message)
                 .Exception(transactionException)
                 .Transaction(transaction)
-                .Property("transaction", transaction)
                 .Write();
             throw transactionException;
             }
