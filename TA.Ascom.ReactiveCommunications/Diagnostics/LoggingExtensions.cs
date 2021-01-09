@@ -23,7 +23,7 @@ namespace TA.Ascom.ReactiveCommunications.Diagnostics
 
         public static IFluentLogBuilder Transaction(this IFluentLogBuilder builder, DeviceTransaction transaction)
             {
-            builder.Property("transactionState", transaction);
+            builder.Property("transaction", transaction);
             builder.Property("transactionId", transaction.TransactionId);
             builder.Property("transactionCommand", transaction.Command);
             builder.Property("transactionState", transaction.State);
