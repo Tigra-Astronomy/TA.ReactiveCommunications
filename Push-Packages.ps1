@@ -1,6 +1,6 @@
 $feed = "https://www.myget.org/F/tigra-astronomy/api/v2/package"
 $symbolFeed = "https://www.myget.org/F/tigra-astronomy/symbols/api/v2/package"
-Push-Location .\Nuget-Packages
+Push-Location .\TA.Ascom.ReactiveCommunications\bin\Release
 $packages = Get-ChildItem -Filter *.nupkg
 foreach ($package in $packages)
 {
@@ -8,9 +8,9 @@ foreach ($package in $packages)
     {
         NuGet.exe push -Source $symbolFeed $package
     }
-    else 
+    else
     {
-        NuGet.exe push -Source $feed $package    
+        NuGet.exe push -Source $feed $package
     }
 }
 Pop-Location

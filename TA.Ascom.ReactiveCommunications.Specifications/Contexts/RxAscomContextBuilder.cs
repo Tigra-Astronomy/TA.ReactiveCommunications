@@ -1,36 +1,45 @@
-﻿// This file is part of the TA.DigitalDomeworks project
+﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
 // 
-// File: RxAscomContextBuilder.cs  Last modified: 2018-03-08@19:17 by Tim Long
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
+// You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
+// 
+// File: RxAscomContextBuilder.cs  Last modified: 2020-07-20@00:51 by Tim Long
 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using TA.Ascom.ReactiveCommunications.Specifications.Fakes;
+using TA.Utils.Logging.NLog;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
     {
     internal class RxAscomContextBuilder
         {
+        readonly ChannelFactory channelFactory;
+        readonly StringBuilder fakeResponseBuilder = new StringBuilder();
+
+        bool channelShouldBeOpen;
+        string connectionString = "Fake";
+        IObservable<char> observableResponse;
+        PropertyChangedEventHandler propertyChangedAction;
+        List<Tuple<string, Action>> propertyChangeObservers = new List<Tuple<string, Action>>();
+
         public RxAscomContextBuilder()
             {
-            channelFactory = new ChannelFactory();
+            var logService = new LoggingService();
+            channelFactory = new ChannelFactory(logService);
             channelFactory.RegisterChannelType(
                 p => p.StartsWith("Fake", StringComparison.InvariantCultureIgnoreCase),
                 connection => new FakeEndpoint(),
                 endpoint => new FakeCommunicationChannel(fakeResponseBuilder.ToString())
             );
             }
-
-        bool channelShouldBeOpen;
-        readonly StringBuilder fakeResponseBuilder = new StringBuilder();
-        readonly ChannelFactory channelFactory;
-        string connectionString = "Fake";
-        PropertyChangedEventHandler propertyChangedAction;
-        List<Tuple<string,Action>> propertyChangeObservers = new List<Tuple<string, Action>>();
-        IObservable<char> observableResponse;
 
         public RxAscomContext Build()
             {
@@ -46,8 +55,8 @@ namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
             var context = new RxAscomContext
                 {
                 Channel = channel,
-                Processor= processor,
-                Observer=observer
+                Processor = processor,
+                Observer = observer
                 };
             return context;
             }

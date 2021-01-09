@@ -1,52 +1,73 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27924.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28721.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunications.Sample.ConsoleApp", "TA.Ascom.ReactiveCommunications.Sample.ConsoleApp\TA.Ascom.ReactiveCommunications.Sample.ConsoleApp.csproj", "{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunications.Specifications", "TA.Ascom.ReactiveCommunications.Specifications\TA.Ascom.ReactiveCommunications.Specifications.csproj", "{BDE363CE-C0A4-47D2-83D2-5E9BBC6F4E1E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4FEAFE79-256F-4426-BF6A-7D5EC0501D90}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		Build-Packages.ps1 = Build-Packages.ps1
 		C:\Users\Tim\source\repos\TA.DigitalDomeworks\GitVersion.yml = C:\Users\Tim\source\repos\TA.DigitalDomeworks\GitVersion.yml
 		License.md = License.md
+		NuGet.Config = NuGet.Config
+		Artwork\NugetPackageIcon.png = Artwork\NugetPackageIcon.png
 		Push-Packages.ps1 = Push-Packages.ps1
+		Artwork\Reactive ASCOM.design = Artwork\Reactive ASCOM.design
+		Artwork\ReactiveASCOM520x520.png = Artwork\ReactiveASCOM520x520.png
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Ascom.ReactiveCommunications", "TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj", "{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Ascom.ReactiveCommunications", "TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj", "{B8B5A523-93A8-482D-A6F8-DBB4BF81D916}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TA.Ascom.ReactiveCommunications.Shared", "TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.shproj", "{CA9C1585-6227-4808-B46A-7F4F8ECC9F68}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{2F2972C0-CD87-467A-8D5B-65D5F02E7C37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{6FCDDEA6-60DA-4C51-BF60-0B44306749BA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Ascom.ReactiveCommunications.Specifications", "TA.Ascom.ReactiveCommunications.Specifications\TA.Ascom.ReactiveCommunications.Specifications.csproj", "{3DFF1A84-50A9-41FD-926F-F63D64C097EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{28EC25FC-2E0B-47C8-BDCD-A87F242E77BC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionalCommunicationModel", "Samples\TransactionalCommunicationModel\TransactionalCommunicationModel.csproj", "{1916A223-63F4-4359-B274-4C201FA5C8ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncCommunicationModel", "Samples\AsyncCommunicationModel\AsyncCommunicationModel.csproj", "{C8A3F481-E5DC-4B09-8B8D-EAD0E9DED295}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulatorChannel", "Samples\SimulatorCommunicationsChannel\SimulatorChannel.csproj", "{5B1815FD-302D-4442-A439-C92F98121553}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{332539bc-1f6e-47c2-bcd4-45fdd77ed7db}*SharedItemsImports = 4
-		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{90a3332b-527d-42ca-8b23-b8e2e3edb09a}*SharedItemsImports = 4
-		TA.Ascom.ReactiveCommunications.Shared\TA.Ascom.ReactiveCommunications.Shared.projitems*{ca9c1585-6227-4808-b46a-7f4f8ecc9f68}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{332539BC-1F6E-47C2-BCD4-45FDD77ED7DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDE363CE-C0A4-47D2-83D2-5E9BBC6F4E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDE363CE-C0A4-47D2-83D2-5E9BBC6F4E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDE363CE-C0A4-47D2-83D2-5E9BBC6F4E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDE363CE-C0A4-47D2-83D2-5E9BBC6F4E1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90A3332B-527D-42CA-8B23-B8E2E3EDB09A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B5A523-93A8-482D-A6F8-DBB4BF81D916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B5A523-93A8-482D-A6F8-DBB4BF81D916}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B5A523-93A8-482D-A6F8-DBB4BF81D916}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B5A523-93A8-482D-A6F8-DBB4BF81D916}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DFF1A84-50A9-41FD-926F-F63D64C097EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DFF1A84-50A9-41FD-926F-F63D64C097EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DFF1A84-50A9-41FD-926F-F63D64C097EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DFF1A84-50A9-41FD-926F-F63D64C097EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1916A223-63F4-4359-B274-4C201FA5C8ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1916A223-63F4-4359-B274-4C201FA5C8ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1916A223-63F4-4359-B274-4C201FA5C8ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1916A223-63F4-4359-B274-4C201FA5C8ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8A3F481-E5DC-4B09-8B8D-EAD0E9DED295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A3F481-E5DC-4B09-8B8D-EAD0E9DED295}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A3F481-E5DC-4B09-8B8D-EAD0E9DED295}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A3F481-E5DC-4B09-8B8D-EAD0E9DED295}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B1815FD-302D-4442-A439-C92F98121553}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B1815FD-302D-4442-A439-C92F98121553}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B1815FD-302D-4442-A439-C92F98121553}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B1815FD-302D-4442-A439-C92F98121553}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6FCDDEA6-60DA-4C51-BF60-0B44306749BA} = {2F2972C0-CD87-467A-8D5B-65D5F02E7C37}
+		{1916A223-63F4-4359-B274-4C201FA5C8ED} = {28EC25FC-2E0B-47C8-BDCD-A87F242E77BC}
+		{C8A3F481-E5DC-4B09-8B8D-EAD0E9DED295} = {28EC25FC-2E0B-47C8-BDCD-A87F242E77BC}
+		{5B1815FD-302D-4442-A439-C92F98121553} = {28EC25FC-2E0B-47C8-BDCD-A87F242E77BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DEEC5AE1-2FB1-48C0-84AE-1ED406320765}

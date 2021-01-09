@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2018 Tigra Astronomy, all rights reserved.
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,18 +8,16 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: NetworkDeviceEndpoint.cs  Last modified: 2018-08-27@17:28 by Tim Long
+// File: NetworkDeviceEndpoint.cs  Last modified: 2020-07-20@00:50 by Tim Long
 
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
-using NLog;
+using TA.Ascom.ReactiveCommunications.Diagnostics;
+using TA.Utils.Core.Diagnostics;
 
 namespace TA.Ascom.ReactiveCommunications
     {
-    /// <summary>
-    ///     Represents a network endpoint, with a hostaddress
-    ///     and port number.
-    /// </summary>
+    /// <summary>Represents a network endpoint, with a hostaddress and port number.</summary>
     internal class NetworkDeviceEndpoint : DeviceEndpoint
         {
         private const string NetworkIPv4Pattern =
@@ -28,11 +26,9 @@ namespace TA.Ascom.ReactiveCommunications
             @"^(?<Host>[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*(?:\.[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)*)(\:(?<Port>\d{1,5}))?";
         private static readonly Regex NetworkIPv4Regex = new Regex(NetworkIPv4Pattern, Options);
         private static readonly Regex NetworkHostRegex = new Regex(NetworkHostPattern, Options);
-        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = ServiceLocator.LogService;
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="NetworkDeviceEndpoint" /> class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the <see cref="NetworkDeviceEndpoint" /> class.</summary>
         /// <param name="host">The network host name or IPv4 address.</param>
         /// <param name="port">The TCP or UDP port number.</param>
         public NetworkDeviceEndpoint(string host, int port)
@@ -43,21 +39,15 @@ namespace TA.Ascom.ReactiveCommunications
             Port = port;
             }
 
-        /// <summary>
-        ///     Gets the TCP/UDP port number of the endpoint.
-        /// </summary>
+        /// <summary>Gets the TCP/UDP port number of the endpoint.</summary>
         /// <value>The port number.</value>
         public int Port { get; }
 
-        /// <summary>
-        ///     Gets the network host name or IPv4 address of the endpoint.
-        /// </summary>
+        /// <summary>Gets the network host name or IPv4 address of the endpoint.</summary>
         /// <value>The host.</value>
         public string Host { get; }
 
-        /// <summary>
-        ///     Returns a <see cref="System.String" /> that represents this instance.
-        /// </summary>
+        /// <summary>Returns a <see cref="System.String" /> that represents this instance.</summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
             {

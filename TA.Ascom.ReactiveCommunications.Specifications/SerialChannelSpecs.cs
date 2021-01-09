@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2018 Tigra Astronomy, all rights reserved.
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: SerialChannelSpecs.cs  Last modified: 2018-08-27@17:51 by Tim Long
+// File: SerialChannelSpecs.cs  Last modified: 2020-07-20@00:51 by Tim Long
 
 using System;
 using FakeItEasy;
@@ -32,14 +32,14 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
     [Subject(typeof(SerialCommunicationChannel), "construction")]
     public class when_constructing_a_serial_channel_with_the_wrong_type_of_endpoint
         {
+        static SerialCommunicationChannel Channel;
+        static DeviceEndpoint DeviceEndpoint;
+        static Exception Thrown;
         Establish context = () =>
             DeviceEndpoint = new NetworkDeviceEndpoint("dummy", 8080);
         Because of =
             () => Thrown = Catch.Exception(() => Channel = new SerialCommunicationChannel(DeviceEndpoint));
         It should_throw_argument_exception = () => Thrown.ShouldBeOfExactType<ArgumentException>();
-        static SerialCommunicationChannel Channel;
-        static DeviceEndpoint DeviceEndpoint;
-        static Exception Thrown;
         }
 
     [Subject(typeof(SerialCommunicationChannel), "Connecting")]
@@ -92,6 +92,7 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
     public class when_a_string_is_sent_to_the_serial_channel :
         with_serial_channel_on_endpoint_com1_9600_n_8_1_and_mock_serial_port
         {
+        const string TestString = "Test String";
         Establish context = () =>
             {
             A.CallTo(() => MockPort.IsOpen).Returns(true);
@@ -101,6 +102,5 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
         It should_send_the_string_to_the_serial_port = () =>
             A.CallTo(() => MockPort.Write(A<string>.That.Matches(s => s == TestString)))
                 .MustHaveHappenedOnceExactly();
-        const string TestString = "Test String";
         }
     }

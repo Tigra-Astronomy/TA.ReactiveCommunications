@@ -1,6 +1,6 @@
 ﻿// This file is part of the TA.Ascom.ReactiveCommunications project
 // 
-// Copyright © 2018 Tigra Astronomy, all rights reserved.
+// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -8,7 +8,7 @@
 // permit persons to whom the Software is furnished to do so. The Software comes with no warranty of any kind.
 // You make use of the Software entirely at your own risk and assume all liability arising from your use thereof.
 // 
-// File: failed_transaction.cs  Last modified: 2018-08-27@22:38 by Tim Long
+// File: failed_transaction.cs  Last modified: 2020-07-20@00:51 by Tim Long
 
 using System.Linq;
 using JetBrains.Annotations;
@@ -20,10 +20,10 @@ namespace TA.Ascom.ReactiveCommunications.Specifications.Behaviours
     [UsedImplicitly]
     internal class failed_transaction : rxascom_behaviour
         {
+        It should_have_a_reason_for_failure = () => Transaction.ErrorMessage.Any().ShouldBeTrue();
+        It should_have_correct_lifecycle_state = () => Transaction.State.ShouldEqual(TransactionLifecycle.Failed);
+        It should_indicate_completed = () => Transaction.Completed.ShouldBeTrue();
         It should_indicate_failed = () => Transaction.Failed.ShouldBeTrue();
         It should_not_indicate_success = () => Transaction.Successful.ShouldBeFalse();
-        It should_indicate_completed = () => Transaction.Completed.ShouldBeTrue();
-        It should_have_correct_lifecycle_state = () => Transaction.State.ShouldEqual(TransactionLifecycle.Failed);
-        It should_have_a_reason_for_failure = () => Transaction.ErrorMessage.Any().ShouldBeTrue();
         }
     }
