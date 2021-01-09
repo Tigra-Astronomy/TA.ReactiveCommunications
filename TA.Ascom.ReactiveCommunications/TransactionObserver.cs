@@ -58,12 +58,10 @@ namespace TA.Ascom.ReactiveCommunications
         public void OnNext(DeviceTransaction transaction)
             {
             log.Info()
-                .Transaction(transaction)
                 .Message("Committing transaction {transaction}", transaction)
                 .Write();
             CommitTransaction(transaction);
             log.Info()
-                .Transaction(transaction)
                 .Message("Completed transaction {transaction}", transaction)
                 .Write();
             }
