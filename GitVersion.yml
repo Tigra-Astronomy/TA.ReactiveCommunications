@@ -1,7 +1,11 @@
 assembly-versioning-scheme: MajorMinorPatchTag
 assembly-informational-format: '{NuGetVersionV2}'
 mode: ContinuousDeployment
-branches: {}
+continuous-delivery-fallback-tag: ''
+branches:
+  master:
+    tag: ''
 ignore:
   sha: []
 merge-message-formats: {}
+update-build-number: true
