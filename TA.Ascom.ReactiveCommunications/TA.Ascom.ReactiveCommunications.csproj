@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Tim Long</Authors>
     <Company>Tigra Astronomy</Company>
     <Description>A thread-safe, transactional, reactive style commications library for ASCOM telescopes and other devices.</Description>
@@ -21,11 +25,8 @@ and just needs to save a "connection string" in settings to recreate the correct
 
 For more information and a quick-start tutorial, please see http://tigra-astronomy.com/reactive-communications-for-ascom
     </Description>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications/wiki</PackageProjectUrl>
     <PackageIconUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications/wiki/Artwork/NugetPackageIcon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications</RepositoryUrl>
