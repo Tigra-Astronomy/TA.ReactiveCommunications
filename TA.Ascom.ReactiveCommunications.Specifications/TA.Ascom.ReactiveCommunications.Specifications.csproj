@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -15,21 +14,23 @@
     <RepositoryType>git</RepositoryType>
     <PackageIcon>NugetPackageIcon.png</PackageIcon>
     <PackageTags>ascom,reactive,rx,communication,serial,oss</PackageTags>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;0169</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Artwork\**" />
     <EmbeddedResource Remove="Artwork\**" />
     <None Remove="Artwork\**" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="6.2.1" />
-    <PackageReference Include="GitVersion.MsBuild" Version="5.6.3">
+    <PackageReference Include="GitVersion.MsBuild" Version="5.6.4-beta1.38">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -41,9 +42,7 @@
     <PackageReference Include="TA.Utils.Core" Version="1.3.0" />
     <PackageReference Include="TA.Utils.Logging.Nlog" Version="1.3.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj" />
   </ItemGroup>
-
 </Project>
