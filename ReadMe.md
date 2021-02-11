@@ -32,8 +32,8 @@ RxComms arose out of the need to solve difficult problems of sequencing and thre
 Like many ASCOM driver writers, we didn't give much thought to these issues early on when coding our drivers.
 Then multi-threaded client applications began to appear and things started to go wrong.
 Developers typically try to solve this by using multi-threading and thread synchronization and this can provide a partial solution.
-Unfortunately, die to the workings of Single Threaded Apartments (STA threads) this also tends to go wrong for rather obscure and hard-to-debug reasons.
-Any in-process ASCOM driver or a driver that has a user interface will almost certainly suffer from this so your multi-threaded code may not work as you expect.
+Unfortunately, due to the workings of Single Threaded Apartments (STA threads) this also tends to go wrong for rather obscure and hard-to-debug reasons.
+Any in-process ASCOM driver or a driver that has a user interface will likely suffer from this so your multi-threaded code may not work as you expect.
 
 We needed a way to solve these issues in multiple drivers but we were not happy with any of the "brute force" solutions available.
 At the same time, we needed a way to make drivers that could work with different types of connection and we needed a general putpose way of doing that.
@@ -41,6 +41,15 @@ At the same time, we needed a way to make drivers that could work with different
 We decided to take a step back and think about the problem in terms of the SOLID principles of object-oriented design, and come up with a general-purpose object-oriented solution that could be packaged as a reusable library.
 
 RxComms provides a robust object-oriented pattern that doesn't require explicit use of threading, but solves all of the sequencing and thread safety issues.
+
+Another difficult problem provoked by multi-threaded applications is ensuring that commands and responses don't get mixed up.
+If two application threads call two different driver methods, each may try to send a command to the device and wait for a response.
+There are no gaurantees about the order of the commands and responses and there is a real risk that they will get mixed up.
+The ASCOM Serial Helper ensures that commands are serialized, but this only solves half of the problem.
+It cannot gaurantee the order that commands and responses will arrive in and it does nothing to ensure that responses go to the correct commands.
+RxComms introduces the concept of a _Transaction_ (with support in abstract base class `DeviceTransaction`) that helps to keep commands and responses together.
+RxComms can't quite do all the work for you because it doesn't know what protocol your device will speak, so you will implement classes that derive from `DeviceTransaction` for each different data type that you need to receive.
+This is easier than it might sound, and the `TransactionalCommunicationModel` sample application shows how to do it.
 
 ## Basic approach
 
@@ -74,9 +83,10 @@ There seems to be two main types.
 
 A _communications channel_ is the pipeline through which data is sent to and received from a device. Channels implement the `ICommunicationsChannel` interface. A channel has a method to send a string of data (command) to the device and exposes an `IObservable<char>` representing a sequence of received characters.
 
-RxComms includes a single implementation of `ICommunicationsChannel`: `SerialCommunicationsChannel`. Other methods of communication can be "plugged in" at runtime.
+RxComms includes a single implementation of `ICommunicationsChannel`: `SerialCommunicationsChannel`.
+You can create other types of channel by implementing the `ICommunicationsChannel` interface and registering your class with the channel factory at runtime.
 
-At the base level, received data is represented as an observable sequence. which means that all handling of received data can be done in a reactive style.
+At the base level, received data is represented as an observable sequence of characters, which means that all handling of received data can be done in a reactive style.
 
 Devices using the *Asynchronous Model* are discussed in a separate document, "[Managing Communications for Devices With Asynchronous Protocols][async]"
 
