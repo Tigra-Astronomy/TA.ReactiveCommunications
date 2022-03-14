@@ -42,7 +42,7 @@ namespace TA.Ascom.ReactiveCommunications
             this.endpoint = endpoint as SerialDeviceEndpoint;
             Port = port ?? CreateSerialPort(this.endpoint);
             observableReceiveSequence = Port.ToObservableCharacterSequence()
-                .Trace("Serial Receive")
+                .Trace($"Serial-{this.endpoint.PortName}")
                 .Publish();
             }
 

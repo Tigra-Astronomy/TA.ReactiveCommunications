@@ -17,7 +17,6 @@ using System.IO.Ports;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Threading;
 using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.Utils.Core.Diagnostics;
 
@@ -46,20 +45,20 @@ namespace TA.Ascom.ReactiveCommunications
             var portEvents = Observable.FromEventPattern<SerialDataReceivedEventHandler, SerialDataReceivedEventArgs>(
                 handler =>
                     {
-                    log.Debug().Message("Event: SerialDataReceived").Write();
-                    return handler.Invoke;
+                        log.Debug().Message("Event: SerialDataReceived").Write();
+                        return handler.Invoke;
                     },
                 handler =>
                     {
-                    // We must discard stale data when subscribing or it will pollute the first element of the sequence.
-                    port.DiscardInBuffer();
-                    port.DataReceived += handler;
-                    log.Debug().Message("Listening to DataReceived event").Write();
+                        // We must discard stale data when subscribing or it will pollute the first element of the sequence.
+                        port.DiscardInBuffer();
+                        port.DataReceived += handler;
+                        log.Debug().Message("Listening to DataReceived event").Write();
                     },
                 handler =>
                     {
-                    port.DataReceived -= handler;
-                    log.Debug().Message("Stopped listening to DataReceived event").Write();
+                        port.DataReceived -= handler;
+                        log.Debug().Message("Stopped listening to DataReceived event").Write();
                     });
 
             return portEvents;
@@ -77,9 +76,9 @@ namespace TA.Ascom.ReactiveCommunications
             {
             return Observable.Create<char>(observer =>
                 {
-                port.DataReceived += ReactiveDataReceivedEventHandler(port, observer);
-                port.ErrorReceived += ReactiveErrorReceivedEventHandler(observer);
-                return UnsubscribeAction(port, observer);
+                    port.DataReceived += ReactiveDataReceivedEventHandler(port, observer);
+                    port.ErrorReceived += ReactiveErrorReceivedEventHandler(observer);
+                    return UnsubscribeAction(port, observer);
                 });
             }
 
@@ -91,9 +90,9 @@ namespace TA.Ascom.ReactiveCommunications
             {
             return () =>
                 {
-                port.DataReceived -= ReactiveDataReceivedEventHandler(port, observer);
-                port.ErrorReceived -= ReactiveErrorReceivedEventHandler(observer);
-                // depending on ownership of port, we could Dispose it here too
+                    port.DataReceived -= ReactiveDataReceivedEventHandler(port, observer);
+                    port.ErrorReceived -= ReactiveErrorReceivedEventHandler(observer);
+                    // depending on ownership of port, we could Dispose it here too
                 };
             }
 
@@ -134,23 +133,22 @@ namespace TA.Ascom.ReactiveCommunications
             var log = ServiceLocator.LogService;
             var receiveEventHandler = new SerialDataReceivedEventHandler((sender, e) =>
                 {
-                switch (e.EventType)
-                    {
+                    switch (e.EventType)
+                        {
                         case SerialData.Eof:
                             observer.OnCompleted();
                             break;
                         case SerialData.Chars:
                             try
                                 {
+                                byte[] inputByte = new byte[1];
                                 while (port.BytesToRead > 0)
                                     {
-                                    var inputBuffer = port.ReadExisting();
-                                    foreach (var character in inputBuffer)
-                                        {
-                                        observer.OnNext(character);
-                                        }
-                                    Thread.Yield(); // There's no point in spinning on an empty stream.
+                                    inputByte[0] = (byte)port.ReadByte();
+                                    char[] inputUnicode = port.Encoding.GetChars(inputByte);
+                                    observer.OnNext(inputUnicode[0]);
                                     }
+                                //Thread.Yield();
                                 }
                             catch (InvalidOperationException ex)
                                 {
@@ -166,7 +164,7 @@ namespace TA.Ascom.ReactiveCommunications
                                 .Message("Ignoring unexpected serial data received event: {type}", e.EventType)
                                 .Write();
                             break;
-                    }
+                        }
                 });
             return receiveEventHandler;
             }

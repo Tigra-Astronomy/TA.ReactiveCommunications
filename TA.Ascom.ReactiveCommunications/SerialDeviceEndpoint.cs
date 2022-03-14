@@ -174,7 +174,7 @@ namespace TA.Ascom.ReactiveCommunications
             return endpoint;
             }
 
-        internal static bool IsValidConnectionString(string connectionString)
+        public static bool IsValidConnectionString(string connectionString)
             {
             return SerialRegex.IsMatch(connectionString);
             }
