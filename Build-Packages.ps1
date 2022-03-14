@@ -1,2 +1,1 @@
-New-Item -ErrorAction Ignore -ItemType directory -Path Nuget-Packages
-nuget pack TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj -Symbols -Properties Configuration=Release -OutputDirectory .\Nuget-Packages
+dotnet pack .\TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj -property:Configuration=Release
