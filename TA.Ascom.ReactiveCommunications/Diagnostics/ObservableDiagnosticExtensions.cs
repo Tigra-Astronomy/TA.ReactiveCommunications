@@ -31,32 +31,40 @@ namespace TA.Ascom.ReactiveCommunications.Diagnostics
                 {
                 var subscriptionId = ++id; // closure
                 var sequenceName = name; // closure
-                Action<string, object> trace = (action, content) => log
-                    .Trace("Observable")
-                    .Message("{@source}[{id}]: {@action}({@content})", sequenceName, subscriptionId, action, content)
-                    .Write();
-                trace("Subscribe", "");
+
+                WriteTraceOutput("Subscribe", "");
                 var disposable = source.Subscribe(
-                    v =>
-                        {
-                        trace("OnNext", v.ToString().ExpandAscii());
-                        observer.OnNext(v);
-                        },
-                    e =>
-                        {
-                        trace("OnError", "");
-                        observer.OnError(e);
-                        },
-                    () =>
-                        {
-                        trace("OnCompleted", "");
-                        observer.OnCompleted();
-                        });
+                                                  v =>
+                                                  {
+                                                      WriteTraceOutput("OnNext", v.ToString().ExpandAscii());
+                                                      observer.OnNext(v);
+                                                  },
+                                                  e =>
+                                                  {
+                                                      WriteTraceOutput("OnError", "");
+                                                      observer.OnError(e);
+                                                  },
+                                                  () =>
+                                                  {
+                                                      WriteTraceOutput("OnCompleted", "");
+                                                      observer.OnCompleted();
+                                                  });
                 return () =>
                     {
-                    trace("Dispose", "");
-                    disposable.Dispose();
+                        WriteTraceOutput("Dispose", "");
+                        disposable.Dispose();
                     };
+
+                void WriteTraceOutput(string action, object content)
+                {
+                    log.Trace(sourceNameOverride: "RxComms")
+                        .Message("{@source}[{id}]: {@action}({@content})",
+                                 sequenceName,
+                                 subscriptionId,
+                                 action,
+                                 content)
+                        .Write();
+                }
                 });
             }
         }

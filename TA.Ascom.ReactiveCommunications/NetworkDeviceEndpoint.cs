@@ -64,7 +64,7 @@ namespace TA.Ascom.ReactiveCommunications
                 return CreateNetworkEndpoint(connection, NetworkHostRegex);
             if (NetworkIPv4Regex.IsMatch(connection))
                 return CreateNetworkEndpoint(connection, NetworkIPv4Regex);
-            Log.Warn("Connection string is for an unsupported endpoint, returning InvalidEndpoint");
+            Log.Warn().Message("Connection string is for an unsupported endpoint, returning InvalidEndpoint").Write();
             return new InvalidEndpoint();
             }
 
