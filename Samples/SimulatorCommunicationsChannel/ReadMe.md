@@ -1,4 +1,4 @@
-﻿# Dome Simulator Custom Communications Channel Sample #
+﻿# Observatory Dome Simulator Custom Communications Channel Sample #
 
 This sample shows one use for a custom communications channel.
 
@@ -12,16 +12,17 @@ The main classes of interest are:
   Monitors the commands being sent and simulates responses being sent back.
   No serial port is involved.
   Responses are injected directly into the observable sequence of characters.
-- `SimulatorEndpoint` holds teh channel configuration (which is rather simple in this case).
+- `SimulatorEndpoint` holds the channel configuration (which is rather simple in this case).
   Also provides the helper methods needed by the `ChannelFactory` when creating
   the channel from a connection string.
 
-The simulator is packaged inside an ICommunicationsChannel.
+The simulator is packaged inside an `ICommunicationsChannel`.
 The idea here is that the user can change between real hardware
 connected to a serial port and the simulator just by changing a setting.
-No code has to change in the ASCOM driver for this to happen, it is all driven
-purely by a settings change to the ConnectionString setting.
-The driver is completely unaware that its talking to a simulator!
+In the orifinal implementation, this was a check-box on the setup dialog.
+No code has to change in order to switch between a real serial port and the simulator,
+it is all driven purely by a settings change to the ConnectionString setting.
+The driver code is completely unaware that its talking to a simulator!
 
 The ability to easily switch between different types of communication channels
 was one of the key design goals of RxComms.

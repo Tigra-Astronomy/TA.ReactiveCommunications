@@ -35,7 +35,7 @@ For more information and a quick-start tutorial, please see http://tigra-astrono
     <RepositoryUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>ASCOM,Rx,Serial,Ethernet,Comms,Transaction,Thread-safe</PackageTags>
-    <PackageIcon>NugetPackageIcon.png</PackageIcon>
+    <PackageIcon>NuGet-Package-Icon.png</PackageIcon>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
     <PackageLicenseFile>
@@ -43,26 +43,27 @@ For more information and a quick-start tutorial, please see http://tigra-astrono
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GitVersion.MsBuild" Version="5.6.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0"/>
+    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
     <PackageReference Include="System.IO.Ports" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
     <PackageReference Include="TA.Utils.Core" Version="1.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\NugetPackageIcon.png">
+    <None Include="..\images\NuGet-Package-Icon.png">
       <Pack>True</Pack>
-      <PackagePath>/</PackagePath>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\" />
+    <None Include="..\ReadMe.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 </Project>

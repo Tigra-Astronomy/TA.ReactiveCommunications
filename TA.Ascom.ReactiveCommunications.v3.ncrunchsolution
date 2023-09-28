@@ -1,9 +1,0 @@
-﻿<SolutionConfiguration>
-  <Settings>
-    <AdditionalFilesToIncludeForSolution>
-      <Value>.git\**.*</Value>
-    </AdditionalFilesToIncludeForSolution>
-    <AllowParallelTestExecution>True</AllowParallelTestExecution>
-    <SolutionConfigured>True</SolutionConfigured>
-  </Settings>
-</SolutionConfiguration>
