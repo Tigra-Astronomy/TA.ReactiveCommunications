@@ -32,7 +32,7 @@ namespace TA.Ascom.ReactiveCommunications.Diagnostics
                 var subscriptionId = ++id; // closure
                 var sequenceName = name; // closure
                 Action<string, object> trace = (action, content) => log
-                    .Trace("Observable")
+                    .Trace(sourceNameOverride: "Observable")
                     .Message("{@source}[{id}]: {@action}({@content})", sequenceName, subscriptionId, action, content)
                     .Write();
                 trace("Subscribe", "");
