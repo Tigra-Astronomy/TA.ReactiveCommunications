@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>0.0.0</Version>
+    <Authors>Tim Long</Authors>
+    <Company>Timtek Systems Limited</Company>
+    <Product>Timtek.ReactiveCommunications</Product>
+    <Description>Unit test project</Description>
+    <Copyright>Copyright © 2015-2023 Timtek Systems Limited, all rights reserved</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>NugetPackageIcon.png</PackageIcon>
+    <PackageTags>ascom,reactive,rx,communication,serial,oss</PackageTags>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <Title>Reactive Communications Model for connected devices</Title>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Artwork\**" />
+    <EmbeddedResource Remove="Artwork\**" />
+    <None Remove="Artwork\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ReadMe.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="7.4.0" />
+    <PackageReference Include="GitVersion.MsBuild" Version="5.12.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+    <PackageReference Include="Machine.Specifications.Runner.VisualStudio" Version="2.10.2" />
+    <PackageReference Include="Machine.Specifications.Should" Version="1.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+    <PackageReference Include="TA.Utils.Core" Version="2.2.0" />
+    <PackageReference Include="TA.Utils.Logging.Nlog" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Timtek.ReactiveCommunications\Timtek.ReactiveCommunications.csproj" />
+  </ItemGroup>
+</Project>

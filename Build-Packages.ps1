@@ -1,1 +1,1 @@
-dotnet pack .\TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj -property:Configuration=Release
+dotnet pack .\Timtek.ReactiveCommunications\Timtek.ReactiveCommunications.csproj -property:Configuration=Release

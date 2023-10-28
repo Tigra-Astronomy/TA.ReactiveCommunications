@@ -1,4 +1,4 @@
-﻿// This file is part of the TA.Ascom.ReactiveCommunications project
+﻿// This file is part of the Timtek.ReactiveCommunications project
 // 
 // Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
 // 
@@ -14,8 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using SimulatorChannel.StateMachine;
-using TA.Ascom.ReactiveCommunications;
 using TA.Utils.Core.Diagnostics;
+using Timtek.ReactiveCommunications;
 
 namespace SimulatorChannel
     {

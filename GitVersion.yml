@@ -1,5 +1,4 @@
 assembly-versioning-scheme: MajorMinorPatchTag
-assembly-informational-format: '{NuGetVersionV2}'
 mode: ContinuousDeployment
 continuous-delivery-fallback-tag: ''
 branches:

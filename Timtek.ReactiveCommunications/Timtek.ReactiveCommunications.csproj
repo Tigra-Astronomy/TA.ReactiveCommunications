@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net4.8;net6.0;net7.0;net8.0</TargetFrameworks>
+    <!--<OldToolsVersion>2.0</OldToolsVersion>-->
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>Tim Long</Authors>
+    <Company>Timtek Systems Limited</Company>
+    <Copyright>Copyright © 2015-2023 Timtek Systems Limited, all rights reserved</Copyright>
+    <AssemblyTitle>Timtek.ReactiveCommunications</AssemblyTitle>
+    <Description>A library based on the Reactive Extensions for simplifying device communications to embedded controllers,
+while guaranteeing correct sequencing and thread-safety of transactions (commands and responses).
+
+Originally developed for use with ASCOM device drivers, but useful for any software that needs to
+communicate with an embedded controller or attached device over a communications link.
+
+The library offers classes that help with developing transactions, which model command-response protocols.
+The communications channel is abstracted into an interface, so that clients can easily switch between (say)
+serial or ethernet streams. Support for serial channels is built-in and custom channel implementations can
+easily be added and used. The client driver or application remains ignorant of the type of channel in use
+and just needs to save a "connection string" in settings to recreate the correct channel.</Description>
+    <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/Timtek-Systems/Timtek.ReactiveCommunications</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications/wiki/Artwork/NugetPackageIcon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/Timtek-Systems/Timtek.ReactiveCommunications</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>ASCOM,Rx,Serial,Ethernet,Comms,Transaction,Thread-safe</PackageTags>
+    <PackageIcon>NuGet-Package-Icon.png</PackageIcon>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <FileVersion>0.0.0.0</FileVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+    <Title>A well-factored pattern for communicating with devices in a reactive style.</Title>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="GitVersion.MsBuild" Version="5.12.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+    <PackageReference Include="System.Reactive" Version="6.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+    <PackageReference Include="TA.Utils.Core" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\images\NuGet-Package-Icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="ReadMe.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+</Project>
