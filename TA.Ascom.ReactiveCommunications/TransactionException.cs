@@ -11,7 +11,6 @@
 // File: TransactionException.cs  Last modified: 2020-07-20@00:51 by Tim Long
 
 using System;
-using System.Runtime.Serialization;
 
 namespace Timtek.ReactiveCommunications;
 
@@ -31,11 +30,6 @@ public class TransactionException : Exception
 
     /// <inheritdoc />
     public TransactionException(string message, Exception inner) : base(message, inner) { }
-
-    /// <inheritdoc />
-    protected TransactionException(
-        SerializationInfo info,
-        StreamingContext  context) : base(info, context) { }
 
     /// <summary>Gets a reference to the failed transaction that generated the exception</summary>
     public DeviceTransaction Transaction { get; set; }

@@ -12,5 +12,4 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("TA.Ascom.ReactiveCommunications.Specifications")]
-[assembly: InternalsVisibleTo("TA.Ascom.RxComms.Specifications.NetCore")]
+[assembly: InternalsVisibleTo("Timtek.ReactiveCommunications.Specifications")]

@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{6FCDDE
 		images\RxComms-520x520.png = images\RxComms-520x520.png
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Ascom.ReactiveCommunications.Specifications", "TA.Ascom.ReactiveCommunications.Specifications\TA.Ascom.ReactiveCommunications.Specifications.csproj", "{3DFF1A84-50A9-41FD-926F-F63D64C097EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timtek.ReactiveCommunications.Specifications", "TA.Ascom.ReactiveCommunications.Specifications\Timtek.ReactiveCommunications.Specifications.csproj", "{3DFF1A84-50A9-41FD-926F-F63D64C097EF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleApplications", "SampleApplications", "{28EC25FC-2E0B-47C8-BDCD-A87F242E77BC}"
 EndProject
