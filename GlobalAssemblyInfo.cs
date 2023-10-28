@@ -1,4 +1,4 @@
-﻿// This file is part of the TA.Ascom.ReactiveCommunications project
+﻿// This file is part of the Timtek.ReactiveCommunications project
 // 
 // Copyright © 2018 Tigra Astronomy, all rights reserved.
 // 
@@ -28,4 +28,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.1.*")]
 [assembly: AssemblyFileVersion("1.1.0.0")]
 [assembly: AssemblyInformationalVersion("1.1.0")]
-[assembly: InternalsVisibleTo("TA.Ascom.ReactiveCommunications.Specifications")]
+[assembly: InternalsVisibleTo("Timtek.ReactiveCommunications.Specifications")]

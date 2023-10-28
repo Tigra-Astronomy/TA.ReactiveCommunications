@@ -1,6 +1,6 @@
-// This file is part of the TA.Ascom.ReactiveCommunications project
+// This file is part of the Timtek.ReactiveCommunications project
 // 
-// Copyright © 2015-2020 Tigra Astronomy, all rights reserved.
+// Copyright ï¿½ 2015-2020 Tigra Astronomy, all rights reserved.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation

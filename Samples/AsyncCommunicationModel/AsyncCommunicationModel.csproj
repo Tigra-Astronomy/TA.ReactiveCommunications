@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <FileUpgradeFlags>40</FileUpgradeFlags>
-    <UpgradeBackupLocation>D:\VS-Projects\ta.ascom.reactivecommunications\Backup3\</UpgradeBackupLocation>
+    <UpgradeBackupLocation>D:\VS-Projects\Timtek.reactivecommunications\Backup3\</UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -19,7 +19,7 @@
     <PackageReference Include="TA.Utils.Logging.Nlog" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TA.Ascom.ReactiveCommunications\Timtek.ReactiveCommunications.csproj" />
+    <ProjectReference Include="..\..\Timtek.ReactiveCommunications\Timtek.ReactiveCommunications.csproj" />
     <ProjectReference Include="..\SimulatorCommunicationsChannel\SimulatorChannel.csproj" />
   </ItemGroup>
   <ItemGroup>

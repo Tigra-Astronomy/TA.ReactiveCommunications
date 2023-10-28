@@ -1,6 +1,6 @@
 $feed = "https://www.myget.org/F/tigra-astronomy/api/v2/package"
 $symbolFeed = "https://www.myget.org/F/tigra-astronomy/symbols/api/v2/package"
-Push-Location .\TA.Ascom.ReactiveCommunications\bin\Release
+Push-Location .\Timtek.ReactiveCommunications\bin\Release
 $packages = Get-ChildItem -Filter *.nupkg
 foreach ($package in $packages)
 {

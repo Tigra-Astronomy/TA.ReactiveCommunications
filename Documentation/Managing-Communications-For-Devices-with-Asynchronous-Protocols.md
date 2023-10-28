@@ -50,7 +50,7 @@ One technology that is perfect for this sort of situation is the Reactive
 Extensions for .NET, which are in the namespace `System.Reactive` (obtained by
 installing a NuGet package called `System.Reactive`). The Reactive Extensions
 are the foundation of the [Reactive Communications for ASCOM] library, which is
-in NuGet package [`TA.ASCOM.ReactiveCommunications`]. Herafter I will refer to
+in NuGet package [`Timtek.ReactiveCommunications`]. Herafter I will refer to
 this library as `RxAscom`.
 
 The RxAscom library was designed to help with transactional Command/Response
@@ -257,7 +257,7 @@ choices!
 
   [Reactive Communications for ASCOM]: http://tigra-astronomy.com/reactive-communications-for-ascom
     "Reactive Communications for ASCOM, project home page"
-  [RxAscom]: https://www.nuget.org/packages/TA.Ascom.ReactiveCommunications/
+  [RxAscom]: https://www.nuget.org/packages/Timtek.ReactiveCommunications/
     "NuGet package"
   [DdwDriver]: https://bitbucket.org/tigra-astronomy/ta.digitaldomeworks/
     "Digital Domeworks on BitBucket"
