@@ -14,28 +14,27 @@ using System;
 using System.Diagnostics.Contracts;
 using TA.Utils.Core;
 
-namespace TA.Ascom.ReactiveCommunications.Transactions
-    {
-    /// <summary>A transaction that doesn't wait for any reply and completes immediately.</summary>
-    public class NoReplyTransaction : DeviceTransaction
-        {
-        /// <summary>Initializes a new instance of the <see cref="DeviceTransaction" /> class.</summary>
-        /// <param name="command">The command to be sent to the communications channel.</param>
-        public NoReplyTransaction(string command) : base(command)
-            {
-            Contract.Requires(command != null);
-            }
+namespace Timtek.ReactiveCommunications.Transactions;
 
-        /// <summary>
-        ///     Ignores the source sequence and does not wait for any received data. Completes the transaction
-        ///     immediately.
-        /// </summary>
-        /// <param name="source">The source sequence of received characters (ignored).</param>
-        public override void ObserveResponse(IObservable<char> source)
-            {
-            Contract.Ensures(Response != null);
-            Response = Maybe<string>.From(string.Empty); // string.Empty is a value, not the absence of a value.
-            OnCompleted();
-            }
-        }
+/// <summary>A transaction that doesn't wait for any reply and completes immediately.</summary>
+public class NoReplyTransaction : DeviceTransaction
+{
+    /// <summary>Initializes a new instance of the <see cref="DeviceTransaction" /> class.</summary>
+    /// <param name="command">The command to be sent to the communications channel.</param>
+    public NoReplyTransaction(string command) : base(command)
+    {
+        Contract.Requires(command != null);
     }
+
+    /// <summary>
+    ///     Ignores the source sequence and does not wait for any received data. Completes the transaction
+    ///     immediately.
+    /// </summary>
+    /// <param name="source">The source sequence of received characters (ignored).</param>
+    public override void ObserveResponse(IObservable<char> source)
+    {
+        Contract.Ensures(Response != null);
+        Response = Maybe<string>.From(string.Empty); // string.Empty is a value, not the absence of a value.
+        OnCompleted();
+    }
+}

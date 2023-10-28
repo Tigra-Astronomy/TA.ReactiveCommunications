@@ -43,6 +43,6 @@
     <PackageReference Include="TA.Utils.Logging.Nlog" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj" />
+    <ProjectReference Include="..\TA.Ascom.ReactiveCommunications\Timtek.ReactiveCommunications.csproj" />
   </ItemGroup>
 </Project>

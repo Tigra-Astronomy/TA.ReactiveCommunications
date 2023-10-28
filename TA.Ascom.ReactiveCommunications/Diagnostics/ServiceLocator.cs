@@ -13,17 +13,16 @@
 using JetBrains.Annotations;
 using TA.Utils.Core.Diagnostics;
 
-namespace TA.Ascom.ReactiveCommunications.Diagnostics
-    {
-    static class ServiceLocator
-        {
-        [CanBeNull] private static ILog logService;
+namespace Timtek.ReactiveCommunications.Diagnostics;
 
-        [NotNull]
-        internal static ILog LogService
-            {
-            get => logService ?? new DegenerateLoggerService();
-            set => logService = value;
-            }
-        }
+static class ServiceLocator
+{
+    [CanBeNull] private static ILog logService;
+
+    [NotNull]
+    internal static ILog LogService
+    {
+        get => logService ?? new DegenerateLoggerService();
+        set => logService = value;
     }
+}

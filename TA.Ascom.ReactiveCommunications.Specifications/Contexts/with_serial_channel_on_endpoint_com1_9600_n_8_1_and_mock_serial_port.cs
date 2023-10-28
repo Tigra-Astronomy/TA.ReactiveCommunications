@@ -14,6 +14,7 @@ using System;
 using System.Diagnostics;
 using FakeItEasy;
 using Machine.Specifications;
+using Timtek.ReactiveCommunications;
 
 // ReSharper disable MissingXmlDoc
 

@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Text;
 using TA.Ascom.ReactiveCommunications.Specifications.Fakes;
 using TA.Utils.Logging.NLog;
+using Timtek.ReactiveCommunications;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
     {

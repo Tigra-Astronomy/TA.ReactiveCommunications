@@ -14,6 +14,7 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
+using Timtek.ReactiveCommunications;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications.Fakes
     {

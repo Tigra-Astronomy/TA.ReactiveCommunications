@@ -14,40 +14,39 @@ using System.Diagnostics.Contracts;
 using JetBrains.Annotations;
 using TA.Utils.Core.Diagnostics;
 
-namespace TA.Ascom.ReactiveCommunications.Diagnostics
-    {
-    public static class TransactionExtensions
-        {
-        /// <summary>Raises a TransactionException for the given transaction.</summary>
-        /// <param name="transaction">The transaction causing the exception.</param>
-        /// <param name="log">
-        ///     An <see cref="ILog" /> instance to which the exception message will be logged at Error
-        ///     severity. The exception and transaction details will also be added to the log as properties.
-        /// </param>
-        /// <exception cref="TransactionException">Always thrown.</exception>
-        public static void RaiseException([NotNull] this DeviceTransaction transaction, [CanBeNull] ILog log = null)
-            {
-            Contract.Requires(transaction != null);
-            var message = $"Transaction {transaction} failed: {transaction.ErrorMessage}";
-            var transactionException = new TransactionException(message) { Transaction = transaction };
-            log?.Error()
-                .Message(message)
-                .Exception(transactionException)
-                .Transaction(transaction)
-                .Write();
-            throw transactionException;
-            }
+namespace Timtek.ReactiveCommunications.Diagnostics;
 
-        /// <summary>
-        /// Throws a <see cref="TransactionException"/> if the transaction failed.
-        /// If a logging service is supplied in the <paramref name="log"/> parameter, then the failure is logged as an error.
-        /// </summary>
-        /// <param name="transaction">The transaction that may have failed.</param>
-        /// <param name="log">Optional. A logging service that can be used to log the error.</param>
-        public static void ThrowIfFailed(this DeviceTransaction transaction, ILog log=null)
-            {
-            if (transaction.Failed)
-                transaction.RaiseException(log);
-            }
-        }
+public static class TransactionExtensions
+{
+    /// <summary>Raises a TransactionException for the given transaction.</summary>
+    /// <param name="transaction">The transaction causing the exception.</param>
+    /// <param name="log">
+    ///     An <see cref="ILog" /> instance to which the exception message will be logged at Error
+    ///     severity. The exception and transaction details will also be added to the log as properties.
+    /// </param>
+    /// <exception cref="TransactionException">Always thrown.</exception>
+    public static void RaiseException([NotNull] this DeviceTransaction transaction, [CanBeNull] ILog log = null)
+    {
+        Contract.Requires(transaction != null);
+        var message = $"Transaction {transaction} failed: {transaction.ErrorMessage}";
+        var transactionException = new TransactionException(message) { Transaction = transaction };
+        log?.Error()
+            .Message(message)
+            .Exception(transactionException)
+            .Transaction(transaction)
+            .Write();
+        throw transactionException;
     }
+
+    /// <summary>
+    /// Throws a <see cref="TransactionException"/> if the transaction failed.
+    /// If a logging service is supplied in the <paramref name="log"/> parameter, then the failure is logged as an error.
+    /// </summary>
+    /// <param name="transaction">The transaction that may have failed.</param>
+    /// <param name="log">Optional. A logging service that can be used to log the error.</param>
+    public static void ThrowIfFailed(this DeviceTransaction transaction, ILog log =null)
+    {
+        if (transaction.Failed)
+            transaction.RaiseException(log);
+    }
+}

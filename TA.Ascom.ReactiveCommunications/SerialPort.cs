@@ -12,27 +12,26 @@
 
 using System;
 
-namespace TA.Ascom.ReactiveCommunications
-    {
-    /// <summary>
-    ///     This class wraps the <see cref="System.IO.Ports.SerialPort" /> class and provides additional
-    ///     behaviours such as diagnostics. It also acts as a vehicle for implementing the
-    ///     <see cref="ISerialPort" /> interface, to assist with dependency injection and unit testing.
-    /// </summary>
-    public sealed class SerialPort : System.IO.Ports.SerialPort, ISerialPort
-        {
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="SerialPort" /> class and sets the
-        ///     <see cref="NewLine" /> property to ASCII Carriage Return.
-        /// </summary>
-        public SerialPort()
-            {
-            NewLine = Environment.NewLine;
-            }
+namespace Timtek.ReactiveCommunications;
 
-        #region ISerialPort Members
-        /// <summary>Gets or sets the line terminator string.</summary>
-        public new string NewLine { get; set; }
-        #endregion
-        }
+/// <summary>
+///     This class wraps the <see cref="System.IO.Ports.SerialPort" /> class and provides additional
+///     behaviours such as diagnostics. It also acts as a vehicle for implementing the
+///     <see cref="ISerialPort" /> interface, to assist with dependency injection and unit testing.
+/// </summary>
+public sealed class SerialPort : System.IO.Ports.SerialPort, ISerialPort
+{
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="SerialPort" /> class and sets the
+    ///     <see cref="NewLine" /> property to ASCII Carriage Return.
+    /// </summary>
+    public SerialPort()
+    {
+        NewLine = Environment.NewLine;
     }
+
+    #region ISerialPort Members
+    /// <summary>Gets or sets the line terminator string.</summary>
+    public new string NewLine { get; set; }
+    #endregion
+}

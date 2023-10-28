@@ -15,50 +15,49 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using TA.Utils.Core;
 
-namespace TA.Ascom.ReactiveCommunications.Transactions
-    {
+namespace Timtek.ReactiveCommunications.Transactions;
+
+/// <summary>
+///     A transaction type that receives a terminated string of any length and uses the first character
+///     as the response value.
+/// </summary>
+public class TerminatedSingleCharacterTransaction : TerminatedStringTransaction
+{
     /// <summary>
-    ///     A transaction type that receives a terminated string of any length and uses the first character
-    ///     as the response value.
+    ///     Initializes a new instance of the <see cref="TerminatedSingleCharacterTransaction" />
+    ///     class.
     /// </summary>
-    public class TerminatedSingleCharacterTransaction : TerminatedStringTransaction
+    /// <param name="command">The command to be sent to the communications channel.</param>
+    /// <param name="terminator">The response terminator character. Optional; defaults to '#'.</param>
+    public TerminatedSingleCharacterTransaction(string command, char terminator = '#') : base(command, terminator)
+    {
+        Contract.Requires(!string.IsNullOrEmpty(command));
+    }
+
+    /// <summary>Gets the response value of the completed transaction.</summary>
+    /// <value>The value, a single character.</value>
+    public new char Value { get; private set; }
+
+    /// <summary>
+    ///     Called when the input sequence completes. Sets the <see cref="Value" /> property to the first
+    ///     character of the response string.
+    /// </summary>
+    protected override void OnCompleted()
+    {
+        Value = default;
+        try
         {
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="TerminatedSingleCharacterTransaction" />
-        ///     class.
-        /// </summary>
-        /// <param name="command">The command to be sent to the communications channel.</param>
-        /// <param name="terminator">The response terminator character. Optional; defaults to '#'.</param>
-        public TerminatedSingleCharacterTransaction(string command, char terminator = '#') : base(command, terminator)
+            if (Response.Any())
             {
-            Contract.Requires(!string.IsNullOrEmpty(command));
-            }
-
-        /// <summary>Gets the response value of the completed transaction.</summary>
-        /// <value>The value, a single character.</value>
-        public new char Value { get; private set; }
-
-        /// <summary>
-        ///     Called when the input sequence completes. Sets the <see cref="Value" /> property to the first
-        ///     character of the response string.
-        /// </summary>
-        protected override void OnCompleted()
-            {
-            Value = default;
-            try
-                {
-                if (Response.Any())
-                    {
-                    Value = Response.Single()[0];
-                    }
-                }
-            catch (FormatException)
-                {
-                Value = default;
-                State = TransactionLifecycle.Failed;
-                ErrorMessage = Maybe<string>.From("Unable to convert the response to a single character value");
-                }
-            base.OnCompleted();
+                Value = Response.Single()[0];
             }
         }
+        catch (FormatException)
+        {
+            Value = default;
+            State = TransactionLifecycle.Failed;
+            ErrorMessage = Maybe<string>.From("Unable to convert the response to a single character value");
+        }
+        base.OnCompleted();
     }
+}

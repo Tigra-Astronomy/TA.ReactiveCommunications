@@ -12,6 +12,7 @@
 
 using Machine.Specifications;
 using TA.Ascom.ReactiveCommunications.Specifications.Fakes;
+using Timtek.ReactiveCommunications;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
     {

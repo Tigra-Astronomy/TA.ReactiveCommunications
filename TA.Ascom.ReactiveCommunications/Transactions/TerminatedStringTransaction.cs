@@ -15,69 +15,68 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reactive.Linq;
 
-namespace TA.Ascom.ReactiveCommunications.Transactions
+namespace Timtek.ReactiveCommunications.Transactions;
+
+/// <summary>
+///     A transaction that receives a string response delimited by an initiator character and a
+///     terminator character. Other characters before the initiator or after the terminator are
+///     discarded.
+/// </summary>
+public class TerminatedStringTransaction : DeviceTransaction
+{
+    readonly char initiator;
+    readonly char terminator;
+
+    /// <summary>Initializes a new instance of the <see cref="DeviceTransaction" /> class.</summary>
+    /// <param name="command">The command to be sent to the communications channel.</param>
+    /// <param name="initiator">
+    ///     The response initiator. Optional; defaults to ':'. Not used, but is stripped from the start of
+    ///     the response (if present).
+    /// </param>
+    /// <param name="terminator">The terminator character. Optional; defaults to '#'.</param>
+    public TerminatedStringTransaction(string command, char terminator = '#', char initiator = ':')
+        : base(command)
     {
-    /// <summary>
-    ///     A transaction that receives a string response delimited by an initiator character and a
-    ///     terminator character. Other characters before the initiator or after the terminator are
-    ///     discarded.
-    /// </summary>
-    public class TerminatedStringTransaction : DeviceTransaction
-        {
-        readonly char initiator;
-        readonly char terminator;
-
-        /// <summary>Initializes a new instance of the <see cref="DeviceTransaction" /> class.</summary>
-        /// <param name="command">The command to be sent to the communications channel.</param>
-        /// <param name="initiator">
-        ///     The response initiator. Optional; defaults to ':'. Not used, but is stripped from the start of
-        ///     the response (if present).
-        /// </param>
-        /// <param name="terminator">The terminator character. Optional; defaults to '#'.</param>
-        public TerminatedStringTransaction(string command, char terminator = '#', char initiator = ':')
-            : base(command)
-            {
-            Contract.Requires(!string.IsNullOrEmpty(command));
-            this.initiator = initiator;
-            this.terminator = terminator;
-            Value = string.Empty;
-            }
-
-        /// <summary>Gets the final response value.</summary>
-        /// <value>The value as a string.</value>
-        public string Value { get; private set; }
-
-        [ContractInvariantMethod]
-        void ObjectInvariant()
-            {
-            Contract.Invariant(Value != null);
-            }
-
-        /// <summary>
-        ///     Observes the character sequence from the communications channel until a satisfactory response
-        ///     has been received.
-        /// </summary>
-        /// <param name="source">The source sequence.</param>
-        public override void ObserveResponse(IObservable<char> source)
-            {
-            source.DelimitedMessageStrings(initiator, terminator)
-                .Take(1)
-                .Subscribe(OnNext, OnError, OnCompleted);
-            }
-
-        /// <summary>
-        ///     Called when the response sequence completes. This indicates a successful transaction. If a
-        ///     valid response was received, then delimiters are stripped off and the unterminated string is
-        ///     copied into the <see cref="Value" /> property.
-        /// </summary>
-        protected override void OnCompleted()
-            {
-            if (Response.Any())
-                {
-                var responseString = Response.Single();
-                Value = responseString.TrimStart(initiator).TrimEnd(terminator);
-                }
-            base.OnCompleted();
-            }
-        }
+        Contract.Requires(!string.IsNullOrEmpty(command));
+        this.initiator = initiator;
+        this.terminator = terminator;
+        Value = string.Empty;
     }
+
+    /// <summary>Gets the final response value.</summary>
+    /// <value>The value as a string.</value>
+    public string Value { get; private set; }
+
+    [ContractInvariantMethod]
+    void ObjectInvariant()
+    {
+        Contract.Invariant(Value != null);
+    }
+
+    /// <summary>
+    ///     Observes the character sequence from the communications channel until a satisfactory response
+    ///     has been received.
+    /// </summary>
+    /// <param name="source">The source sequence.</param>
+    public override void ObserveResponse(IObservable<char> source)
+    {
+        source.DelimitedMessageStrings(initiator, terminator)
+            .Take(1)
+            .Subscribe(OnNext, OnError, OnCompleted);
+    }
+
+    /// <summary>
+    ///     Called when the response sequence completes. This indicates a successful transaction. If a
+    ///     valid response was received, then delimiters are stripped off and the unterminated string is
+    ///     copied into the <see cref="Value" /> property.
+    /// </summary>
+    protected override void OnCompleted()
+    {
+        if (Response.Any())
+        {
+            var responseString = Response.Single();
+            Value = responseString.TrimStart(initiator).TrimEnd(terminator);
+        }
+        base.OnCompleted();
+    }
+}

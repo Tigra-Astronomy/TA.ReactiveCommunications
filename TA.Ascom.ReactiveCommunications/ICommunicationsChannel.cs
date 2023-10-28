@@ -12,31 +12,30 @@
 
 using System;
 
-namespace TA.Ascom.ReactiveCommunications
-    {
-    /// <summary>Interface ICommunicationsChannel</summary>
-    public interface ICommunicationChannel : IDisposable
-        {
-        /// <summary>An observable sequence of the characters received from the serial port.</summary>
-        /// <value>The receive stream.</value>
-        IObservable<char> ObservableReceivedCharacters { get; }
+namespace Timtek.ReactiveCommunications;
 
-        /// <summary>Gets a value indicating whether this instance is open.</summary>
-        /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
-        bool IsOpen { get; }
+/// <summary>Interface ICommunicationsChannel</summary>
+public interface ICommunicationChannel : IDisposable
+{
+    /// <summary>An observable sequence of the characters received from the serial port.</summary>
+    /// <value>The receive stream.</value>
+    IObservable<char> ObservableReceivedCharacters { get; }
 
-        /// <summary>Gets the endpoint that is associated with the channel.</summary>
-        /// <value>The endpoint.</value>
-        DeviceEndpoint Endpoint { get; }
+    /// <summary>Gets a value indicating whether this instance is open.</summary>
+    /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
+    bool IsOpen { get; }
 
-        /// <summary>Creates any underlying communication objects and opens the channel ready for transmitting.</summary>
-        void Open();
+    /// <summary>Gets the endpoint that is associated with the channel.</summary>
+    /// <value>The endpoint.</value>
+    DeviceEndpoint Endpoint { get; }
 
-        /// <summary>Closes the channel and destroys any underlying communication objects.</summary>
-        void Close();
+    /// <summary>Creates any underlying communication objects and opens the channel ready for transmitting.</summary>
+    void Open();
 
-        /// <summary>Sends the specified data and returns immediately without waiting for a reply.</summary>
-        /// <param name="txData">The data to be transmitted.</param>
-        void Send(string txData);
-        }
-    }
+    /// <summary>Closes the channel and destroys any underlying communication objects.</summary>
+    void Close();
+
+    /// <summary>Sends the specified data and returns immediately without waiting for a reply.</summary>
+    /// <param name="txData">The data to be transmitted.</param>
+    void Send(string txData);
+}

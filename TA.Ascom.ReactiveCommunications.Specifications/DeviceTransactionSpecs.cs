@@ -16,7 +16,8 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using TA.Ascom.ReactiveCommunications.Specifications.Behaviours;
 using TA.Ascom.ReactiveCommunications.Specifications.Contexts;
-using TA.Ascom.ReactiveCommunications.Transactions;
+using Timtek.ReactiveCommunications;
+using Timtek.ReactiveCommunications.Transactions;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications
     {
@@ -103,7 +104,11 @@ namespace TA.Ascom.ReactiveCommunications.Specifications
          * "In Progress" here and can only perform negative tests.
          */
         It should_not_be_completed = () => Transaction.Completed.ShouldBeFalse();
-        It should_not_be_failed = () => Transaction.Failed.ShouldBeFalse();
-        It should_not_be_successful = () => Transaction.Successful.ShouldBeFalse();
+
+        private It should_not_be_failed = () =>
+            Catch.Exception(() => Transaction.Failed).ShouldBeOfExactType<InvalidOperationException>();
+
+        private It should_not_be_successful = () =>
+            Catch.Exception(() => Transaction.Successful).ShouldBeOfExactType<InvalidOperationException>();
         }
     }

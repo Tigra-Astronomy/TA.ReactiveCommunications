@@ -13,7 +13,7 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
-using TA.Ascom.ReactiveCommunications;
+using Timtek.ReactiveCommunications;
 
 namespace SimulatorChannel
     {

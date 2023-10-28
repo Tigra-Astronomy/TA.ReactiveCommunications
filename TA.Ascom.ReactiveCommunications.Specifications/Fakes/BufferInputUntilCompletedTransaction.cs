@@ -13,6 +13,7 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using Timtek.ReactiveCommunications;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications.Fakes
     {

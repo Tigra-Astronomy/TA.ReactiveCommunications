@@ -13,6 +13,7 @@
 using System.Linq;
 using JetBrains.Annotations;
 using Machine.Specifications;
+using Timtek.ReactiveCommunications;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications.Behaviours
     {

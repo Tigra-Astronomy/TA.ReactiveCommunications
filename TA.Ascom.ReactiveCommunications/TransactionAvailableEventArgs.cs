@@ -12,13 +12,12 @@
 
 using System;
 
-namespace TA.Ascom.ReactiveCommunications
-    {
-    /// <summary>Event arguments used by the ReactiveTransactionProcessor.</summary>
-    class TransactionAvailableEventArgs : EventArgs
-        {
-        /// <summary>Gets or sets the transaction.</summary>
-        /// <value>The transaction.</value>
-        public DeviceTransaction Transaction { get; set; }
-        }
-    }
+namespace Timtek.ReactiveCommunications;
+
+/// <summary>Event arguments used by the ReactiveTransactionProcessor.</summary>
+class TransactionAvailableEventArgs : EventArgs
+{
+    /// <summary>Gets or sets the transaction.</summary>
+    /// <value>The transaction.</value>
+    public DeviceTransaction Transaction { get; set; }
+}

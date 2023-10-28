@@ -14,58 +14,57 @@ using System;
 using System.Reactive.Linq;
 using TA.Utils.Core;
 
-namespace TA.Ascom.ReactiveCommunications.Diagnostics
+namespace Timtek.ReactiveCommunications.Diagnostics;
+
+/// <summary>Provides debug and trace support for observables.</summary>
+public static class ObservableDiagnosticExtensions
+{
+    /// <summary>Traces the specified observable.</summary>
+    /// <typeparam name="TSource">The type of the observable sequence.</typeparam>
+    /// <param name="source">The source sequence to be traced.</param>
+    /// <param name="name">The name emitted in trace output for this source.</param>
+    public static IObservable<TSource> Trace<TSource>(this IObservable<TSource> source, string name)
     {
-    /// <summary>Provides debug and trace support for observables.</summary>
-    public static class ObservableDiagnosticExtensions
+        var log = ServiceLocator.LogService;
+        var id = 0;
+        return Observable.Create<TSource>(observer =>
         {
-        /// <summary>Traces the specified observable.</summary>
-        /// <typeparam name="TSource">The type of the observable sequence.</typeparam>
-        /// <param name="source">The source sequence to be traced.</param>
-        /// <param name="name">The name emitted in trace output for this source.</param>
-        public static IObservable<TSource> Trace<TSource>(this IObservable<TSource> source, string name)
+            var subscriptionId = ++id; // closure
+            var sequenceName = name; // closure
+
+            WriteTraceOutput("Subscribe", "");
+            var disposable = source.Subscribe(
+                                              v =>
+                                              {
+                                                  WriteTraceOutput("OnNext", v.ToString().ExpandAscii());
+                                                  observer.OnNext(v);
+                                              },
+                                              e =>
+                                              {
+                                                  WriteTraceOutput("OnError", "");
+                                                  observer.OnError(e);
+                                              },
+                                              () =>
+                                              {
+                                                  WriteTraceOutput("OnCompleted", "");
+                                                  observer.OnCompleted();
+                                              });
+            return () =>
             {
-            var log = ServiceLocator.LogService;
-            var id = 0;
-            return Observable.Create<TSource>(observer =>
-                {
-                var subscriptionId = ++id; // closure
-                var sequenceName = name; // closure
+                WriteTraceOutput("Dispose", "");
+                disposable.Dispose();
+            };
 
-                WriteTraceOutput("Subscribe", "");
-                var disposable = source.Subscribe(
-                                                  v =>
-                                                  {
-                                                      WriteTraceOutput("OnNext", v.ToString().ExpandAscii());
-                                                      observer.OnNext(v);
-                                                  },
-                                                  e =>
-                                                  {
-                                                      WriteTraceOutput("OnError", "");
-                                                      observer.OnError(e);
-                                                  },
-                                                  () =>
-                                                  {
-                                                      WriteTraceOutput("OnCompleted", "");
-                                                      observer.OnCompleted();
-                                                  });
-                return () =>
-                    {
-                        WriteTraceOutput("Dispose", "");
-                        disposable.Dispose();
-                    };
-
-                void WriteTraceOutput(string action, object content)
-                {
-                    log.Trace(sourceNameOverride: "RxComms")
-                        .Message("{@source}[{id}]: {@action}({@content})",
-                                 sequenceName,
-                                 subscriptionId,
-                                 action,
-                                 content)
-                        .Write();
-                }
-                });
+            void WriteTraceOutput(string action, object content)
+            {
+                log.Trace(sourceNameOverride: "RxComms")
+                    .Message("{@source}[{id}]: {@action}({@content})",
+                             sequenceName,
+                             subscriptionId,
+                             action,
+                             content)
+                    .Write();
             }
-        }
+        });
     }
+}

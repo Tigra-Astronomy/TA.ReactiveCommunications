@@ -12,6 +12,7 @@
 
 using System.IO.Ports;
 using Machine.Specifications;
+using Timtek.ReactiveCommunications;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications
     {
