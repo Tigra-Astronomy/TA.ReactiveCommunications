@@ -16,11 +16,11 @@ using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using SimulatorChannel;
-using TA.Ascom.ReactiveCommunications;
-using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.Utils.Core;
 using TA.Utils.Core.Diagnostics;
 using TA.Utils.Logging.NLog;
+using Timtek.ReactiveCommunications;
+using Timtek.ReactiveCommunications.Diagnostics;
 
 namespace AsyncCommunicationModel
     {

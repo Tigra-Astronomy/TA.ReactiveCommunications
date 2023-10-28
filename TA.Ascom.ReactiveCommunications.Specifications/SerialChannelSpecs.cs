@@ -14,6 +14,7 @@ using System;
 using FakeItEasy;
 using Machine.Specifications;
 using TA.Ascom.ReactiveCommunications.Specifications.Contexts;
+using Timtek.ReactiveCommunications;
 
 // ReSharper disable ComplexConditionExpression
 

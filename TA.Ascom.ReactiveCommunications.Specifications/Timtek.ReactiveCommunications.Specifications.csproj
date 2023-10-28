@@ -4,10 +4,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <Version>0.0.0</Version>
     <Authors>Tim Long</Authors>
-    <Company>Tigra Astronomy</Company>
-    <Product>TA.Ascom.ReactiveCommunications</Product>
+    <Company>Timtek Systems Limited</Company>
+    <Product>Timtek.ReactiveCommunications</Product>
     <Description>Unit test project</Description>
-    <Copyright>Copyright © 2015-2020 Tigra Astronomy, all rights reserved</Copyright>
+    <Copyright>Copyright © 2015-2023 Timtek Systems Limited, all rights reserved</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Tigra-Astronomy/TA.ReactiveCommunications</RepositoryUrl>
@@ -19,6 +19,8 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <Title>Reactive Communications Model for connected devices</Title>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;0169</NoWarn>
@@ -27,6 +29,12 @@
     <Compile Remove="Artwork\**" />
     <EmbeddedResource Remove="Artwork\**" />
     <None Remove="Artwork\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ReadMe.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="7.4.0" />
@@ -43,6 +51,6 @@
     <PackageReference Include="TA.Utils.Logging.Nlog" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj" />
+    <ProjectReference Include="..\TA.Ascom.ReactiveCommunications\Timtek.ReactiveCommunications.csproj" />
   </ItemGroup>
 </Project>

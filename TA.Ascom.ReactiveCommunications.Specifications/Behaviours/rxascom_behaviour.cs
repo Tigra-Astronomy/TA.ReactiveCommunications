@@ -12,6 +12,7 @@
 
 using JetBrains.Annotations;
 using TA.Ascom.ReactiveCommunications.Specifications.Contexts;
+using Timtek.ReactiveCommunications;
 
 #pragma warning disable 0649 // Context never assigned
 

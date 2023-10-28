@@ -12,34 +12,33 @@
 
 using System;
 
-namespace TA.Ascom.ReactiveCommunications
+namespace Timtek.ReactiveCommunications;
+
+internal class NetworkCommunicationsChannel : ICommunicationChannel
+{
+    public void Dispose()
     {
-    internal class NetworkCommunicationsChannel : ICommunicationChannel
-        {
-        public void Dispose()
-            {
-            throw new NotImplementedException();
-            }
-
-        public void Open()
-            {
-            throw new NotImplementedException();
-            }
-
-        public void Close()
-            {
-            throw new NotImplementedException();
-            }
-
-        public void Send(string txData)
-            {
-            throw new NotImplementedException();
-            }
-
-        public IObservable<char> ObservableReceivedCharacters { get; }
-
-        public bool IsOpen { get; }
-
-        public DeviceEndpoint Endpoint { get; }
-        }
+        throw new NotImplementedException();
     }
+
+    public void Open()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Close()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Send(string txData)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IObservable<char> ObservableReceivedCharacters { get; }
+
+    public bool IsOpen { get; }
+
+    public DeviceEndpoint Endpoint { get; }
+}

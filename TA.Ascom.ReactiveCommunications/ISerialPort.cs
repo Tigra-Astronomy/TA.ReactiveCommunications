@@ -18,112 +18,111 @@ using System.Text;
 
 #pragma warning disable 1591 // Prevent warnings for missing XML comments
 
-namespace TA.Ascom.ReactiveCommunications
-    {
-    /// <summary>
-    ///     Mirrors the <see cref="System.IO.Ports.SerialPort" /> class and serves as a vehicle for
-    ///     dependency injection, allowing the serial port to be faked.
-    /// </summary>
-    public interface ISerialPort
-        {
-        Stream BaseStream { get; }
+namespace Timtek.ReactiveCommunications;
 
-        int BaudRate { get; set; }
+/// <summary>
+///     Mirrors the <see cref="System.IO.Ports.SerialPort" /> class and serves as a vehicle for
+///     dependency injection, allowing the serial port to be faked.
+/// </summary>
+public interface ISerialPort
+{
+    Stream BaseStream { get; }
 
-        bool BreakState { get; set; }
+    int BaudRate { get; set; }
 
-        int BytesToWrite { get; }
+    bool BreakState { get; set; }
 
-        int BytesToRead { get; }
+    int BytesToWrite { get; }
 
-        bool CDHolding { get; }
+    int BytesToRead { get; }
 
-        bool CtsHolding { get; }
+    bool CDHolding { get; }
 
-        int DataBits { get; set; }
+    bool CtsHolding { get; }
 
-        bool DiscardNull { get; set; }
+    int DataBits { get; set; }
 
-        bool DsrHolding { get; }
+    bool DiscardNull { get; set; }
 
-        bool DtrEnable { get; set; }
+    bool DsrHolding { get; }
 
-        Encoding Encoding { get; set; }
+    bool DtrEnable { get; set; }
 
-        Handshake Handshake { get; set; }
+    Encoding Encoding { get; set; }
 
-        bool IsOpen { get; }
+    Handshake Handshake { get; set; }
 
-        string NewLine { get; set; }
+    bool IsOpen { get; }
 
-        Parity Parity { get; set; }
+    string NewLine { get; set; }
 
-        byte ParityReplace { get; set; }
+    Parity Parity { get; set; }
 
-        string PortName { get; set; }
+    byte ParityReplace { get; set; }
 
-        int ReadBufferSize { get; set; }
+    string PortName { get; set; }
 
-        int ReadTimeout { get; set; }
+    int ReadBufferSize { get; set; }
 
-        int ReceivedBytesThreshold { get; set; }
+    int ReadTimeout { get; set; }
 
-        bool RtsEnable { get; set; }
+    int ReceivedBytesThreshold { get; set; }
 
-        StopBits StopBits { get; set; }
+    bool RtsEnable { get; set; }
 
-        int WriteBufferSize { get; set; }
+    StopBits StopBits { get; set; }
 
-        int WriteTimeout { get; set; }
+    int WriteBufferSize { get; set; }
 
-        ISite Site { get; set; }
+    int WriteTimeout { get; set; }
 
-        IContainer Container { get; }
+    ISite Site { get; set; }
 
-        void Close();
+    IContainer Container { get; }
 
-        void DiscardInBuffer();
+    void Close();
 
-        void DiscardOutBuffer();
+    void DiscardInBuffer();
 
-        void Open();
+    void DiscardOutBuffer();
 
-        int Read(byte[] buffer, int offset, int count);
+    void Open();
 
-        int ReadChar();
+    int Read(byte[] buffer, int offset, int count);
 
-        int Read(char[] buffer, int offset, int count);
+    int ReadChar();
 
-        int ReadByte();
+    int Read(char[] buffer, int offset, int count);
 
-        string ReadExisting();
+    int ReadByte();
 
-        string ReadLine();
+    string ReadExisting();
 
-        string ReadTo(string value);
+    string ReadLine();
 
-        void Write(string text);
+    string ReadTo(string value);
 
-        void Write(char[] buffer, int offset, int count);
+    void Write(string text);
 
-        void Write(byte[] buffer, int offset, int count);
+    void Write(char[] buffer, int offset, int count);
 
-        void WriteLine(string text);
+    void Write(byte[] buffer, int offset, int count);
 
-        event SerialErrorReceivedEventHandler ErrorReceived;
+    void WriteLine(string text);
 
-        event SerialPinChangedEventHandler PinChanged;
+    event SerialErrorReceivedEventHandler ErrorReceived;
 
-        event SerialDataReceivedEventHandler DataReceived;
+    event SerialPinChangedEventHandler PinChanged;
 
-        void Dispose();
+    event SerialDataReceivedEventHandler DataReceived;
 
-        string ToString();
+    void Dispose();
 
-        event EventHandler Disposed;
+    string ToString();
 
-        object GetLifetimeService();
+    event EventHandler Disposed;
 
-        object InitializeLifetimeService();
-        }
-    }
+    object GetLifetimeService();
+
+    object InitializeLifetimeService();
+}

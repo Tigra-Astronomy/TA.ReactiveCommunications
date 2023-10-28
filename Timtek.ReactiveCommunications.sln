@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Ascom.ReactiveCommunications", "TA.Ascom.ReactiveCommunications\TA.Ascom.ReactiveCommunications.csproj", "{B8B5A523-93A8-482D-A6F8-DBB4BF81D916}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timtek.ReactiveCommunications", "TA.Ascom.ReactiveCommunications\Timtek.ReactiveCommunications.csproj", "{B8B5A523-93A8-482D-A6F8-DBB4BF81D916}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{6FCDDEA6-60DA-4C51-BF60-0B44306749BA}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{6FCDDE
 		images\RxComms-520x520.png = images\RxComms-520x520.png
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.Ascom.ReactiveCommunications.Specifications", "TA.Ascom.ReactiveCommunications.Specifications\TA.Ascom.ReactiveCommunications.Specifications.csproj", "{3DFF1A84-50A9-41FD-926F-F63D64C097EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timtek.ReactiveCommunications.Specifications", "TA.Ascom.ReactiveCommunications.Specifications\Timtek.ReactiveCommunications.Specifications.csproj", "{3DFF1A84-50A9-41FD-926F-F63D64C097EF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleApplications", "SampleApplications", "{28EC25FC-2E0B-47C8-BDCD-A87F242E77BC}"
 EndProject

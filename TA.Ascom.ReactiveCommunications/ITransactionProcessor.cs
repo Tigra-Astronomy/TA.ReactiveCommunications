@@ -13,29 +13,28 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace TA.Ascom.ReactiveCommunications
-    {
-    /// <summary>Defines the interface of a transaction processing service.</summary>
-    [ContractClass(typeof(TransactionProcessorContract))]
-    public interface ITransactionProcessor
-        {
-        /// <summary>
-        ///     Commits a transaction. That is, submits it for execution with no way to cancel. From this
-        ///     point, the transaction will either succeed in which case it will contain a valid response, or
-        ///     it will fail, in which case the response will be <see cref="Maybe{T}.Empty" />.
-        /// </summary>
-        /// <param name="transaction">The transaction to be processed.</param>
-        void CommitTransaction(DeviceTransaction transaction);
-        }
+namespace Timtek.ReactiveCommunications;
 
-    [ContractClassFor(typeof(ITransactionProcessor))]
-    internal abstract class TransactionProcessorContract : ITransactionProcessor
-        {
-        void ITransactionProcessor.CommitTransaction(DeviceTransaction transaction)
-            {
-            Contract.Requires(transaction != null);
-            Contract.Requires(!string.IsNullOrEmpty(transaction.Command));
-            throw new NotImplementedException();
-            }
-        }
+/// <summary>Defines the interface of a transaction processing service.</summary>
+[ContractClass(typeof(TransactionProcessorContract))]
+public interface ITransactionProcessor
+{
+    /// <summary>
+    ///     Commits a transaction. That is, submits it for execution with no way to cancel. From this
+    ///     point, the transaction will either succeed in which case it will contain a valid response, or
+    ///     it will fail, in which case the response will be <see cref="Maybe{T}.Empty" />.
+    /// </summary>
+    /// <param name="transaction">The transaction to be processed.</param>
+    void CommitTransaction(DeviceTransaction transaction);
+}
+
+[ContractClassFor(typeof(ITransactionProcessor))]
+internal abstract class TransactionProcessorContract : ITransactionProcessor
+{
+    void ITransactionProcessor.CommitTransaction(DeviceTransaction transaction)
+    {
+        Contract.Requires(transaction != null);
+        Contract.Requires(!string.IsNullOrEmpty(transaction.Command));
+        throw new NotImplementedException();
     }
+}

@@ -12,6 +12,7 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using Timtek.ReactiveCommunications;
 
 namespace TA.Ascom.ReactiveCommunications.Specifications.Fakes
     {
@@ -30,8 +31,8 @@ namespace TA.Ascom.ReactiveCommunications.Specifications.Fakes
             {
             Contract.Requires(transaction != null);
             Transaction = transaction;
+            transaction.MakeHot(); // Transaction must be "hot" before the response can start.
             transaction.ObserveResponse(response);
-            transaction.MakeHot();
             }
         }
     }

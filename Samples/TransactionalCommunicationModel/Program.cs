@@ -14,10 +14,10 @@ using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using SimulatorChannel;
-using TA.Ascom.ReactiveCommunications;
-using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.Utils.Core;
 using TA.Utils.Logging.NLog;
+using Timtek.ReactiveCommunications;
+using Timtek.ReactiveCommunications.Diagnostics;
 
 namespace TransactionalCommunicationModel
     {

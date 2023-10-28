@@ -14,8 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using SimulatorChannel.StateMachine;
-using TA.Ascom.ReactiveCommunications;
 using TA.Utils.Core.Diagnostics;
+using Timtek.ReactiveCommunications;
 
 namespace SimulatorChannel
     {

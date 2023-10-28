@@ -11,33 +11,26 @@
 // File: TransactionException.cs  Last modified: 2020-07-20@00:51 by Tim Long
 
 using System;
-using System.Runtime.Serialization;
 
-namespace TA.Ascom.ReactiveCommunications
-    {
+namespace Timtek.ReactiveCommunications;
+
+/// <inheritdoc />
+/// <summary>
+///     An exception that indicates a failed <see cref="DeviceTransaction" />. The exception carries a
+///     copy of the failed transaction, which can be used for further analysis and logging.
+/// </summary>
+[Serializable]
+public class TransactionException : Exception
+{
     /// <inheritdoc />
-    /// <summary>
-    ///     An exception that indicates a failed <see cref="DeviceTransaction" />. The exception carries a
-    ///     copy of the failed transaction, which can be used for further analysis and logging.
-    /// </summary>
-    [Serializable]
-    public class TransactionException : Exception
-        {
-        /// <inheritdoc />
-        public TransactionException() : base("The transaction failed") { }
+    public TransactionException() : base("The transaction failed") { }
 
-        /// <inheritdoc />
-        public TransactionException(string message) : base(message) { }
+    /// <inheritdoc />
+    public TransactionException(string message) : base(message) { }
 
-        /// <inheritdoc />
-        public TransactionException(string message, Exception inner) : base(message, inner) { }
+    /// <inheritdoc />
+    public TransactionException(string message, Exception inner) : base(message, inner) { }
 
-        /// <inheritdoc />
-        protected TransactionException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context) { }
-
-        /// <summary>Gets a reference to the failed transaction that generated the exception</summary>
-        public DeviceTransaction Transaction { get; set; }
-        }
-    }
+    /// <summary>Gets a reference to the failed transaction that generated the exception</summary>
+    public DeviceTransaction Transaction { get; set; }
+}

@@ -10,6 +10,8 @@
 // 
 // File: RxAscomContext.cs  Last modified: 2020-07-20@00:51 by Tim Long
 
+using Timtek.ReactiveCommunications;
+
 namespace TA.Ascom.ReactiveCommunications.Specifications.Contexts
     {
     internal class RxAscomContext

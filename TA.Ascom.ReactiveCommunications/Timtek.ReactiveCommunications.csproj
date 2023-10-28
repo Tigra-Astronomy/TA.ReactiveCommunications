@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net4.8;net6.0;net7.0;net8.0</TargetFrameworks>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -11,16 +11,16 @@
     <Authors>Tim Long</Authors>
     <Company>Tigra Astronomy</Company>
     <Description>A thread-safe, transactional, reactive style commications library for ASCOM telescopes and other devices.</Description>
-    <Copyright>Copyright © 2015-20 Tigra Astronomy, all rights reserved</Copyright>
-    <AssemblyTitle>TA.Ascom.ReactiveCommunications</AssemblyTitle>
+    <Copyright>Copyright © 2015-2023 Timtek Systems Limited, all rights reserved</Copyright>
+    <AssemblyTitle>Timtek.ReactiveCommunications</AssemblyTitle>
     <Description>
 A library based on the Reactive Extensions for simplifying device communications to embedded controllers,
-while guaranteeing correct sequencing and thread-safety of transactions.
+while guaranteeing correct sequencing and thread-safety of transactions (commands and responses).
 
-Originally developed for use with ASCOM device drivers, but may be useful for any software that needs to
-communicate with an embedded controller over a communications channel.
+Originally developed for use with ASCOM device drivers, but useful for any software that needs to
+communicate with an embedded controller or attached device over a communications link.
 
-The library offers classes that help with developing transactions, which model command/response protocols.
+The library offers classes that help with developing transactions, which model command-response protocols.
 The communications channel is abstracted into an interface, so that clients can easily switch between (say)
 serial or ethernet streams. Support for serial channels is built-in and custom channel implementations can
 easily be added and used. The client driver or application remains ignorant of the type of channel in use

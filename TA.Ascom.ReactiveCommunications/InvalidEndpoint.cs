@@ -10,11 +10,10 @@
 // 
 // File: InvalidEndpoint.cs  Last modified: 2020-07-20@00:50 by Tim Long
 
-namespace TA.Ascom.ReactiveCommunications
-    {
-    /// <summary>
-    ///     A degenerate endpoint (possibly created from an invalud connection string) that can never
-    ///     transfer any data.
-    /// </summary>
-    public sealed class InvalidEndpoint : DeviceEndpoint { }
-    }
+namespace Timtek.ReactiveCommunications;
+
+/// <summary>
+///     A degenerate endpoint (possibly created from an invalud connection string) that can never
+///     transfer any data.
+/// </summary>
+public sealed class InvalidEndpoint : DeviceEndpoint { }
